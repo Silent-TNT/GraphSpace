@@ -53,7 +53,12 @@ REQUIRED_ROOMS = [
 
 HEIGHT_3000_OR_6000_TYPES = frozenset([
     "living_room", "multi_purpose", "dining_room", "balcony",
+    "entryway",
 ])
+
+MIN_2F_SLAB_SUPPORT_RATIO = 0.25
+MAX_FLOATING_2F_ROOMS = 2
+FLOATING_2F_EXEMPT_TYPES = frozenset(["balcony"])
 
 TARGET_ROOMS = [
     "living_room", "bedroom", "dining_room", "bathroom",
@@ -97,10 +102,11 @@ SUGGESTION_MAP = {
     "体素越界": "缩小建筑平面跨度或联系管理员调整训练栅格上限",
     "体素裁剪": "缩小户型或居中后仍超 96×96×32 栅格，需缩模或调整 RES",
     "功能缺失": "补全必需功能体块（玄关/客厅/卧室/餐厅/卫生间/楼梯）",
-    "玄关规则": "至少一个玄关体块需有直接 outdoor 采光面",
+    "玄关规则": "至少一个玄关体块需有 direct 或 indirect 采光（含经走道传导）",
     "拓扑孤岛": "用 corridor 等走道连接孤立体块，保证全屋单连通",
     "楼梯未跨层": "楼梯体块应 Z=0~6000 贯穿两层",
     "楼梯未连通": "楼梯需共面邻接一层与二层体块",
+    "底部架空": "减少二层漂浮体块：在架空区补 1F 体块或调整二层布局",
     "采光复核·重要": "为客厅/卧室增加采光面或确认平面是否合理，建模师复核",
     "采光复核": "确认该房间是否应为无采光暗房间，建模师复核",
     "tensor试转": "检查 rooms 字段与 box 坐标是否完整，或安装 torch/torch_geometric",
@@ -707,15 +713,12 @@ def _check_required_and_entryway(house_id, rooms, stats, issues):
 
     entryways = [r for r in rooms if r["type"] == "entryway"]
     if entryways:
-        has_outdoor = False
-        for e in entryways:
-            for surf in e.get("direct_lighting_surfaces", []):
-                if surf.get("exposure_type", "outdoor") == "outdoor":
-                    has_outdoor = True
-                    break
-        if not has_outdoor:
+        has_lighting = any(
+            e.get("lighting_access", "none") != "none" for e in entryways
+        )
+        if not has_lighting:
             names = "、".join(_room_label(e) for e in entryways)
-            msg = "【玄关规则】{} 均无 outdoor direct 暴露面".format(names)
+            msg = "【玄关规则】{} 无任何采光，至少一个玄关须具备 direct/indirect 采光（含经走道传导）".format(names)
             issues.append(_issue_from_msg(house_id, "error", msg))
 
 
@@ -766,6 +769,84 @@ def _check_topology(house_id, rooms, issues):
             msg = "【楼梯未连通】[{}] 一层{} 二层{}".format(
                 _room_label(st), "✓" if has_f1 else "✗", "✓" if has_f2 else "✗")
             issues.append(_issue_from_msg(house_id, "error", msg))
+
+
+def _entry_floors_set(entry):
+    fs = entry.get("floors")
+    if fs:
+        return set(int(f) for f in fs)
+    return {int(entry.get("floor", 1))}
+
+
+def _entry_plan_area(entry):
+    bmin, bmax = entry["box_min"], entry["box_max"]
+    return max(0.0, bmax[0] - bmin[0]) * max(0.0, bmax[1] - bmin[1])
+
+
+def _entry_xy_overlap(a, b):
+    return _xy_overlap_area(a["box_min"], a["box_max"], b["box_min"], b["box_max"])
+
+
+def _xy_overlap_area(a_min, a_max, b_min, b_max):
+    ox = min(a_max[0], b_max[0]) - max(a_min[0], b_min[0])
+    oy = min(a_max[1], b_max[1]) - max(a_min[1], b_min[1])
+    if ox <= TOL or oy <= TOL:
+        return 0.0
+    return ox * oy
+
+
+def _is_first_floor_slab_supporter_entry(entry):
+    floors = _entry_floors_set(entry)
+    if 1 not in floors:
+        return False
+    if entry["type"] == "stairs":
+        return True
+    bmin, bmax = entry["box_min"], entry["box_max"]
+    if 2 in floors and _near_level(bmin[2], 0) and _near_level(bmax[2], 6000):
+        return False
+    return _near_level(bmax[2], 3000)
+
+
+def _second_floor_support_ratio_entry(entry_2f, entries):
+    if _entry_floors_set(entry_2f) != {2}:
+        return 1.0
+    bmin, bmax = entry_2f["box_min"], entry_2f["box_max"]
+    if not _near_level(bmin[2], 3000):
+        return 1.0
+    plan = _entry_plan_area(entry_2f)
+    if plan <= 0:
+        return 1.0
+    supported = 0.0
+    for other in entries:
+        if other["id"] == entry_2f["id"]:
+            continue
+        if not _is_first_floor_slab_supporter_entry(other):
+            continue
+        if not _boxes_share_face(
+            other["box_min"], other["box_max"],
+            entry_2f["box_min"], entry_2f["box_max"],
+            "z+",
+        ):
+            continue
+        supported += _entry_xy_overlap(entry_2f, other)
+    return min(1.0, supported / plan)
+
+
+def _check_pilotis_floating_2f(house_id, entries, issues):
+    pure_2f = [e for e in entries if _entry_floors_set(e) == {2}]
+    floating = [
+        e for e in pure_2f
+        if e["type"] not in FLOATING_2F_EXEMPT_TYPES
+        and _second_floor_support_ratio_entry(e, entries) < MIN_2F_SLAB_SUPPORT_RATIO
+    ]
+    if len(floating) <= MAX_FLOATING_2F_ROOMS:
+        return
+    names = "、".join(e["layer_name"] for e in floating[:8])
+    msg = (
+        "【底部架空】{} 个二层漂浮体块（允许 ≤{}），如：{}".format(
+            len(floating), MAX_FLOATING_2F_ROOMS, names)
+    )
+    issues.append(_issue_from_msg(house_id, "error", msg))
 
 
 def _check_lighting_warnings(house_id, rooms, issues):
@@ -863,6 +944,7 @@ def validate_json_file(path, strict_v14=False, run_tensor=True, use_torch=True):
     _check_modulus_and_slab(house_id, entries, building_size, issues)
     _check_required_and_entryway(house_id, rooms, stats, issues)
     _check_topology(house_id, rooms, issues)
+    _check_pilotis_floating_2f(house_id, entries, issues)
     _check_lighting_warnings(house_id, rooms, issues)
     _check_graph_edges(house_id, rooms, issues)
 

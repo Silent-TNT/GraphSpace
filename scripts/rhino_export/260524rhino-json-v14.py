@@ -5,10 +5,11 @@ Rhino 户型数据集 QC + JSON 导出 (V14)
 基于 260523rhino-json.py，新增：
   - 拓扑连通 / 楼梯跨层检查
   - Z 区间楼层判定 + 楼板界面对齐 + 高度白名单
-  - 玄关 / 必需功能 / 体素包络 / 采光复核 / 朝向 metadata
-  - Eto 可滚动错误弹窗
+  - 玄关 / 必需功能 / 体素包络 / 采光复核 / 朝向 metadata / 底部架空二层漂浮检查
+  - Eto 可滚动错误弹窗（已内置，无需额外文件）
 """
 import json
+import os
 import re
 import math
 from collections import deque
@@ -17,6 +18,275 @@ try:
     import rhinoscriptsyntax as rs
 except ImportError:
     rs = None
+
+
+# ==========================================
+# Eto 弹窗（内置于本文件，绑定 Rhino 主窗口 + SemiModal）
+# ==========================================
+def _dlg_u(text):
+    if text is None:
+        return u""
+    if isinstance(text, unicode):
+        return text
+    try:
+        return unicode(text, "utf-8", "replace")
+    except Exception:
+        return unicode(text)
+
+
+def _dlg_get_parent():
+    try:
+        import Rhino
+        import scriptcontext as sc
+        doc = sc.doc or Rhino.RhinoDoc.ActiveDoc
+        if doc is not None:
+            return Rhino.UI.RhinoEtoApp.MainWindowForDocument(doc)
+    except Exception:
+        pass
+    try:
+        import Rhino
+        return Rhino.UI.RhinoEtoApp.MainWindow
+    except Exception:
+        return None
+
+
+def _dlg_focus_rhino():
+    try:
+        import Rhino
+        Rhino.RhinoApp.SetFocusToMainWindow()
+    except Exception:
+        pass
+
+
+def _dlg_hidden_abort_button():
+    import Eto.Forms as forms
+    btn = forms.Button(Text=u"取消")
+    btn.Visible = False
+    return btn
+
+
+def _dlg_show_modal(dialog):
+    import Eto.Forms as forms
+    _dlg_focus_rhino()
+    parent = _dlg_get_parent()
+    try:
+        dialog.Topmost = True
+    except Exception:
+        pass
+    try:
+        import Rhino
+        import scriptcontext as sc
+        doc = sc.doc or Rhino.RhinoDoc.ActiveDoc
+        if doc is not None and hasattr(Rhino.UI, "EtoExtensions"):
+            if dialog.DefaultButton is None:
+                dialog.DefaultButton = forms.Button(Text=u"确定")
+            if dialog.AbortButton is None:
+                dialog.AbortButton = _dlg_hidden_abort_button()
+            Rhino.UI.EtoExtensions.ShowSemiModal(dialog, doc, parent)
+            return
+    except Exception:
+        pass
+    if parent is not None:
+        dialog.ShowModal(parent)
+    else:
+        dialog.ShowModal()
+
+
+def _dlg_fallback_message(text, title, buttons=0):
+    if rs is None:
+        print(_dlg_u(title) + u": " + _dlg_u(text))
+        return 1 if buttons else 0
+    return rs.MessageBox(_dlg_u(text), buttons, _dlg_u(title))
+
+
+def _dlg_estimate_message_size(text, max_width=560, min_width=320):
+    import Eto.Drawing as drawing
+    lines = _dlg_u(text).split(u"\n")
+    line_count = max(1, len(lines))
+    longest = max(len(line) for line in lines) if lines else 0
+    width = min(max_width, max(min_width, 48 + longest * 9))
+    height = min(480, max(140, 72 + line_count * 20))
+    scroll_h = max(60, height - 72)
+    return drawing.Size(width, height), drawing.Size(width - 32, scroll_h)
+
+
+def _dlg_make_button(text, width=88):
+    import Eto.Drawing as drawing
+    import Eto.Forms as forms
+    btn = forms.Button(Text=_dlg_u(text))
+    btn.Size = drawing.Size(width, 28)
+    return btn
+
+
+def _dlg_button_row(*buttons):
+    import Eto.Drawing as drawing
+    import Eto.Forms as forms
+    row = forms.TableLayout()
+    row.Spacing = drawing.Size(8, 0)
+    cells = [None]
+    cells.extend(buttons)
+    row.Rows.Add(forms.TableRow(*cells))
+    return row
+
+
+def ui_show_message(text, title=u"提示", width=None, height=None):
+    """替代 rs.MessageBox(..., 0, title)"""
+    try:
+        import Eto.Drawing as drawing
+        import Eto.Forms as forms
+        text = _dlg_u(text)
+        if width is None or height is None:
+            client_size, scroll_size = _dlg_estimate_message_size(text)
+        else:
+            client_size = drawing.Size(width, height)
+            scroll_size = drawing.Size(max(200, width - 32), max(60, height - 72))
+        dialog = forms.Dialog()
+        dialog.Title = _dlg_u(title)
+        dialog.ClientSize = client_size
+        dialog.MinimumSize = client_size
+        dialog.Resizable = False
+        body = forms.TextArea()
+        body.ReadOnly = True
+        body.Wrap = True
+        body.Text = text
+        scroll = forms.Scrollable()
+        scroll.Content = body
+        scroll.Border = forms.BorderType.Bezel
+        scroll.Size = scroll_size
+        btn = _dlg_make_button(u"确定")
+        btn.Click += lambda sender, e: dialog.Close()
+        dialog.DefaultButton = btn
+        dialog.AbortButton = _dlg_hidden_abort_button()
+        layout = forms.DynamicLayout()
+        layout.Padding = drawing.Padding(12)
+        layout.Spacing = drawing.Size(6, 6)
+        layout.AddRow(scroll)
+        layout.AddRow(_dlg_button_row(btn))
+        dialog.Content = layout
+        _dlg_show_modal(dialog)
+    except Exception:
+        _dlg_fallback_message(text, title, buttons=0)
+
+
+def ui_show_confirm_scrollable(text, title=u"确认", yes_text=u"确认", no_text=u"取消",
+                               width=560, height=400):
+    """可滚动确认框，返回 True=确认 / False=取消"""
+    try:
+        import Eto.Drawing as drawing
+        import Eto.Forms as forms
+        dialog = forms.Dialog()
+        dialog.Title = _dlg_u(title)
+        dialog.ClientSize = drawing.Size(width, height)
+        dialog.MinimumSize = drawing.Size(400, 260)
+        dialog.Resizable = True
+        body = forms.TextArea()
+        body.ReadOnly = True
+        body.Wrap = True
+        body.Text = _dlg_u(text)
+        scroll = forms.Scrollable()
+        scroll.Content = body
+        scroll.Border = forms.BorderType.Bezel
+        scroll.Size = drawing.Size(width - 32, height - 88)
+        result = {"confirmed": False}
+
+        def on_yes(sender, e):
+            result["confirmed"] = True
+            dialog.Close()
+
+        def on_no(sender, e):
+            dialog.Close()
+
+        btn_yes = _dlg_make_button(yes_text, width=96)
+        btn_no = _dlg_make_button(no_text, width=72)
+        btn_yes.Click += on_yes
+        btn_no.Click += on_no
+        dialog.DefaultButton = btn_yes
+        dialog.AbortButton = btn_no
+        layout = forms.DynamicLayout()
+        layout.Padding = drawing.Padding(12)
+        layout.Spacing = drawing.Size(6, 6)
+        layout.AddRow(scroll)
+        layout.AddRow(_dlg_button_row(btn_yes, btn_no))
+        dialog.Content = layout
+        _dlg_show_modal(dialog)
+        return result["confirmed"]
+    except Exception:
+        return _dlg_fallback_message(text, title, buttons=4 | 32) == 6
+
+
+def ui_show_report(lines, title=u"报告", is_warning=False, width=640, height=480):
+    """可滚动报告（QC 错误/警告）"""
+    prefix = u"⚠️ " if is_warning else u"⛔ "
+    full_title = prefix + _dlg_u(title)
+    text = u"\n\n".join(_dlg_u(line) for line in lines) if lines else u"（无内容）"
+    header = u"共 {} 条{}。".format(
+        len(lines) if lines else 0,
+        u"警告" if is_warning else u"错误",
+    )
+    try:
+        import Eto.Drawing as drawing
+        import Eto.Forms as forms
+        dialog = forms.Dialog()
+        dialog.Title = full_title
+        dialog.ClientSize = drawing.Size(width, height)
+        dialog.MinimumSize = drawing.Size(480, 320)
+        dialog.Resizable = True
+        header_lbl = forms.Label()
+        header_lbl.Text = header
+        body = forms.TextArea()
+        body.ReadOnly = True
+        body.Wrap = True
+        body.Text = text
+        scroll = forms.Scrollable()
+        scroll.Content = body
+        scroll.Border = forms.BorderType.Bezel
+        scroll.Size = drawing.Size(width - 32, height - 120)
+        btn = _dlg_make_button(u"关闭")
+        btn.Click += lambda sender, e: dialog.Close()
+        dialog.DefaultButton = btn
+        dialog.AbortButton = _dlg_hidden_abort_button()
+        layout = forms.DynamicLayout()
+        layout.Padding = drawing.Padding(12)
+        layout.Spacing = drawing.Size(6, 6)
+        layout.AddRow(header_lbl)
+        layout.AddRow(scroll)
+        layout.AddRow(_dlg_button_row(btn))
+        dialog.Content = layout
+        _dlg_show_modal(dialog)
+    except Exception:
+        _dlg_fallback_message(text, full_title, buttons=0)
+
+
+def show_qc_report_dialog(lines, title="AI 严苛质检 V14", is_warning=False):
+    """建模时显示全部 QC 信息（可滚动）"""
+    ui_show_report(lines, title=title, is_warning=is_warning)
+
+
+def show_confirm_export_dialog(orientation_msg, warning_lines, room_count, count_display,
+                               courtyard_count, indirect_count, float_snap_count):
+    """导出确认（含警告时可滚动）"""
+    header_lines = [
+        "✅ 质检通过！准备导出数据。",
+        "",
+        "🧭 " + orientation_msg,
+        "",
+        "💡 采光分析: {} 间间接采光, {} 面庭院采光".format(indirect_count, courtyard_count),
+    ]
+    if float_snap_count:
+        header_lines.append("⚠️ 坐标浮点吸附 {} 条（≤1mm 误差已自动修正）".format(float_snap_count))
+    header_lines.extend([
+        "",
+        "📊 请核对当前识别到的功能体块（共 {} 个）：".format(room_count),
+        count_display,
+        "",
+        "👉 数量如果正确，是否确认导出 JSON 文件？",
+    ])
+    if warning_lines:
+        header_lines.extend(["", "—— 以下项目请建模师复核 ——", ""] + warning_lines)
+    return ui_show_confirm_scrollable(
+        "\n".join(header_lines), title="确认导出清单 V14", yes_text="确认导出", no_text="取消",
+    )
+
 
 # ==========================================
 # QC V14 常量
@@ -50,8 +320,14 @@ REQUIRED_ROOMS = [
 HEIGHT_6000_TYPES = frozenset(["stairs"])
 HEIGHT_3000_OR_6000_TYPES = frozenset([
     "living_room", "multi_purpose", "dining_room", "balcony",
+    "entryway",
 ])
 HEIGHT_6000_ALLOWED = HEIGHT_6000_TYPES | HEIGHT_3000_OR_6000_TYPES
+
+# 底部架空：纯 2F 体块在 1F (Z=0~3000) 下方缺少足够支承平面
+MIN_2F_SLAB_SUPPORT_RATIO = 0.25   # 二层底面至少 25% 面积下方有 1F 体块顶板
+MAX_FLOATING_2F_ROOMS = 2          # 允许最多 2 个「漂浮」二层体块，超出则拦截导出
+FLOATING_2F_EXEMPT_TYPES = frozenset(["balcony"])  # 阳台允许挑出，不计入漂浮
 
 LIGHTING_REVIEW_STRONG = frozenset(["living_room", "bedroom"])
 LIGHTING_REVIEW_SOFT = frozenset(["dining_room", "multi_purpose", "kitchen"])
@@ -111,148 +387,12 @@ CORNER_QC_META = {
 
 
 # ==========================================
-# Eto 可滚动弹窗
-# ==========================================
-def show_qc_report_dialog(lines, title="AI 严苛质检 V14", is_warning=False):
-    """建模时显示全部 QC 信息（可滚动）"""
-    text = "\n\n".join(lines) if lines else "（无内容）"
-    prefix = "⚠️ " if is_warning else "⛔ "
-    full_title = prefix + title
-
-    try:
-        import Rhino
-        import Eto.Drawing as drawing
-        import Eto.Forms as forms
-
-        dialog = forms.Dialog()
-        dialog.Title = full_title
-        dialog.ClientSize = drawing.Size(680, 540)
-        dialog.MinimumSize = drawing.Size(520, 360)
-
-        header = forms.Label()
-        header.Text = "共 {} 条{}。".format(len(lines), "警告" if is_warning else "错误")
-
-        body = forms.TextArea()
-        body.ReadOnly = True
-        body.Wrap = True
-        body.Text = text
-
-        scroll = forms.Scrollable()
-        scroll.Content = body
-        scroll.Border = forms.BorderType.Bezel
-        scroll.ExpandContentWidth = True
-        scroll.ExpandContentHeight = True
-        scroll.Size = drawing.Size(660, 440)
-
-        btn = forms.Button(Text="关闭")
-        btn.Click += lambda sender, e: dialog.Close()
-
-        layout = forms.DynamicLayout()
-        layout.Padding = drawing.Padding(10)
-        layout.Spacing = drawing.Size(6, 6)
-        layout.AddRow(header)
-        layout.AddRow(scroll)
-        layout.AddRow(None)
-        layout.AddRow(btn)
-        dialog.Content = layout
-
-        doc = Rhino.RhinoDoc.ActiveDoc
-        if doc is None:
-            rs.MessageBox(text, 0, full_title)
-            return
-        parent = Rhino.UI.RhinoEtoApp.MainWindowForDocument(doc)
-        dialog.ShowModal(parent)
-    except Exception:
-        rs.MessageBox(text, 0, full_title)
-
-
-def show_confirm_export_dialog(orientation_msg, warning_lines, room_count, count_display,
-                               courtyard_count, indirect_count, float_snap_count):
-    """导出确认（含警告时可滚动）"""
-    header_lines = [
-        "✅ 质检通过！准备导出数据。",
-        "",
-        "🧭 " + orientation_msg,
-        "",
-        "💡 采光分析: {} 间间接采光, {} 面庭院采光".format(indirect_count, courtyard_count),
-    ]
-    if float_snap_count:
-        header_lines.append("⚠️ 坐标浮点吸附 {} 条（≤1mm 误差已自动修正）".format(float_snap_count))
-    header_lines.extend([
-        "",
-        "📊 请核对当前识别到的功能体块（共 {} 个）：".format(room_count),
-        count_display,
-        "",
-        "👉 数量如果正确，是否确认导出 JSON 文件？",
-    ])
-    if warning_lines:
-        header_lines.extend(["", "—— 以下项目请建模师复核 ——", ""] + warning_lines)
-
-    text = "\n".join(header_lines)
-
-    try:
-        import Rhino
-        import Eto.Drawing as drawing
-        import Eto.Forms as forms
-
-        dialog = forms.Dialog()
-        dialog.Title = "确认导出清单 V14"
-        dialog.ClientSize = drawing.Size(620, 520)
-        dialog.MinimumSize = drawing.Size(480, 360)
-
-        body = forms.TextArea()
-        body.ReadOnly = True
-        body.Wrap = True
-        body.Text = text
-
-        scroll = forms.Scrollable()
-        scroll.Content = body
-        scroll.Border = forms.BorderType.Bezel
-        scroll.ExpandContentWidth = True
-        scroll.ExpandContentHeight = True
-        scroll.Size = drawing.Size(600, 400)
-
-        result = {"confirmed": False}
-
-        def on_yes(sender, e):
-            result["confirmed"] = True
-            dialog.Close()
-
-        def on_no(sender, e):
-            dialog.Close()
-
-        btn_yes = forms.Button(Text="确认导出")
-        btn_no = forms.Button(Text="取消")
-        btn_yes.Click += on_yes
-        btn_no.Click += on_no
-
-        btn_row = forms.TableLayout()
-        btn_row.Spacing = drawing.Size(8, 8)
-        btn_row.Rows.Add(forms.TableRow(None, btn_yes, btn_no))
-
-        layout = forms.DynamicLayout()
-        layout.Padding = drawing.Padding(10)
-        layout.AddRow(scroll)
-        layout.AddRow(btn_row)
-        dialog.Content = layout
-
-        doc = Rhino.RhinoDoc.ActiveDoc
-        if doc is None:
-            return rs.MessageBox(text + "\n\n是否确认导出？", 4 | 32, "确认导出") == 6
-        parent = Rhino.UI.RhinoEtoApp.MainWindowForDocument(doc)
-        dialog.ShowModal(parent)
-        return result["confirmed"]
-    except Exception:
-        return rs.MessageBox(text, 4 | 32, "确认导出清单 V14") == 6
-
-
-# ==========================================
 # 工具函数（与原脚本一致 + V14 扩展）
 # ==========================================
 _LAYER_PATTERN = re.compile(r"\[([^\[\]]+?)\]")
 
 _GLOBAL_LAYER_TOKENS = frozenset([
-    "功能缺失", "体素越界", "图层未识别",
+    "功能缺失", "体素越界", "图层未识别", "底部架空",
 ])
 
 
@@ -309,7 +449,7 @@ def _infer_floors_from_z(norm_min_z, norm_max_z, room_type):
 
     - 单层 1F: [1]      (Z 区间 0~3000)
     - 单层 2F: [2]      (Z 区间 3000~6000)
-    - 跨层:    [1, 2]   (Z 区间 0~6000；仅 stairs / 挑空 living_room 等允许)
+    - 跨层:    [1, 2]   (Z 区间 0~6000；stairs / 挑空 living_room / 玄关等允许)
     返回 None 表示楼层判定失败（Z 未对齐 0/3000/6000 楼板）。
 
     主层（floor 兼容字段）= floors[0]。
@@ -512,12 +652,109 @@ def _check_stairs_connectivity(rooms, errors):
                 ))
 
 
-def _entryway_has_outdoor_direct(room):
-    for surf in room.get("direct_lighting_surfaces", []):
-        if surf.get("exposure_type") != "outdoor":
-            continue
+def _room_floors_set(room):
+    if isinstance(room.get("floors"), list) and room["floors"]:
+        return set(int(f) for f in room["floors"])
+    return {int(room.get("floor", 1))}
+
+
+def _is_pure_second_floor_room(room):
+    """仅占据 2F (Z≈3000~6000)，非楼梯/挑空跨层体块"""
+    return _room_floors_set(room) == {2}
+
+
+def _xy_overlap_area(a_min, a_max, b_min, b_max):
+    ox = min(a_max[0], b_max[0]) - max(a_min[0], b_min[0])
+    oy = min(a_max[1], b_max[1]) - max(a_min[1], b_min[1])
+    if ox <= TOL or oy <= TOL:
+        return 0.0
+    return ox * oy
+
+
+def _is_first_floor_slab_supporter(room_below):
+    """可作为二层下方的 1F 楼板支承（顶面在 Z=3000）"""
+    floors = _room_floors_set(room_below)
+    if 1 not in floors:
+        return False
+    if room_below["type"] == "stairs":
         return True
-    return False
+    o_min, o_max = room_below["_abs_min"], room_below["_abs_max"]
+    # 跨层挑空/楼梯：Z=0~6000，不提供二层楼板支承
+    if 2 in floors and _near_level(o_min[2], 0) and _near_level(o_max[2], 6000):
+        return False
+    return _near_level(o_max[2], 3000)
+
+
+def _second_floor_slab_support_ratio(room_2f, rooms):
+    """纯 2F 体块底面 (Z=3000) 被 1F 体块顶板覆盖的面积比例"""
+    if not _is_pure_second_floor_room(room_2f):
+        return 1.0
+
+    b_min, b_max = room_2f["_abs_min"], room_2f["_abs_max"]
+    if not _near_level(b_min[2], 3000):
+        return 1.0
+
+    plan = _room_plan_area(room_2f)
+    if plan <= 0:
+        return 1.0
+
+    supported = 0.0
+    for other in rooms:
+        if other["id"] == room_2f["id"]:
+            continue
+        if not _is_first_floor_slab_supporter(other):
+            continue
+        if not _boxes_share_face(other, room_2f, "z+"):
+            continue
+        o_min, o_max = other["_abs_min"], other["_abs_max"]
+        supported += _xy_overlap_area(b_min, b_max, o_min, o_max)
+
+    return min(1.0, supported / plan)
+
+
+def _is_floating_second_floor_room(room, rooms):
+    """底部架空导致二层体块「漂浮」：2F 体块下方缺少足够 1F 支承"""
+    if not _is_pure_second_floor_room(room):
+        return False
+    if room["type"] in FLOATING_2F_EXEMPT_TYPES:
+        return False
+    return _second_floor_slab_support_ratio(room, rooms) < MIN_2F_SLAB_SUPPORT_RATIO
+
+
+def _check_pilotis_floating_2f(rooms, errors):
+    """底部架空：过多二层体块下方无 1F 支承时禁止导出"""
+    pure_2f = [r for r in rooms if _is_pure_second_floor_room(r)]
+    if not pure_2f:
+        return
+
+    floating = [r for r in pure_2f if _is_floating_second_floor_room(r, rooms)]
+    if len(floating) <= MAX_FLOATING_2F_ROOMS:
+        return
+
+    lines = [
+        "【底部架空】检测到 {} 个二层漂浮体块（允许 ≤{} 个）".format(
+            len(floating), MAX_FLOATING_2F_ROOMS),
+        "  → 一层 Z=0~3000 下方缺少足够体块顶板（常见于底部架空/挑空过多）",
+        "  → 请在架空区补 1F 体块，或将二层功能移至有下层支承的位置",
+    ]
+    for room in floating[:10]:
+        ratio = _second_floor_slab_support_ratio(room, rooms)
+        type_cn = ROOM_TYPE_CN.get(room["type"], room["type"])
+        lines.append(
+            "  · [{}] {} — 下层支承覆盖率 {:.0f}%（要求 ≥{:.0f}%）".format(
+                room.get("layer_name", room["id"]),
+                type_cn,
+                ratio * 100.0,
+                MIN_2F_SLAB_SUPPORT_RATIO * 100.0,
+            ))
+    if len(floating) > 10:
+        lines.append("  · … 另有 {} 个漂浮体块".format(len(floating) - 10))
+    errors.append("\n".join(lines))
+
+
+def _entryway_has_lighting(room):
+    """玄关有采光即可（含经走道间接传导，不要求 direct outdoor）"""
+    return room.get("lighting_access", "none") != "none"
 
 
 def _check_entryway_rules(rooms, errors):
@@ -526,10 +763,10 @@ def _check_entryway_rules(rooms, errors):
         errors.append("【功能缺失】缺少必需空间：entryway（玄关）。")
         return
 
-    if not any(_entryway_has_outdoor_direct(e) for e in entryways):
+    if not any(_entryway_has_lighting(e) for e in entryways):
         names = "、".join(e.get("layer_name", e["id"]) for e in entryways)
         errors.append(
-            "【玄关规则】{} 均无 direct outdoor 暴露面，至少一个玄关须接室外".format(names))
+            "【玄关规则】{} 无任何采光，至少一个玄关须具备 direct/indirect 采光（含经走道传导）".format(names))
 
 
 def _check_required_rooms(room_counts, errors):
@@ -1363,14 +1600,38 @@ def _all_lighting_surfaces(room):
 # ==========================================
 # 主导出
 # ==========================================
-def export_and_qc_rhino_dataset():
+def _suggested_json_name(doc_name=None):
+    """从文档名推断 house_*.json 文件名"""
+    name = doc_name if doc_name is not None else rs.DocumentName()
+    if name:
+        base_name = name.split(".")[0]
+        match = re.search(r"\d+", base_name)
+        return "house_{}.json".format(match.group() if match else base_name)
+    return "house_001.json"
+
+
+def export_and_qc_rhino_dataset(interactive=True, save_path=None):
+    """导出当前文档 JSON。
+
+    interactive=False 时不弹窗（供批量脚本使用）；save_path 指定时跳过另存为对话框。
+    返回 {"ok": True/False, ...} 结果字典。
+    """
     if rs is None:
         raise RuntimeError("此脚本需在 Rhino 环境中运行（缺少 rhinoscriptsyntax）")
 
+    def _fail(stage, errors_list=None, **extra):
+        payload = {"ok": False, "stage": stage}
+        if errors_list is not None:
+            payload["errors"] = list(errors_list)
+        payload.update(extra)
+        return payload
+
     objects = rs.NormalObjects()
     if not objects:
-        rs.MessageBox("模型中没有可视对象！请确保体块未被隐藏或锁定。", 0, "错误")
-        return
+        msg = "模型中没有可视对象！请确保体块未被隐藏或锁定。"
+        if interactive:
+            ui_show_message(msg, title="错误")
+        return _fail("empty", [msg])
 
     errors = []
     warnings = []
@@ -1409,15 +1670,16 @@ def export_and_qc_rhino_dataset():
             "  → 推荐格式：11multi_purpose-多功能室".format(layer_name, count))
 
     if has_bad_geometry:
-        show_qc_report_dialog(
-            _sort_messages_by_layer(list(set(bad_reasons))) + ["", "请加盖(_Cap)或清理散线。"],
-            title="体块不合格",
-        )
-        return
+        bad_msgs = _sort_messages_by_layer(list(set(bad_reasons))) + ["", "请加盖(_Cap)或清理散线。"]
+        if interactive:
+            show_qc_report_dialog(bad_msgs, title="体块不合格")
+        return _fail("geometry", bad_msgs)
 
     if not valid_objs:
-        rs.MessageBox("没有找到任何有效的功能体块！", 0, "错误")
-        return
+        msg = "没有找到任何有效的功能体块！"
+        if interactive:
+            ui_show_message(msg, title="错误")
+        return _fail("no_rooms", [msg])
 
     overall_bbox = rs.BoundingBox(valid_objs)
     global_min_x = overall_bbox[0].X
@@ -1535,24 +1797,23 @@ def export_and_qc_rhino_dataset():
     _check_required_rooms(room_counts, errors)
     _check_topology_connectivity(rooms, errors)
     _check_stairs_connectivity(rooms, errors)
+    _check_pilotis_floating_2f(rooms, errors)
 
     if errors:
-        show_qc_report_dialog(
-            ["⛔ 严重错误：请修正后再导出！(已拦截)", ""] + _sort_messages_by_layer(errors),
-            title="AI 严苛质检 V14",
-        )
-        return
+        qc_msgs = ["⛔ 严重错误：请修正后再导出！(已拦截)", ""] + _sort_messages_by_layer(errors)
+        if interactive:
+            show_qc_report_dialog(qc_msgs, title="AI 严苛质检 V14")
+        return _fail("qc", qc_msgs)
 
     analyze_lighting(rooms)
 
     _check_entryway_rules(rooms, errors)
 
     if errors:
-        show_qc_report_dialog(
-            ["⛔ 严重错误：请修正后再导出！(已拦截)", ""] + _sort_messages_by_layer(errors),
-            title="AI 严苛质检 V14",
-        )
-        return
+        qc_msgs = ["⛔ 严重错误：请修正后再导出！(已拦截)", ""] + _sort_messages_by_layer(errors)
+        if interactive:
+            show_qc_report_dialog(qc_msgs, title="AI 严苛质检 V14")
+        return _fail("qc", qc_msgs)
 
     lighting_warnings = _collect_lighting_review_warnings(rooms)
     warnings.extend(lighting_warnings)
@@ -1594,19 +1855,14 @@ def export_and_qc_rhino_dataset():
         [w for w in warnings if not w.startswith("【坐标浮点误差】")]
     )
 
-    if not show_confirm_export_dialog(
-        orientation_msg, review_warnings, len(rooms), count_display,
-        courtyard_count, indirect_count, float_snap_count,
-    ):
-        return
+    if interactive:
+        if not show_confirm_export_dialog(
+            orientation_msg, review_warnings, len(rooms), count_display,
+            courtyard_count, indirect_count, float_snap_count,
+        ):
+            return _fail("cancelled")
 
-    doc_name = rs.DocumentName()
-    if doc_name:
-        base_name = doc_name.split(".")[0]
-        match = re.search(r"\d+", base_name)
-        suggested_name = "house_{}.json".format(match.group() if match else base_name)
-    else:
-        suggested_name = "house_001.json"
+    suggested_name = _suggested_json_name()
 
     metadata = {
         "total_rooms": len(rooms),
@@ -1621,6 +1877,7 @@ def export_and_qc_rhino_dataset():
             "overlap_qc": True,
             "gap_qc": True,
             "topology_qc": True,
+            "pilotis_floating_2f_qc": True,
             "slab_interface_qc": True,
             "floors_field": "rooms[i].floors=[1] / [2] / [1,2]; floor=floors[0] 兼容字段（跨层=stairs+挑空 living_room）",
             "lighting_field": "direct_lighting_surfaces + effective_lighting；effective 含 hops=0 直接采光副本，便于按法向聚合",
@@ -1658,16 +1915,37 @@ def export_and_qc_rhino_dataset():
         "rooms": rooms,
     }
 
-    save_path = rs.SaveFileName(
-        "保存合格的 AI 数据集",
-        "JSON Files (*.json)|*.json||",
-        filename=suggested_name,
-    )
+    if save_path is None:
+        save_path = rs.SaveFileName(
+            "保存合格的 AI 数据集",
+            "JSON Files (*.json)|*.json||",
+            filename=suggested_name,
+        )
 
-    if save_path:
-        with open(save_path, "w") as f:
-            json.dump(output, f, indent=4)
-        rs.MessageBox("🎉 JSON 数据已成功保存！\n(QC {})".format(QC_VERSION), 0, "导出完成")
+    if not save_path:
+        return _fail("no_save_path")
+
+    out_dir = os.path.dirname(save_path)
+    if out_dir and not os.path.isdir(out_dir):
+        os.makedirs(out_dir)
+
+    with open(save_path, "w") as f:
+        json.dump(output, f, indent=4)
+
+    if interactive:
+        ui_show_message(
+            "🎉 JSON 数据已成功保存！\n(QC {})".format(QC_VERSION),
+            title="导出完成",
+        )
+
+    return {
+        "ok": True,
+        "save_path": save_path,
+        "house_id": output["house_id"],
+        "total_rooms": len(rooms),
+        "warnings": review_warnings,
+        "qc_version": QC_VERSION,
+    }
 
 
 if __name__ == "__main__":
