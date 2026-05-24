@@ -1,0 +1,37 @@
+# ── 私有内容（不上传 GitHub）────────────────────────────
+docs/
+data/*
+!data/README.md
+models/*
+!models/README.md
+
+# ── 实验产物与日志 ────────────────────────────────────────
+experimental_results/
+logs/
+notebooks/experiments/
+notebooks/sandbox/
+
+# 预处理缓存与训练权重（防止误提交到任意目录）
+*.pt
+*.pth
+
+# QC / 评估脚本生成的报告
+qc_report_*.csv
+qc_summary_*.json
+
+# ── 表格数据（限定在 data/ 与实验目录；上方目录规则已覆盖）──
+data/**/*.csv
+data/**/*.json
+data/**/*.xlsx
+data/**/*.xls
+
+# ── Python 与 IDE ─────────────────────────────────────────
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.vscode/
+.DS_Store
+
+# ── 允许提交目录说明文件 ──────────────────────────────────
+!data/README.md
+!models/README.md
