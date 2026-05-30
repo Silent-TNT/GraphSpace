@@ -544,7 +544,8 @@ body {
     width: 100%;
     min-width: unset;
     height: auto;
-    max-height: 35vh;
+    max-height: 40vh;
+    max-height: 40dvh;
   }
 
   .viewer-body {
@@ -554,6 +555,89 @@ body {
   .info-panel {
     width: 100%;
     min-width: unset;
-    max-height: 30vh;
+    max-height: 32vh;
+    max-height: 32dvh;
+  }
+}
+
+@media (max-width: 768px) {
+  .site-topbar {
+    flex-wrap: wrap;
+    padding: 0.5rem 0.75rem;
+    padding-top: calc(0.5rem + env(safe-area-inset-top, 0px));
+    gap: 0.5rem;
+  }
+
+  .site-back {
+    font-size: 0.85rem;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .site-topbar-links {
+    width: 100%;
+    order: 3;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    gap: 0.35rem;
+    padding-bottom: 2px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .site-topbar-links::-webkit-scrollbar {
+    display: none;
+  }
+
+  .site-topbar-links a {
+    flex-shrink: 0;
+    padding: 0.55rem 0.75rem;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 8px;
+    background: var(--surface-2);
+  }
+
+  .sidebar {
+    max-height: 45dvh;
+  }
+
+  .search-box input,
+  #search-input {
+    font-size: 16px;
+    min-height: 44px;
+  }
+
+  .house-item {
+    min-height: 44px;
+    padding: 0.75rem 0.85rem;
+  }
+
+  .tab,
+  .floor-btn {
+    min-height: 44px;
+    padding: 0.5rem 0.85rem;
+  }
+
+  .view-tabs {
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .viewer-header {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .canvas-area.split-mode {
+    grid-template-rows: 1fr 1fr;
+    min-height: 50vh;
+  }
+
+  #view-2d,
+  #view-3d {
+    min-height: 200px;
   }
 }

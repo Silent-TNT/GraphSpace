@@ -6,6 +6,7 @@
   var transition = document.getElementById("fold-transition");
   var soundToggle = document.getElementById("fold-sound-toggle");
   var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var isCoarse = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
   var isLeaving = false;
   var lastHoverCard = null;
   var hoverSoundThrottle = 0;
@@ -35,15 +36,17 @@
   }
 
   cards.forEach(function (card) {
-    card.addEventListener("mouseenter", function () {
-      if (card === lastHoverCard) return;
-      lastHoverCard = card;
-      var now = Date.now();
-      if (now - hoverSoundThrottle > 180 && window.FoldAudio) {
-        hoverSoundThrottle = now;
-        FoldAudio.playHover();
-      }
-    });
+    if (!isCoarse) {
+      card.addEventListener("mouseenter", function () {
+        if (card === lastHoverCard) return;
+        lastHoverCard = card;
+        var now = Date.now();
+        if (now - hoverSoundThrottle > 180 && window.FoldAudio) {
+          hoverSoundThrottle = now;
+          FoldAudio.playHover();
+        }
+      });
+    }
 
     card.addEventListener("mousedown", function () {
       card.classList.add("is-pressed");
@@ -97,7 +100,7 @@
       transition.classList.add("is-active");
     });
 
-    var duration = 900;
+    var duration = isCoarse ? 550 : 900;
     setTimeout(function () {
       window.location.href = href;
     }, duration);

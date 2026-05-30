@@ -410,36 +410,96 @@
   opacity: 0.55;
 }
 
-/* 响应式 */
+/* 平板 */
 @media (max-width: 1024px) {
   .zone-cards {
     grid-template-columns: repeat(2, 1fr);
+    gap: 0.65rem;
   }
   .zone-card:nth-child(5) {
     grid-column: 1 / -1;
-    max-width: 420px;
-    margin: 0 auto;
-    width: 100%;
+    max-width: none;
   }
 }
 
-@media (max-width: 640px) {
+/* 手机 — 单列大按钮卡片 */
+@media (max-width: 768px) {
+  .fold-stage {
+    padding: 0.75rem 0.75rem 0;
+    min-height: auto;
+  }
+
+  .fold-intro {
+    margin-bottom: 1.25rem;
+  }
+
+  .fold-intro h1 {
+    font-size: 1.5rem;
+  }
+
   .zone-cards {
     grid-template-columns: 1fr;
-    max-width: 360px;
-  }
-  .zone-card:nth-child(5) {
+    gap: 0.65rem;
     max-width: none;
+    perspective: none;
   }
+
   .zone-card {
     min-height: auto;
-    transform-origin: center top;
+    padding: 1rem 1.1rem;
+    transform-origin: center center;
+    transform: none !important;
+    filter: none !important;
+    opacity: 1 !important;
   }
+
+  .zone-card__enter {
+    opacity: 1;
+    transform: none;
+    margin-top: 0.5rem;
+    min-height: var(--touch-min, 44px);
+    display: inline-flex;
+    align-items: center;
+  }
+
   .zone-cards:has(.zone-card:hover) .zone-card:not(:hover) {
-    transform: scale(0.96);
+    opacity: 1;
+    filter: none;
+    transform: none;
   }
+
+  .zone-card:active {
+    transform: scale(0.98) !important;
+    border-color: var(--zone-color);
+  }
+
+  .fold-legend {
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .fold-sound-toggle {
+    min-width: var(--touch-min, 44px);
+  }
+}
+
+/* 触控设备：弱化悬停 3D，避免粘滞 */
+@media (hover: none) and (pointer: coarse) {
+  .zone-cards:has(.zone-card:hover) .zone-card:not(:hover) {
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+
   .zone-card:hover {
-    transform: translateY(-8px) scale(1.02);
+    transform: none;
+    box-shadow: none;
+  }
+
+  .zone-card__enter {
+    opacity: 1;
+    transform: none;
   }
 }
 
