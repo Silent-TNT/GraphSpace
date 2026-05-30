@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>论文 — SpaceModal / GraphSpace</title>
+  <meta name="description" content="GraphSpace 住宅布局生成论文摘要：异构 GNN、SpatialModalCVAE、体素解码与采光约束。">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/shell.js"></script>
+</head>
+<body>
+  <div data-site-shell></div>
+
+  <main class="container">
+    <header class="page-header">
+      <p class="breadcrumb"><a href="/">折叠空间</a> / <a href="/ml/">ML 展示</a> / 论文</p>
+      <h1>论文</h1>
+      <p class="meta">
+        <span class="status-badge status-draft">撰写 / 审稿中</span>
+        &nbsp;·&nbsp; 项目主页：https://spacemodal.com
+      </p>
+    </header>
+
+    <article class="prose">
+      <div class="privacy-notice">
+        <strong>发表前说明：</strong> 数据集与模型权重在论文正式发表前不对外公开。本页仅提供方法摘要与引用信息。
+      </div>
+
+      <h2>标题（待定）</h2>
+      <p><strong>中文：</strong>GraphSpace：基于异构图与条件变分自编码器的住宅功能布局生成</p>
+      <p><strong>English：</strong>GraphSpace: Heterogeneous Graph-based Conditional Residential Layout Generation with Lighting and Modular Constraints</p>
+      <p><strong>项目品牌：</strong>SpaceModal（空间模态）· 产品方向 ModalPlan（模态户型）</p>
+
+      <h2>摘要</h2>
+      <blockquote>
+        住宅方案设计早期阶段需要在用地边界、功能清单与建造模数等多重约束下快速探索布局可能性。
+        GraphSpace 提出一套将空间拓扑结构化为异构图网络的表达方法，
+        并基于 SpatialModalCVAE 实现条件驱动的三维功能体块生成。
+        系统从 Rhino 三维模型提取房间邻接、采光面与流线关系，
+        经离线质量校验后用于 GNN 编码与 CVAE 潜空间学习，
+        最终通过 3D 体素解码输出符合 300mm 模数的功能体块布局。
+      </blockquote>
+
+      <h2>方法概述</h2>
+      <ol>
+        <li><strong>拓扑提取</strong> — Rhino 脚本导出 JSON：节点、邻接边、采光面属性</li>
+        <li><strong>异构图编码</strong> — HeteroGraphVAEEncoder 分类型编码</li>
+        <li><strong>条件 CVAE</strong> — 潜空间注入用地、功能清单、朝向与采光约束</li>
+        <li><strong>体素解码</strong> — 96×96×32 栅格，300mm 模数</li>
+        <li><strong>量化评估</strong> — mIoU、program_acc、模数合规率等</li>
+      </ol>
+
+      <h2>引用格式</h2>
+      <pre class="code-block">@misc{spacemodal2026,
+  title  = {GraphSpace: Heterogeneous Graph-based Conditional Residential Layout Generation},
+  author = {[Authors]},
+  year   = {2026},
+  url    = {https://spacemodal.com/paper/},
+  note   = {Project brand: SpaceModal}
+}</pre>
+
+      <h2>相关资源</h2>
+      <ul>
+        <li><a href="/portfolio/">作品集</a> — 工程能力与公开范围说明</li>
+        <li><a href="/demo/">演示说明</a> — 本地运行方式（不公开放权重）</li>
+        <li><a href="#" data-github-url target="_blank" rel="noopener">GitHub 仓库</a> — 脚本与 notebook 结构</li>
+        <li>数据集与权重 — 论文发表后评估发布方式</li>
+      </ul>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>© 2026 SpaceModal · spacemodal.com</span>
+      <div class="footer-links">
+        <a href="/portfolio/">作品集</a>
+        <a href="/demo/">演示</a>
+        <a href="#" data-contact-email>联系</a>
+      </div>
+    </div>
+  </footer>
+  <script src="/js/site-config.js"></script>
+  <script src="/js/site-apply.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>

@@ -85,6 +85,27 @@ python scripts/offline_check/validate_json_dataset.py --data-dir data/processed
 #    训练完成后将权重保存至本地 models/（参见 models/README.md）
 ```
 
+## 项目网站
+
+静态站点位于 [`website/`](website/)，域名为 **spacemodal.com** / spacemodal.cn：
+
+| 页面 | 说明 |
+|------|------|
+| [首页](website/index.html) | SpaceModal 空间模态 — 项目概览 |
+| [作品集](website/portfolio/index.html) | 实习作品集（安全模式，无数据下载） |
+| [数据可视化](website/viewer/index.html) | 公网 10 套 Demo（`demo/datasets/`） |
+| [论文](website/paper/index.html) | 摘要、方法、引用 |
+| [演示](website/demo/index.html) | 本地演示说明 |
+| [产品](website/product/index.html) | 模态户型 ModalPlan |
+
+部署与安全说明见 [`website/DEPLOY.md`](website/DEPLOY.md)。上线前请编辑 [`website/js/site-config.js`](website/js/site-config.js) 并运行 `cd website && npm run build:viewer`。
+
+```bash
+cd website
+npm run build:viewer
+python -m http.server 8080
+```
+
 ## 许可证
 
 待定（论文发表后补充）。

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>机器学习展示 — SpaceModal / GraphSpace</title>
+  <meta name="description" content="GraphSpace 机器学习展示枢纽：论文摘要、演示说明、模态户型产品与 SpatialModalCVAE 方法链。">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/shell.js"></script>
+</head>
+<body>
+  <div data-site-shell></div>
+
+  <main class="container">
+    <header class="page-header">
+      <p class="breadcrumb"><a href="/">折叠空间</a> / 机器学习展示</p>
+      <h1>机器学习展示</h1>
+      <p class="meta">异构图 + SpatialModalCVAE + 体素解码 · 采光与模数约束</p>
+    </header>
+
+    <div class="pipeline">
+      <span>用地 + 功能清单</span>
+      <span class="arrow">→</span>
+      <span>异构图编码</span>
+      <span class="arrow">→</span>
+      <span>SpatialModalCVAE</span>
+      <span class="arrow">→</span>
+      <span>96×96×32 体素</span>
+    </div>
+
+    <h2>聚合指标（MVP）</h2>
+    <div class="metric-grid">
+      <div class="metric-card">
+        <div class="value">—</div>
+        <div class="label">mIoU</div>
+      </div>
+      <div class="metric-card">
+        <div class="value">—</div>
+        <div class="label">program_acc</div>
+      </div>
+      <div class="metric-card">
+        <div class="value">—</div>
+        <div class="label">模数合规率</div>
+      </div>
+      <div class="metric-card">
+        <div class="value">74</div>
+        <div class="label">训练集规模（户）</div>
+      </div>
+    </div>
+
+    <h2>深入浏览</h2>
+    <div class="grid-3">
+      <article class="card">
+        <span class="step-num">论文</span>
+        <h3>方法与评估</h3>
+        <p>摘要、SpatialModalCVAE 方法链、指标与引用格式（撰写中）。</p>
+        <p style="margin-top: 0.75rem;"><a class="btn btn-secondary" href="/paper/">进入论文 →</a></p>
+      </article>
+      <article class="card">
+        <span class="step-num">演示</span>
+        <h3>交互与 Demo</h3>
+        <p>公网 10 套可视化样例；条件生成与 Gradio 本地说明。</p>
+        <p style="margin-top: 0.75rem;"><a class="btn btn-secondary" href="/demo/">演示说明 →</a></p>
+      </article>
+      <article class="card">
+        <span class="step-num">产品</span>
+        <h3>模态户型 ModalPlan</h3>
+        <p>面向方案早期的约束感知体块生成产品方向。</p>
+        <p style="margin-top: 0.75rem;"><a class="btn btn-product" href="/product/">了解产品 →</a></p>
+      </article>
+    </div>
+
+    <div class="product-banner" style="margin-top: 2rem;">
+      <h2>技术亮点</h2>
+      <ul class="feature-list">
+        <li>Living / Service / Circulation 分类型异构图节点</li>
+        <li>空间模态潜空间 + 多条件注入</li>
+        <li>300mm 模数对齐的 3D 体素解码</li>
+      </ul>
+      <a class="btn btn-primary" href="/viewer/">打开数据看板 →</a>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>© 2026 SpaceModal · spacemodal.com</span>
+      <div class="footer-links">
+        <a href="/">折叠空间</a>
+        <a href="/portal/">门户</a>
+        <a href="#" data-contact-email>联系</a>
+      </div>
+    </div>
+  </footer>
+  <script src="/js/site-config.js"></script>
+  <script src="/js/site-apply.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>

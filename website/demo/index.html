@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>演示说明 — SpaceModal</title>
+  <meta name="description" content="SpaceModal 条件生成与数据可视化演示说明。">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/shell.js"></script>
+</head>
+<body>
+  <div data-site-shell></div>
+
+  <main class="container">
+    <header class="page-header">
+      <p class="breadcrumb"><a href="/">折叠空间</a> / <a href="/ml/">ML 展示</a> / 演示</p>
+      <h1>演示说明</h1>
+      <p class="meta">
+        <span class="status-badge status-live">10 套 Demo 样例可在线浏览</span>
+      </p>
+    </header>
+
+    <article class="prose">
+      <h2>数据可视化（公网 Demo）</h2>
+      <p>
+        在 <a href="/viewer/">/viewer/</a> 浏览 <strong>10 套</strong>展示用拓扑 JSON（2D 平面图 + 3D 体块），
+        源文件位于 <code>website/demo/datasets/</code>。
+      </p>
+      <p><a class="btn btn-primary" href="/viewer/">打开数据可视化 →</a></p>
+
+      <h2>条件生成 Demo（本地）</h2>
+      <p>
+        模型权重与完整训练集不公开展示。条件生成请在本地运行 notebook 或 Gradio 占位脚本。
+      </p>
+
+      <h2>本地运行 Gradio 占位</h2>
+      <pre class="code-block">cd GraphSpace
+pip install -r requirements.txt gradio
+python website/demo/gradio_app.py
+# 打开 http://127.0.0.1:7860</pre>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>© 2026 SpaceModal · spacemodal.com</span>
+      <div class="footer-links">
+        <a href="/viewer/">数据可视化</a>
+        <a href="/portal/">门户</a>
+        <a href="#" data-contact-email>联系</a>
+      </div>
+    </div>
+  </footer>
+  <script src="/js/site-config.js"></script>
+  <script src="/js/site-apply.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>

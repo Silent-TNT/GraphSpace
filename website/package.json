@@ -1,0 +1,11 @@
+{
+  "private": true,
+  "name": "spacemodal-website",
+  "scripts": {
+    "dev:viewer": "npm --prefix qc-viewer run dev",
+    "build:viewer": "npm --prefix qc-viewer run build:demo",
+    "build:search": "node scripts/build-search-index.mjs",
+    "build:site": "npm run build:search && npm run build:viewer",
+    "preview:site": "python -m http.server 8080"
+  }
+}

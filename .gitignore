@@ -5,6 +5,14 @@ data/*
 models/*
 !models/README.md
 
+# ── 数据集可视化（本地生成，勿提交）────────────────────
+website/qc-viewer/node_modules/
+website/qc-viewer/public/dataset/
+website/qc-viewer/public/manifest.json
+website/qc-viewer/dist/
+dataset/
+web/
+
 # ── 实验产物与日志 ────────────────────────────────────────
 experimental_results/
 logs/

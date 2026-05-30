@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SpaceModal 空间模态 — 空间折叠五区门户</title>
+  <meta name="description" content="SpaceModal 空间折叠门户：五区卡片折入展开。GraphSpace 住宅布局生成。">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/fold-home.css">
+  <script src="/js/shell.js"></script>
+</head>
+<body class="page-fold">
+  <div data-site-shell></div>
+
+  <div id="fold-transition" class="fold-transition" hidden aria-hidden="true">
+    <div class="fold-transition__veil"></div>
+    <div class="fold-transition__sheet fold-transition__sheet--left"></div>
+    <div class="fold-transition__sheet fold-transition__sheet--right"></div>
+    <div class="fold-transition__crease"></div>
+  </div>
+
+  <main class="fold-page">
+    <section class="fold-stage" aria-label="空间折叠导航">
+      <header class="fold-intro">
+        <span class="fold-intro-badge">Space Folding</span>
+        <h1>空间折叠</h1>
+        <p class="fold-intro-sub">GraphSpace · 点击折面进入空间</p>
+      </header>
+
+      <div class="zone-cards" id="zone-cards">
+        <a class="zone-card" href="/portal/" data-zone="portal" data-fold-dir="left">
+          <span class="zone-card__paper" aria-hidden="true"></span>
+          <span class="zone-card__crease" aria-hidden="true"></span>
+          <span class="zone-card__corner" aria-hidden="true"></span>
+          <span class="zone-card__num">01</span>
+          <h2 class="zone-card__title">个人数字门户</h2>
+          <p class="zone-card__desc">身份 · 工作流 · 作品集</p>
+          <span class="zone-card__enter">折入 →</span>
+        </a>
+        <a class="zone-card" href="/viewer/" data-zone="dashboard" data-fold-dir="center">
+          <span class="zone-card__paper" aria-hidden="true"></span>
+          <span class="zone-card__crease" aria-hidden="true"></span>
+          <span class="zone-card__corner" aria-hidden="true"></span>
+          <span class="zone-card__num">02</span>
+          <h2 class="zone-card__title">数据看板</h2>
+          <p class="zone-card__desc">10 套 Demo · 2D / 3D</p>
+          <span class="zone-card__enter">折入 →</span>
+        </a>
+        <a class="zone-card" href="/ml/" data-zone="ml" data-fold-dir="center">
+          <span class="zone-card__paper" aria-hidden="true"></span>
+          <span class="zone-card__crease" aria-hidden="true"></span>
+          <span class="zone-card__corner" aria-hidden="true"></span>
+          <span class="zone-card__num">03</span>
+          <h2 class="zone-card__title">机器学习展示</h2>
+          <p class="zone-card__desc">论文 · 演示 · 产品</p>
+          <span class="zone-card__enter">折入 →</span>
+        </a>
+        <a class="zone-card" href="/ai/" data-zone="ai" data-fold-dir="center">
+          <span class="zone-card__paper" aria-hidden="true"></span>
+          <span class="zone-card__crease" aria-hidden="true"></span>
+          <span class="zone-card__corner" aria-hidden="true"></span>
+          <span class="zone-card__num">04</span>
+          <h2 class="zone-card__title">AI 对话检索</h2>
+          <p class="zone-card__desc">全站检索 · 对话占位</p>
+          <span class="zone-card__enter">折入 →</span>
+        </a>
+        <a class="zone-card" href="/tools/" data-zone="tools" data-fold-dir="right">
+          <span class="zone-card__paper" aria-hidden="true"></span>
+          <span class="zone-card__crease" aria-hidden="true"></span>
+          <span class="zone-card__corner" aria-hidden="true"></span>
+          <span class="zone-card__num">05</span>
+          <h2 class="zone-card__title">个人工具箱</h2>
+          <p class="zone-card__desc">Rhino · QC · Gradio</p>
+          <span class="zone-card__enter">折入 →</span>
+        </a>
+      </div>
+
+      <p class="fold-legend">
+        <button type="button" class="fold-sound-toggle" id="fold-sound-toggle" aria-pressed="true" title="折纸音效">🔊 音效</button>
+        <span class="fold-legend-hint">悬停听折纸声 · 点击进入</span>
+      </p>
+    </section>
+  </main>
+
+  <footer class="site-footer fold-footer">
+    <div class="container footer-inner">
+      <span>© 2026 SpaceModal</span>
+      <div class="footer-links">
+        <a href="#" data-github-url target="_blank" rel="noopener">GitHub</a>
+        <a href="/portal/">门户</a>
+        <a href="#" data-contact-email>联系</a>
+      </div>
+    </div>
+  </footer>
+  <script src="/js/site-config.js"></script>
+  <script src="/js/site-apply.js"></script>
+  <script src="/js/fold-audio.js"></script>
+  <script src="/js/fold.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>

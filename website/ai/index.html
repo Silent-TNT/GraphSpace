@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 对话检索 — SpaceModal</title>
+  <meta name="description" content="SpaceModal 全站检索：论文、产品、工具与 Demo 户型 ID。对话功能二期接入 LLM API。">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/shell.js"></script>
+</head>
+<body>
+  <div data-site-shell></div>
+
+  <main class="container">
+    <header class="page-header">
+      <p class="breadcrumb"><a href="/">折叠空间</a> / AI 对话检索</p>
+      <h1>AI 对话检索</h1>
+      <p class="meta"><span id="search-status">加载索引…</span></p>
+    </header>
+
+    <div class="ai-layout">
+      <section>
+        <label for="search-input" class="section-lead" style="display:block; margin-bottom: 0.5rem;">全站检索</label>
+        <input
+          id="search-input"
+          class="search-box-main"
+          type="search"
+          placeholder="搜索页面、方法、户型 ID（如 house_2107）…"
+          autocomplete="off"
+        />
+        <ul id="search-results" class="search-results" aria-live="polite">
+          <li class="search-result-item">
+            <span class="search-result-meta">输入关键词开始检索</span>
+          </li>
+        </ul>
+      </section>
+
+      <aside class="ai-chat-panel">
+        <h3>对话（占位）</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">
+          首版提供静态站内检索。LLM 对话需后端或 Edge Function，计划在二期接入。
+        </p>
+        <p style="margin-top: 1rem; font-size: 0.85rem; color: var(--text-muted);">
+          从检索结果可直达 <a href="/viewer/">数据看板</a> 的指定户型（URL 参数 <code>?house=</code>）。
+        </p>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>© 2026 SpaceModal · spacemodal.com</span>
+      <div class="footer-links">
+        <a href="/">折叠空间</a>
+        <a href="/viewer/">数据看板</a>
+        <a href="#" data-contact-email>联系</a>
+      </div>
+    </div>
+  </footer>
+  <script src="/js/site-config.js"></script>
+  <script src="/js/site-apply.js"></script>
+  <script src="/js/main.js"></script>
+  <script src="/ai/search.js"></script>
+</body>
+</html>

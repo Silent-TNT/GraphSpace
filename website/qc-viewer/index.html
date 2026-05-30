@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SpaceModal 数据可视化</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <header class="site-topbar">
+      <a href="/" class="site-back">← 折叠空间</a>
+      <nav class="site-topbar-links" aria-label="五区导航">
+        <a href="/portal/">门户</a>
+        <a href="/viewer/" class="topbar-active">看板</a>
+        <a href="/ml/">ML</a>
+        <a href="/ai/">AI</a>
+        <a href="/tools/">工具箱</a>
+      </nav>
+    </header>
+    <div id="mode-banner" class="mode-banner hidden"></div>
+    <div id="app">
+      <aside class="sidebar">
+        <header class="sidebar-header">
+          <h1>数据可视化</h1>
+          <p class="subtitle">2D 平面图 · 3D 体块浏览</p>
+        </header>
+        <div class="search-box">
+          <input
+            id="search-input"
+            type="search"
+            placeholder="搜索房屋 ID..."
+            autocomplete="off"
+          />
+        </div>
+        <div id="house-list" class="house-list"></div>
+        <footer class="sidebar-footer">
+          <span id="dataset-count"></span>
+        </footer>
+      </aside>
+
+      <main class="main">
+        <div id="empty-state" class="empty-state">
+          <div class="empty-icon">🏠</div>
+          <h2>选择一套房屋</h2>
+          <p>从左侧列表中选择，查看 2D 平面图与 3D 模型</p>
+        </div>
+
+        <div id="viewer-panel" class="viewer-panel hidden">
+          <header class="viewer-header">
+            <div>
+              <h2 id="house-title"></h2>
+              <p id="house-meta" class="house-meta"></p>
+            </div>
+            <div class="view-tabs">
+              <button class="tab active" data-view="2d">2D 平面图</button>
+              <button class="tab" data-view="3d">3D 视图</button>
+              <button class="tab" data-view="split">分屏</button>
+            </div>
+          </header>
+
+          <div class="viewer-body">
+            <div class="canvas-area">
+              <div id="floor-toolbar" class="floor-toolbar"></div>
+              <div id="view-2d" class="view-container"></div>
+              <div id="view-3d" class="view-container hidden"></div>
+            </div>
+
+            <aside class="info-panel">
+              <section class="info-section">
+                <h3>房间统计</h3>
+                <div id="stats-grid" class="stats-grid"></div>
+              </section>
+              <section class="info-section">
+                <h3>建筑尺寸</h3>
+                <div id="building-info" class="building-info"></div>
+              </section>
+              <section class="info-section">
+                <h3>图例</h3>
+                <div id="legend" class="legend"></div>
+              </section>
+              <section class="info-section">
+                <h3>选中房间</h3>
+                <div id="room-detail" class="room-detail">
+                  <p class="muted">点击平面图上的房间查看详情</p>
+                </div>
+              </section>
+            </aside>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

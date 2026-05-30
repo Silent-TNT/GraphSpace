@@ -1,0 +1,1830 @@
+{
+    "metadata": {
+        "lighting_qc": {
+            "review_warnings": []
+        }, 
+        "total_rooms": 22, 
+        "stats": {
+            "living_room": 1, 
+            "stairs": 1, 
+            "balcony": 2, 
+            "utility": 2, 
+            "bathroom": 2, 
+            "entryway": 1, 
+            "multi_purpose": 1, 
+            "corridor": 5, 
+            "bedroom": 5, 
+            "kitchen": 1, 
+            "dining_room": 1
+        }, 
+        "condition_vector_extensions": {
+            "labels": [
+                "living_room_south_direct", 
+                "living_room_south_indirect", 
+                "main_bedroom_south_direct", 
+                "facade_N", 
+                "facade_S", 
+                "facade_E", 
+                "facade_W"
+            ], 
+            "schema": "orientation_v1", 
+            "orientation": [
+                1.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0
+            ]
+        }, 
+        "constraints": {
+            "pilotis_floating_2f_qc": true, 
+            "qc_version": "v14", 
+            "modulus": 300, 
+            "lighting_analysis": "adjacency_void_propagation_v2", 
+            "topology_qc": true, 
+            "slab_interface_qc": true, 
+            "gap_qc": true, 
+            "voxel_grid": {
+                "grid_z_phys": 9600, 
+                "max_building_mm": [
+                    28800, 
+                    28800, 
+                    6000
+                ], 
+                "voxel_size": 300, 
+                "res": [
+                    96, 
+                    96, 
+                    32
+                ]
+            }, 
+            "pure_box_enforced": true, 
+            "floors_field": "rooms[i].floors=[1] / [2] / [1,2]; floor=floors[0] \u517c\u5bb9\u5b57\u6bb5\uff08\u8de8\u5c42=stairs+\u6311\u7a7a living_room\uff09", 
+            "overlap_qc": true, 
+            "lighting_field": "direct_lighting_surfaces + effective_lighting\uff1beffective \u542b hops=0 \u76f4\u63a5\u91c7\u5149\u526f\u672c\uff0c\u4fbf\u4e8e\u6309\u6cd5\u5411\u805a\u5408", 
+            "coord_modulus_qc": true, 
+            "origin_aligned_auto": true
+        }, 
+        "building_size": {
+            "x": 16500.0, 
+            "z": 6000.0, 
+            "y": 9900.0
+        }, 
+        "orientation_qc": {
+            "living_room_south_indirect": false, 
+            "main_bedroom_south_direct": true, 
+            "living_room_south_direct": true, 
+            "facade_exposed_sides": [
+                "N", 
+                "S", 
+                "E", 
+                "W"
+            ]
+        }
+    }, 
+    "house_id": "house_2108", 
+    "rooms": [
+        {
+            "lighting_access": "direct", 
+            "type": "dining_room", 
+            "id": "room_0", 
+            "box_max": [
+                4200.0, 
+                7200.0, 
+                3000.0
+            ], 
+            "effective_lighting": [
+                {
+                    "area": 12600000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_0"
+                    ], 
+                    "normal": [
+                        -1.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "source": "room_0", 
+                    "hops": 0, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "floor": 1, 
+            "box_min": [
+                0.0, 
+                3000.0, 
+                0.0
+            ], 
+            "floors": [
+                1
+            ], 
+            "layer_name": "dining_room-\u9910\u5385", 
+            "direct_lighting_surfaces": [
+                {
+                    "normal": [
+                        -1.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "area": 12600000.0, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "lighting_priority": 5
+        }, 
+        {
+            "lighting_access": "direct", 
+            "type": "kitchen", 
+            "id": "room_1", 
+            "box_max": [
+                4200.0, 
+                3000.0, 
+                3000.0
+            ], 
+            "effective_lighting": [
+                {
+                    "area": 7200000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_1"
+                    ], 
+                    "normal": [
+                        -1.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "source": "room_1", 
+                    "hops": 0, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "area": 12600000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_1"
+                    ], 
+                    "normal": [
+                        0.0, 
+                        -1.0, 
+                        0.0
+                    ], 
+                    "source": "room_1", 
+                    "hops": 0, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "floor": 1, 
+            "box_min": [
+                0.0, 
+                600.0, 
+                0.0
+            ], 
+            "floors": [
+                1
+            ], 
+            "layer_name": "kitchen-\u53a8\u623f", 
+            "direct_lighting_surfaces": [
+                {
+                    "normal": [
+                        -1.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "area": 7200000.0, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "normal": [
+                        0.0, 
+                        -1.0, 
+                        0.0
+                    ], 
+                    "area": 12600000.0, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "lighting_priority": 4
+        }, 
+        {
+            "lighting_access": "direct", 
+            "type": "living_room", 
+            "id": "room_2", 
+            "box_max": [
+                8400.0, 
+                6600.0, 
+                3000.0
+            ], 
+            "effective_lighting": [
+                {
+                    "area": 9450000.0, 
+                    "attenuation": 0.69999999999999996, 
+                    "path": [
+                        "room_21", 
+                        "room_3", 
+                        "room_2"
+                    ], 
+                    "normal": [
+                        1.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "source": "room_21", 
+                    "hops": 2, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "area": 9009000.0, 
+                    "attenuation": 0.69999999999999996, 
+                    "path": [
+                        "room_4", 
+                        "room_3", 
+                        "room_2"
+                    ], 
+                    "normal": [
+                        0.0, 
+                        1.0, 
+                        0.0
+                    ], 
+                    "source": "room_4", 
+                    "hops": 2, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "area": 12600000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_2"
+                    ], 
+                    "normal": [
+                        0.0, 
+                        -1.0, 
+                        0.0
+                    ], 
+                    "source": "room_2", 
+                    "hops": 0, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "floor": 1, 
+            "box_min": [
+                4200.0, 
+                1500.0, 
+                0.0
+            ], 
+            "floors": [
+                1
+            ], 
+            "layer_name": "living_room-\u5ba2\u5385", 
+            "direct_lighting_surfaces": [
+                {
+                    "normal": [
+                        0.0, 
+                        -1.0, 
+                        0.0
+                    ], 
+                    "area": 12600000.0, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "lighting_priority": 10
+        }, 
+        {
+            "lighting_access": "direct", 
+            "type": "entryway", 
+            "id": "room_3", 
+            "box_max": [
+                12300.0, 
+                6600.0, 
+                3000.0
+            ], 
+            "effective_lighting": [
+                {
+                    "area": 6435000.0, 
+                    "attenuation": 0.5, 
+                    "path": [
+                        "room_4", 
+                        "room_3"
+                    ], 
+                    "normal": [
+                        0.0, 
+                        1.0, 
+                        0.0
+                    ], 
+                    "source": "room_4", 
+                    "hops": 1, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "area": 8100000.0, 
+                    "attenuation": 0.5, 
+                    "path": [
+                        "room_5", 
+                        "room_4", 
+                        "room_3"
+                    ], 
+                    "normal": [
+                        1.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "source": "room_5", 
+                    "hops": 2, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "area": 11700000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_3"
+                    ], 
+                    "normal": [
+                        0.0, 
+                        -1.0, 
+                        0.0
+                    ], 
+                    "source": "room_3", 
+                    "hops": 0, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "floor": 1, 
+            "box_min": [
+                8400.0, 
+                1500.0, 
+                0.0
+            ], 
+            "floors": [
+                1
+            ], 
+            "layer_name": "entryway-\u7384\u5173", 
+            "direct_lighting_surfaces": [
+                {
+                    "normal": [
+                        0.0, 
+                        -1.0, 
+                        0.0
+                    ], 
+                    "area": 11700000.0, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "lighting_priority": 1
+        }, 
+        {
+            "lighting_access": "direct", 
+            "type": "corridor", 
+            "id": "room_4", 
+            "box_max": [
+                12300.0, 
+                9900.0, 
+                3000.0
+            ], 
+            "effective_lighting": [
+                {
+                    "area": 12870000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_4"
+                    ], 
+                    "normal": [
+                        0.0, 
+                        1.0, 
+                        0.0
+                    ], 
+                    "source": "room_4", 
+                    "hops": 0, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "floor": 1, 
+            "box_min": [
+                8400.0, 
+                6600.0, 
+                0.0
+            ], 
+            "floors": [
+                1
+            ], 
+            "layer_name": "corridor-\u8fc7\u9053", 
+            "direct_lighting_surfaces": [
+                {
+                    "normal": [
+                        0.0, 
+                        1.0, 
+                        0.0
+                    ], 
+                    "area": 12870000.0, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "lighting_priority": 0
+        }, 
+        {
+            "lighting_access": "direct", 
+            "type": "stairs", 
+            "id": "room_5", 
+            "box_max": [
+                16500.0, 
+                9900.0, 
+                6000.0
+            ], 
+            "effective_lighting": [
+                {
+                    "area": 5850000.0, 
+                    "attenuation": 0.5, 
+                    "path": [
+                        "room_3", 
+                        "room_4", 
+                        "room_5"
+                    ], 
+                    "normal": [
+                        0.0, 
+                        -1.0, 
+                        0.0
+                    ], 
+                    "source": "room_3", 
+                    "hops": 2, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "area": 11340000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_5"
+                    ], 
+                    "normal": [
+                        0.0, 
+                        0.0, 
+                        1.0
+                    ], 
+                    "source": "room_5", 
+                    "hops": 0, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "area": 16200000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_5"
+                    ], 
+                    "normal": [
+                        1.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "source": "room_5", 
+                    "hops": 0, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "area": 11340000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_5"
+                    ], 
+                    "normal": [
+                        0.0, 
+                        1.0, 
+                        0.0
+                    ], 
+                    "source": "room_5", 
+                    "hops": 0, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "floor": 1, 
+            "box_min": [
+                12300.0, 
+                7200.0, 
+                0.0
+            ], 
+            "floors": [
+                1, 
+                2
+            ], 
+            "layer_name": "stairs-\u697c\u68af", 
+            "direct_lighting_surfaces": [
+                {
+                    "normal": [
+                        1.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "area": 16200000.0, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "normal": [
+                        0.0, 
+                        1.0, 
+                        0.0
+                    ], 
+                    "area": 11340000.0, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "normal": [
+                        0.0, 
+                        0.0, 
+                        1.0
+                    ], 
+                    "area": 11340000.0, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "lighting_priority": 1
+        }, 
+        {
+            "lighting_access": "direct", 
+            "type": "utility", 
+            "id": "room_6", 
+            "box_max": [
+                4200.0, 
+                9900.0, 
+                3000.0
+            ], 
+            "effective_lighting": [
+                {
+                    "area": 8100000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_6"
+                    ], 
+                    "normal": [
+                        -1.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "source": "room_6", 
+                    "hops": 0, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "area": 11340000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_6"
+                    ], 
+                    "normal": [
+                        0.0, 
+                        1.0, 
+                        0.0
+                    ], 
+                    "source": "room_6", 
+                    "hops": 0, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "floor": 1, 
+            "box_min": [
+                0.0, 
+                7200.0, 
+                0.0
+            ], 
+            "floors": [
+                1
+            ], 
+            "layer_name": "utility-\u5bb6\u653f/\u670d\u52a1\u7a7a\u95f4", 
+            "direct_lighting_surfaces": [
+                {
+                    "normal": [
+                        -1.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "area": 8100000.0, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "normal": [
+                        0.0, 
+                        1.0, 
+                        0.0
+                    ], 
+                    "area": 11340000.0, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "lighting_priority": 2
+        }, 
+        {
+            "lighting_access": "direct", 
+            "type": "bedroom", 
+            "id": "room_7", 
+            "box_max": [
+                8400.0, 
+                9900.0, 
+                3000.0
+            ], 
+            "effective_lighting": [
+                {
+                    "area": 5850000.0, 
+                    "attenuation": 0.5, 
+                    "path": [
+                        "room_3", 
+                        "room_4", 
+                        "room_7"
+                    ], 
+                    "normal": [
+                        0.0, 
+                        -1.0, 
+                        0.0
+                    ], 
+                    "source": "room_3", 
+                    "hops": 2, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "area": 13860000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_7"
+                    ], 
+                    "normal": [
+                        0.0, 
+                        1.0, 
+                        0.0
+                    ], 
+                    "source": "room_7", 
+                    "hops": 0, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "area": 8100000.0, 
+                    "attenuation": 0.5, 
+                    "path": [
+                        "room_5", 
+                        "room_4", 
+                        "room_7"
+                    ], 
+                    "normal": [
+                        1.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "source": "room_5", 
+                    "hops": 2, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "floor": 1, 
+            "box_min": [
+                4200.0, 
+                6600.0, 
+                0.0
+            ], 
+            "floors": [
+                1
+            ], 
+            "layer_name": "bedroom-\u5367\u5ba4", 
+            "direct_lighting_surfaces": [
+                {
+                    "normal": [
+                        0.0, 
+                        1.0, 
+                        0.0
+                    ], 
+                    "area": 13860000.0, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "lighting_priority": 8
+        }, 
+        {
+            "lighting_access": "direct", 
+            "type": "bedroom", 
+            "id": "room_8", 
+            "box_max": [
+                8400.0, 
+                9900.0, 
+                6000.0
+            ], 
+            "effective_lighting": [
+                {
+                    "area": 13860000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_8"
+                    ], 
+                    "normal": [
+                        0.0, 
+                        1.0, 
+                        0.0
+                    ], 
+                    "source": "room_8", 
+                    "hops": 0, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "area": 13860000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_8"
+                    ], 
+                    "normal": [
+                        0.0, 
+                        0.0, 
+                        1.0
+                    ], 
+                    "source": "room_8", 
+                    "hops": 0, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "area": 12600000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_15", 
+                        "room_8"
+                    ], 
+                    "normal": [
+                        0.0, 
+                        -1.0, 
+                        0.0
+                    ], 
+                    "source": "room_15", 
+                    "hops": 1, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "area": 13500000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_14", 
+                        "room_16", 
+                        "room_15", 
+                        "room_8"
+                    ], 
+                    "normal": [
+                        1.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "source": "room_14", 
+                    "hops": 3, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "area": 29700000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_15", 
+                        "room_8"
+                    ], 
+                    "normal": [
+                        -1.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "source": "room_15", 
+                    "hops": 1, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "floor": 2, 
+            "box_min": [
+                4200.0, 
+                6600.0, 
+                3000.0
+            ], 
+            "floors": [
+                2
+            ], 
+            "layer_name": "bedroom-\u5367\u5ba4", 
+            "direct_lighting_surfaces": [
+                {
+                    "normal": [
+                        0.0, 
+                        1.0, 
+                        0.0
+                    ], 
+                    "area": 13860000.0, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "normal": [
+                        0.0, 
+                        0.0, 
+                        1.0
+                    ], 
+                    "area": 13860000.0, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "lighting_priority": 8
+        }, 
+        {
+            "lighting_access": "direct", 
+            "type": "utility", 
+            "id": "room_9", 
+            "box_max": [
+                6900.0, 
+                6600.0, 
+                6000.0
+            ], 
+            "effective_lighting": [
+                {
+                    "area": 4050000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_9"
+                    ], 
+                    "normal": [
+                        0.0, 
+                        0.0, 
+                        1.0
+                    ], 
+                    "source": "room_9", 
+                    "hops": 0, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "floor": 2, 
+            "box_min": [
+                4200.0, 
+                5100.0, 
+                3000.0
+            ], 
+            "floors": [
+                2
+            ], 
+            "layer_name": "utility-\u5bb6\u653f/\u670d\u52a1\u7a7a\u95f4", 
+            "direct_lighting_surfaces": [
+                {
+                    "normal": [
+                        0.0, 
+                        0.0, 
+                        1.0
+                    ], 
+                    "area": 4050000.0, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "lighting_priority": 2
+        }, 
+        {
+            "lighting_access": "direct", 
+            "type": "corridor", 
+            "id": "room_10", 
+            "box_max": [
+                8400.0, 
+                6600.0, 
+                6000.0
+            ], 
+            "effective_lighting": [
+                {
+                    "area": 2250000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_10"
+                    ], 
+                    "normal": [
+                        0.0, 
+                        0.0, 
+                        1.0
+                    ], 
+                    "source": "room_10", 
+                    "hops": 0, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "floor": 2, 
+            "box_min": [
+                6900.0, 
+                5100.0, 
+                3000.0
+            ], 
+            "floors": [
+                2
+            ], 
+            "layer_name": "corridor-\u8fc7\u9053", 
+            "direct_lighting_surfaces": [
+                {
+                    "normal": [
+                        0.0, 
+                        0.0, 
+                        1.0
+                    ], 
+                    "area": 2250000.0, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "lighting_priority": 0
+        }, 
+        {
+            "lighting_access": "direct", 
+            "type": "bedroom", 
+            "id": "room_11", 
+            "box_max": [
+                8400.0, 
+                5100.0, 
+                6000.0
+            ], 
+            "effective_lighting": [
+                {
+                    "area": 41580000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_15", 
+                        "room_11"
+                    ], 
+                    "normal": [
+                        0.0, 
+                        1.0, 
+                        0.0
+                    ], 
+                    "source": "room_15", 
+                    "hops": 1, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "area": 15120000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_11"
+                    ], 
+                    "normal": [
+                        0.0, 
+                        0.0, 
+                        1.0
+                    ], 
+                    "source": "room_11", 
+                    "hops": 0, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "area": 12600000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_15", 
+                        "room_11"
+                    ], 
+                    "normal": [
+                        0.0, 
+                        -1.0, 
+                        0.0
+                    ], 
+                    "source": "room_15", 
+                    "hops": 1, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "area": 13500000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_14", 
+                        "room_16", 
+                        "room_11"
+                    ], 
+                    "normal": [
+                        1.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "source": "room_14", 
+                    "hops": 2, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "area": 29700000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_15", 
+                        "room_11"
+                    ], 
+                    "normal": [
+                        -1.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "source": "room_15", 
+                    "hops": 1, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "floor": 2, 
+            "box_min": [
+                4200.0, 
+                1500.0, 
+                3000.0
+            ], 
+            "floors": [
+                2
+            ], 
+            "layer_name": "bedroom-\u5367\u5ba4", 
+            "direct_lighting_surfaces": [
+                {
+                    "normal": [
+                        0.0, 
+                        0.0, 
+                        1.0
+                    ], 
+                    "area": 15120000.0, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "lighting_priority": 8
+        }, 
+        {
+            "lighting_access": "direct", 
+            "type": "corridor", 
+            "id": "room_12", 
+            "box_max": [
+                12300.0, 
+                9900.0, 
+                6000.0
+            ], 
+            "effective_lighting": [
+                {
+                    "area": 18720000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_12"
+                    ], 
+                    "normal": [
+                        0.0, 
+                        0.0, 
+                        1.0
+                    ], 
+                    "source": "room_12", 
+                    "hops": 0, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "area": 18720000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_12"
+                    ], 
+                    "normal": [
+                        0.0, 
+                        1.0, 
+                        0.0
+                    ], 
+                    "source": "room_12", 
+                    "hops": 0, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "floor": 2, 
+            "box_min": [
+                8400.0, 
+                5100.0, 
+                3000.0
+            ], 
+            "floors": [
+                2
+            ], 
+            "layer_name": "corridor-\u8fc7\u9053", 
+            "direct_lighting_surfaces": [
+                {
+                    "normal": [
+                        0.0, 
+                        1.0, 
+                        0.0
+                    ], 
+                    "area": 18720000.0, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "normal": [
+                        0.0, 
+                        0.0, 
+                        1.0
+                    ], 
+                    "area": 18720000.0, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "lighting_priority": 0
+        }, 
+        {
+            "lighting_access": "direct", 
+            "type": "multi_purpose", 
+            "id": "room_13", 
+            "box_max": [
+                12300.0, 
+                5100.0, 
+                6000.0
+            ], 
+            "effective_lighting": [
+                {
+                    "area": 41580000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_15", 
+                        "room_16", 
+                        "room_13"
+                    ], 
+                    "normal": [
+                        0.0, 
+                        1.0, 
+                        0.0
+                    ], 
+                    "source": "room_15", 
+                    "hops": 2, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "area": 14040000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_13"
+                    ], 
+                    "normal": [
+                        0.0, 
+                        0.0, 
+                        1.0
+                    ], 
+                    "source": "room_13", 
+                    "hops": 0, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "area": 24300000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_16", 
+                        "room_13"
+                    ], 
+                    "normal": [
+                        0.0, 
+                        -1.0, 
+                        0.0
+                    ], 
+                    "source": "room_16", 
+                    "hops": 1, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "area": 13500000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_14", 
+                        "room_16", 
+                        "room_13"
+                    ], 
+                    "normal": [
+                        1.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "source": "room_14", 
+                    "hops": 2, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "area": 29700000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_15", 
+                        "room_16", 
+                        "room_13"
+                    ], 
+                    "normal": [
+                        -1.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "source": "room_15", 
+                    "hops": 2, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "floor": 2, 
+            "box_min": [
+                8400.0, 
+                1500.0, 
+                3000.0
+            ], 
+            "floors": [
+                2
+            ], 
+            "layer_name": "multi_purpose\u591a\u529f\u80fd\u5ba4", 
+            "direct_lighting_surfaces": [
+                {
+                    "normal": [
+                        0.0, 
+                        0.0, 
+                        1.0
+                    ], 
+                    "area": 14040000.0, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "lighting_priority": 6
+        }, 
+        {
+            "lighting_access": "direct", 
+            "type": "bedroom", 
+            "id": "room_14", 
+            "box_max": [
+                16500.0, 
+                5100.0, 
+                6000.0
+            ], 
+            "effective_lighting": [
+                {
+                    "area": 41580000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_15", 
+                        "room_16", 
+                        "room_14"
+                    ], 
+                    "normal": [
+                        0.0, 
+                        1.0, 
+                        0.0
+                    ], 
+                    "source": "room_15", 
+                    "hops": 2, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "area": 18900000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_14"
+                    ], 
+                    "normal": [
+                        0.0, 
+                        0.0, 
+                        1.0
+                    ], 
+                    "source": "room_14", 
+                    "hops": 0, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "area": 12600000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_14"
+                    ], 
+                    "normal": [
+                        0.0, 
+                        -1.0, 
+                        0.0
+                    ], 
+                    "source": "room_14", 
+                    "hops": 0, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "area": 13500000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_14"
+                    ], 
+                    "normal": [
+                        1.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "source": "room_14", 
+                    "hops": 0, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "area": 29700000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_15", 
+                        "room_16", 
+                        "room_14"
+                    ], 
+                    "normal": [
+                        -1.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "source": "room_15", 
+                    "hops": 2, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "floor": 2, 
+            "box_min": [
+                12300.0, 
+                600.0, 
+                3000.0
+            ], 
+            "floors": [
+                2
+            ], 
+            "layer_name": "bedroom-\u5367\u5ba4", 
+            "direct_lighting_surfaces": [
+                {
+                    "normal": [
+                        1.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "area": 13500000.0, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "normal": [
+                        0.0, 
+                        -1.0, 
+                        0.0
+                    ], 
+                    "area": 12600000.0, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "normal": [
+                        0.0, 
+                        0.0, 
+                        1.0
+                    ], 
+                    "area": 18900000.0, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "lighting_priority": 8
+        }, 
+        {
+            "lighting_access": "direct", 
+            "type": "balcony", 
+            "id": "room_15", 
+            "box_max": [
+                4200.0, 
+                9900.0, 
+                6000.0
+            ], 
+            "effective_lighting": [
+                {
+                    "area": 41580000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_15"
+                    ], 
+                    "normal": [
+                        0.0, 
+                        0.0, 
+                        1.0
+                    ], 
+                    "source": "room_15", 
+                    "hops": 0, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "area": 29700000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_15"
+                    ], 
+                    "normal": [
+                        -1.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "source": "room_15", 
+                    "hops": 0, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "area": 41580000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_15"
+                    ], 
+                    "normal": [
+                        0.0, 
+                        1.0, 
+                        0.0
+                    ], 
+                    "source": "room_15", 
+                    "hops": 0, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "area": 12600000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_15"
+                    ], 
+                    "normal": [
+                        0.0, 
+                        -1.0, 
+                        0.0
+                    ], 
+                    "source": "room_15", 
+                    "hops": 0, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "floor": 2, 
+            "box_min": [
+                0.0, 
+                0.0, 
+                3000.0
+            ], 
+            "floors": [
+                2
+            ], 
+            "layer_name": "balcony-\u9633\u53f0/\u5ba4\u5916\u9732\u53f0", 
+            "direct_lighting_surfaces": [
+                {
+                    "normal": [
+                        -1.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "area": 29700000.0, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "normal": [
+                        0.0, 
+                        -1.0, 
+                        0.0
+                    ], 
+                    "area": 12600000.0, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "normal": [
+                        0.0, 
+                        1.0, 
+                        0.0
+                    ], 
+                    "area": 41580000.0, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "normal": [
+                        0.0, 
+                        0.0, 
+                        1.0
+                    ], 
+                    "area": 41580000.0, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "lighting_priority": 0
+        }, 
+        {
+            "lighting_access": "direct", 
+            "type": "balcony", 
+            "id": "room_16", 
+            "box_max": [
+                12300.0, 
+                1500.0, 
+                6000.0
+            ], 
+            "effective_lighting": [
+                {
+                    "area": 12150000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_16"
+                    ], 
+                    "normal": [
+                        0.0, 
+                        0.0, 
+                        1.0
+                    ], 
+                    "source": "room_16", 
+                    "hops": 0, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "area": 24300000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_16"
+                    ], 
+                    "normal": [
+                        0.0, 
+                        -1.0, 
+                        0.0
+                    ], 
+                    "source": "room_16", 
+                    "hops": 0, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "floor": 2, 
+            "box_min": [
+                4200.0, 
+                0.0, 
+                3000.0
+            ], 
+            "floors": [
+                2
+            ], 
+            "layer_name": "balcony-\u9633\u53f0/\u5ba4\u5916\u9732\u53f0", 
+            "direct_lighting_surfaces": [
+                {
+                    "normal": [
+                        0.0, 
+                        -1.0, 
+                        0.0
+                    ], 
+                    "area": 24300000.0, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "normal": [
+                        0.0, 
+                        0.0, 
+                        1.0
+                    ], 
+                    "area": 12150000.0, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "lighting_priority": 0
+        }, 
+        {
+            "lighting_access": "direct", 
+            "type": "corridor", 
+            "id": "room_17", 
+            "box_max": [
+                13800.0, 
+                7200.0, 
+                6000.0
+            ], 
+            "effective_lighting": [
+                {
+                    "area": 3150000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_17"
+                    ], 
+                    "normal": [
+                        0.0, 
+                        0.0, 
+                        1.0
+                    ], 
+                    "source": "room_17", 
+                    "hops": 0, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "floor": 2, 
+            "box_min": [
+                12300.0, 
+                5100.0, 
+                3000.0
+            ], 
+            "floors": [
+                2
+            ], 
+            "layer_name": "corridor-\u8fc7\u9053", 
+            "direct_lighting_surfaces": [
+                {
+                    "normal": [
+                        0.0, 
+                        0.0, 
+                        1.0
+                    ], 
+                    "area": 3150000.0, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "lighting_priority": 0
+        }, 
+        {
+            "lighting_access": "direct", 
+            "type": "bathroom", 
+            "id": "room_18", 
+            "box_max": [
+                16500.0, 
+                7200.0, 
+                6000.0
+            ], 
+            "effective_lighting": [
+                {
+                    "area": 5670000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_18"
+                    ], 
+                    "normal": [
+                        0.0, 
+                        0.0, 
+                        1.0
+                    ], 
+                    "source": "room_18", 
+                    "hops": 0, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "area": 6300000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_18"
+                    ], 
+                    "normal": [
+                        1.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "source": "room_18", 
+                    "hops": 0, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "floor": 2, 
+            "box_min": [
+                13800.0, 
+                5100.0, 
+                3000.0
+            ], 
+            "floors": [
+                2
+            ], 
+            "layer_name": "bathroom-\u536b\u751f\u95f4/\u6d74\u5ba4", 
+            "direct_lighting_surfaces": [
+                {
+                    "normal": [
+                        1.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "area": 6300000.0, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "normal": [
+                        0.0, 
+                        0.0, 
+                        1.0
+                    ], 
+                    "area": 5670000.0, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "lighting_priority": 2
+        }, 
+        {
+            "lighting_access": "none", 
+            "type": "corridor", 
+            "id": "room_19", 
+            "box_max": [
+                13800.0, 
+                7200.0, 
+                3000.0
+            ], 
+            "effective_lighting": [], 
+            "floor": 1, 
+            "box_min": [
+                12300.0, 
+                5100.0, 
+                0.0
+            ], 
+            "floors": [
+                1
+            ], 
+            "layer_name": "corridor-\u8fc7\u9053", 
+            "direct_lighting_surfaces": [], 
+            "lighting_priority": 0
+        }, 
+        {
+            "lighting_access": "direct", 
+            "type": "bathroom", 
+            "id": "room_20", 
+            "box_max": [
+                16500.0, 
+                7200.0, 
+                3000.0
+            ], 
+            "effective_lighting": [
+                {
+                    "area": 6300000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_20"
+                    ], 
+                    "normal": [
+                        1.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "source": "room_20", 
+                    "hops": 0, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "floor": 1, 
+            "box_min": [
+                13800.0, 
+                5100.0, 
+                0.0
+            ], 
+            "floors": [
+                1
+            ], 
+            "layer_name": "bathroom-\u536b\u751f\u95f4/\u6d74\u5ba4", 
+            "direct_lighting_surfaces": [
+                {
+                    "normal": [
+                        1.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "area": 6300000.0, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "lighting_priority": 2
+        }, 
+        {
+            "lighting_access": "direct", 
+            "type": "bedroom", 
+            "id": "room_21", 
+            "box_max": [
+                16500.0, 
+                5100.0, 
+                3000.0
+            ], 
+            "effective_lighting": [
+                {
+                    "area": 9009000.0, 
+                    "attenuation": 0.69999999999999996, 
+                    "path": [
+                        "room_4", 
+                        "room_3", 
+                        "room_21"
+                    ], 
+                    "normal": [
+                        0.0, 
+                        1.0, 
+                        0.0
+                    ], 
+                    "source": "room_4", 
+                    "hops": 2, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "area": 13500000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_21"
+                    ], 
+                    "normal": [
+                        1.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "source": "room_21", 
+                    "hops": 0, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "area": 12600000.0, 
+                    "attenuation": 1.0, 
+                    "path": [
+                        "room_21"
+                    ], 
+                    "normal": [
+                        0.0, 
+                        -1.0, 
+                        0.0
+                    ], 
+                    "source": "room_21", 
+                    "hops": 0, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "floor": 1, 
+            "box_min": [
+                12300.0, 
+                600.0, 
+                0.0
+            ], 
+            "floors": [
+                1
+            ], 
+            "layer_name": "bedroom-\u5367\u5ba4", 
+            "direct_lighting_surfaces": [
+                {
+                    "normal": [
+                        1.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "area": 13500000.0, 
+                    "exposure_type": "outdoor"
+                }, 
+                {
+                    "normal": [
+                        0.0, 
+                        -1.0, 
+                        0.0
+                    ], 
+                    "area": 12600000.0, 
+                    "exposure_type": "outdoor"
+                }
+            ], 
+            "lighting_priority": 8
+        }
+    ]
+}

@@ -1,0 +1,267 @@
+{
+  "mode": "demo",
+  "count": 10,
+  "houses": [
+    {
+      "id": "house_2107",
+      "file": "house_2107.json",
+      "totalRooms": 30,
+      "stats": {
+        "stairs": 1,
+        "living_room": 2,
+        "balcony": 2,
+        "bathroom": 4,
+        "utility": 2,
+        "multi_purpose": 3,
+        "entryway": 2,
+        "corridor": 7,
+        "bedroom": 5,
+        "kitchen": 1,
+        "dining_room": 1
+      },
+      "buildingSize": {
+        "x": 18600,
+        "z": 6000,
+        "y": 12000
+      },
+      "floors": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "house_2108",
+      "file": "house_2108.json",
+      "totalRooms": 22,
+      "stats": {
+        "living_room": 1,
+        "stairs": 1,
+        "balcony": 2,
+        "utility": 2,
+        "bathroom": 2,
+        "entryway": 1,
+        "multi_purpose": 1,
+        "corridor": 5,
+        "bedroom": 5,
+        "kitchen": 1,
+        "dining_room": 1
+      },
+      "buildingSize": {
+        "x": 16500,
+        "z": 6000,
+        "y": 9900
+      },
+      "floors": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "house_2110",
+      "file": "house_2110.json",
+      "totalRooms": 20,
+      "stats": {
+        "stairs": 1,
+        "living_room": 2,
+        "balcony": 1,
+        "bathroom": 4,
+        "utility": 1,
+        "entryway": 1,
+        "corridor": 4,
+        "bedroom": 4,
+        "kitchen": 1,
+        "dining_room": 1
+      },
+      "buildingSize": {
+        "x": 9300,
+        "z": 6000,
+        "y": 12300
+      },
+      "floors": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "house_2111",
+      "file": "house_2111.json",
+      "totalRooms": 20,
+      "stats": {
+        "living_room": 2,
+        "stairs": 1,
+        "balcony": 3,
+        "bathroom": 2,
+        "entryway": 1,
+        "corridor": 4,
+        "bedroom": 5,
+        "kitchen": 1,
+        "dining_room": 1
+      },
+      "buildingSize": {
+        "x": 11700,
+        "z": 6000,
+        "y": 10500
+      },
+      "floors": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "house_2115",
+      "file": "house_2115.json",
+      "totalRooms": 28,
+      "stats": {
+        "living_room": 2,
+        "stairs": 1,
+        "balcony": 2,
+        "bathroom": 4,
+        "entryway": 1,
+        "multi_purpose": 3,
+        "corridor": 8,
+        "bedroom": 5,
+        "kitchen": 1,
+        "dining_room": 1
+      },
+      "buildingSize": {
+        "x": 15300,
+        "z": 6000,
+        "y": 10200
+      },
+      "floors": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "house_2125",
+      "file": "house_2125.json",
+      "totalRooms": 25,
+      "stats": {
+        "living_room": 2,
+        "stairs": 2,
+        "balcony": 1,
+        "bathroom": 3,
+        "entryway": 2,
+        "multi_purpose": 2,
+        "corridor": 7,
+        "bedroom": 4,
+        "kitchen": 1,
+        "dining_room": 1
+      },
+      "buildingSize": {
+        "x": 11400,
+        "z": 6000,
+        "y": 11400
+      },
+      "floors": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "house_2126",
+      "file": "house_2126.json",
+      "totalRooms": 24,
+      "stats": {
+        "stairs": 1,
+        "living_room": 2,
+        "balcony": 1,
+        "utility": 1,
+        "bathroom": 4,
+        "entryway": 3,
+        "corridor": 4,
+        "bedroom": 6,
+        "kitchen": 1,
+        "dining_room": 1
+      },
+      "buildingSize": {
+        "x": 10800,
+        "z": 6000,
+        "y": 12900
+      },
+      "floors": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "house_2128",
+      "file": "house_2128.json",
+      "totalRooms": 15,
+      "stats": {
+        "balcony": 1,
+        "corridor": 3,
+        "living_room": 2,
+        "dining_room": 1,
+        "bathroom": 2,
+        "stairs": 1,
+        "bedroom": 3,
+        "entryway": 1,
+        "kitchen": 1
+      },
+      "buildingSize": {
+        "z": 6000,
+        "y": 9000,
+        "x": 9600
+      },
+      "floors": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "house_2135",
+      "file": "house_2135.json",
+      "totalRooms": 22,
+      "stats": {
+        "balcony": 1,
+        "corridor": 3,
+        "living_room": 2,
+        "dining_room": 1,
+        "bathroom": 4,
+        "stairs": 1,
+        "bedroom": 6,
+        "entryway": 1,
+        "utility": 2,
+        "kitchen": 1
+      },
+      "buildingSize": {
+        "z": 6000,
+        "y": 9600,
+        "x": 15300
+      },
+      "floors": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "house_2142",
+      "file": "house_2142.json",
+      "totalRooms": 26,
+      "stats": {
+        "stairs": 1,
+        "living_room": 2,
+        "balcony": 4,
+        "bathroom": 3,
+        "entryway": 2,
+        "multi_purpose": 4,
+        "corridor": 3,
+        "bedroom": 5,
+        "kitchen": 1,
+        "dining_room": 1
+      },
+      "buildingSize": {
+        "x": 19500,
+        "z": 6000,
+        "y": 15300
+      },
+      "floors": [
+        1,
+        2
+      ]
+    }
+  ],
+  "notice": "Public demo datasets for visualization showcase. Full training set is local only."
+}

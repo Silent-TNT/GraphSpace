@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>个人工具箱 — SpaceModal</title>
+  <meta name="description" content="GraphSpace 个人工具箱：Rhino 拓扑导出、离线 JSON 校验、Gradio 本地演示与 Colab 占位。">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/shell.js"></script>
+</head>
+<body>
+  <div data-site-shell></div>
+
+  <main class="container">
+    <header class="page-header">
+      <p class="breadcrumb"><a href="/">折叠空间</a> / 个人工具箱</p>
+      <h1>个人工具箱</h1>
+      <p class="meta">本地运行 · 公网 Pages 不执行脚本</p>
+    </header>
+
+    <div class="privacy-notice">
+      <strong>安全说明：</strong>
+      以下工具均在本地环境运行。本静态站点不提供在线执行或下载训练数据/权重。
+    </div>
+
+    <div class="grid-3">
+      <article class="card">
+        <span class="step-num">Rhino</span>
+        <h3>拓扑导出 V14</h3>
+        <p><code>scripts/rhino_export/260524rhino-json-v14.py</code> — 从 Rhino 模型导出房间节点、邻接与采光面 JSON。</p>
+        <p style="margin-top: 0.5rem; font-size: 0.85rem;">环境：Rhino 3D + Python 脚本编辑器</p>
+      </article>
+      <article class="card">
+        <span class="step-num">Rhino</span>
+        <h3>批量导出</h3>
+        <p><code>scripts/rhino_export/batch_export_v14.py</code> — 批量处理多套户型模型。</p>
+        <p style="margin-top: 0.5rem; font-size: 0.85rem;">环境：Rhino 3D</p>
+      </article>
+      <article class="card">
+        <span class="step-num">Python</span>
+        <h3>离线 JSON 校验</h3>
+        <p><code>scripts/offline_check/validate_json_dataset.py</code> — 连通性、模数、张量转换与 QC 规则。</p>
+        <p style="margin-top: 0.5rem; font-size: 0.85rem;">环境：Python 3.8+</p>
+      </article>
+      <article class="card">
+        <span class="step-num">Demo</span>
+        <h3>Gradio 占位</h3>
+        <p><code>website/demo/gradio_app.py</code> — 本地交互流程演示（不含公网权重）。</p>
+        <pre class="code-block" style="margin-top: 0.75rem;">pip install -r requirements.txt gradio
+python website/demo/gradio_app.py
+# http://127.0.0.1:7860</pre>
+      </article>
+      <article class="card">
+        <span class="step-num">Viewer</span>
+        <h3>完整数据看板（本地）</h3>
+        <p><code>website/qc-viewer</code> — 浏览完整训练集（非 10 套 Demo）。</p>
+        <pre class="code-block" style="margin-top: 0.75rem;">cd website/qc-viewer
+npm install
+npm run dev</pre>
+      </article>
+      <article class="card">
+        <span class="step-num">训练</span>
+        <h3>Jupyter 训练</h3>
+        <p><code>notebooks/train/</code> — SpatialModalCVAE 训练 notebook（需本地 data/ 与 models/）。</p>
+        <p style="margin-top: 0.5rem;"><a href="/demo/">演示说明 →</a></p>
+      </article>
+    </div>
+
+    <h2>相关入口</h2>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="/viewer/">公网数据看板</a>
+      <a class="btn btn-secondary" href="/ml/">机器学习展示</a>
+      <a class="btn btn-secondary" href="#" data-github-url target="_blank" rel="noopener">GitHub 仓库</a>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>© 2026 SpaceModal · spacemodal.com</span>
+      <div class="footer-links">
+        <a href="/">折叠空间</a>
+        <a href="/ai/">AI 检索</a>
+        <a href="#" data-contact-email>联系</a>
+      </div>
+    </div>
+  </footer>
+  <script src="/js/site-config.js"></script>
+  <script src="/js/site-apply.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>

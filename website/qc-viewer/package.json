@@ -1,0 +1,24 @@
+{
+  "name": "house-dataset-viewer",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "predev": "node scripts/generate-manifest.mjs --mode=local",
+    "dev": "vite",
+    "demo:sample": "node scripts/create-demo-sample.mjs",
+    "prebuild:demo": "node scripts/generate-manifest.mjs --mode=demo",
+    "build:demo": "tsc && vite build --base /viewer/ --outDir ../viewer --emptyOutDir",
+    "prebuild:local": "node scripts/generate-manifest.mjs --mode=local",
+    "build:local": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@types/three": "^0.184.1",
+    "typescript": "^5.7.3",
+    "vite": "^6.0.7"
+  },
+  "dependencies": {
+    "three": "^0.172.0"
+  }
+}

@@ -1,0 +1,571 @@
+{
+  "rooms": [
+    {
+      "id": "room_0",
+      "floor": 1,
+      "box_min": [
+        3900,
+        6000,
+        0
+      ],
+      "type": "living_room",
+      "box_max": [
+        9600,
+        13200,
+        3000
+      ]
+    },
+    {
+      "id": "room_1",
+      "floor": 2,
+      "box_min": [
+        3900,
+        11400,
+        3000
+      ],
+      "type": "corridor",
+      "box_max": [
+        14400,
+        13200,
+        6000
+      ]
+    },
+    {
+      "id": "room_2",
+      "floor": 2,
+      "box_min": [
+        0,
+        4200,
+        3000
+      ],
+      "type": "balcony",
+      "box_max": [
+        9600,
+        6000,
+        6000
+      ]
+    },
+    {
+      "id": "room_3",
+      "floor": 2,
+      "box_min": [
+        3900,
+        18900,
+        3000
+      ],
+      "type": "corridor",
+      "box_max": [
+        14400,
+        20400,
+        6000
+      ]
+    },
+    {
+      "id": "room_4",
+      "floor": 2,
+      "box_min": [
+        3900,
+        13200,
+        3000
+      ],
+      "type": "corridor",
+      "box_max": [
+        5400,
+        18900,
+        6000
+      ]
+    },
+    {
+      "id": "room_5",
+      "floor": 2,
+      "box_min": [
+        6600,
+        24600,
+        3000
+      ],
+      "type": "bathroom",
+      "box_max": [
+        10500,
+        26400,
+        6000
+      ]
+    },
+    {
+      "id": "room_6",
+      "floor": 2,
+      "box_min": [
+        10500,
+        24600,
+        3000
+      ],
+      "type": "bathroom",
+      "box_max": [
+        14400,
+        26400,
+        6000
+      ]
+    },
+    {
+      "id": "room_7",
+      "floor": 2,
+      "box_min": [
+        6600,
+        20400,
+        3000
+      ],
+      "type": "bedroom",
+      "box_max": [
+        10500,
+        24600,
+        6000
+      ]
+    },
+    {
+      "id": "room_8",
+      "floor": 2,
+      "box_min": [
+        10500,
+        20400,
+        3000
+      ],
+      "type": "bedroom",
+      "box_max": [
+        14400,
+        24600,
+        6000
+      ]
+    },
+    {
+      "id": "room_9",
+      "floor": 2,
+      "box_min": [
+        0,
+        20400,
+        3000
+      ],
+      "type": "bathroom",
+      "box_max": [
+        2400,
+        22500,
+        6000
+      ]
+    },
+    {
+      "id": "room_10",
+      "floor": 2,
+      "box_min": [
+        0,
+        16200,
+        3000
+      ],
+      "type": "bedroom",
+      "box_max": [
+        3900,
+        20400,
+        6000
+      ]
+    },
+    {
+      "id": "room_11",
+      "floor": 2,
+      "box_min": [
+        2400,
+        20400,
+        3000
+      ],
+      "type": "corridor",
+      "box_max": [
+        3900,
+        22500,
+        6000
+      ]
+    },
+    {
+      "id": "room_12",
+      "floor": 2,
+      "box_min": [
+        11400,
+        9000,
+        3000
+      ],
+      "type": "bathroom",
+      "box_max": [
+        14400,
+        11400,
+        6000
+      ]
+    },
+    {
+      "id": "room_13",
+      "floor": 2,
+      "box_min": [
+        9600,
+        4200,
+        3000
+      ],
+      "type": "bedroom",
+      "box_max": [
+        14400,
+        9000,
+        6000
+      ]
+    },
+    {
+      "id": "room_14",
+      "floor": 2,
+      "box_min": [
+        9600,
+        9000,
+        3000
+      ],
+      "type": "corridor",
+      "box_max": [
+        11400,
+        11400,
+        6000
+      ]
+    },
+    {
+      "id": "room_15",
+      "floor": 2,
+      "box_min": [
+        3900,
+        20400,
+        3000
+      ],
+      "type": "corridor",
+      "box_max": [
+        6600,
+        21600,
+        6000
+      ]
+    },
+    {
+      "id": "room_16",
+      "floor": 1,
+      "box_min": [
+        3900,
+        21600,
+        0
+      ],
+      "type": "stairs",
+      "box_max": [
+        6600,
+        26400,
+        6000
+      ]
+    },
+    {
+      "id": "room_17",
+      "floor": 1,
+      "box_min": [
+        3900,
+        18900,
+        0
+      ],
+      "type": "corridor",
+      "box_max": [
+        14400,
+        20400,
+        3000
+      ]
+    },
+    {
+      "id": "room_18",
+      "floor": 1,
+      "box_min": [
+        3900,
+        13200,
+        0
+      ],
+      "type": "corridor",
+      "box_max": [
+        5400,
+        18900,
+        3000
+      ]
+    },
+    {
+      "id": "room_19",
+      "floor": 1,
+      "box_min": [
+        6600,
+        24600,
+        0
+      ],
+      "type": "bathroom",
+      "box_max": [
+        10500,
+        26400,
+        3000
+      ]
+    },
+    {
+      "id": "room_20",
+      "floor": 1,
+      "box_min": [
+        10500,
+        24600,
+        0
+      ],
+      "type": "bathroom",
+      "box_max": [
+        14400,
+        26400,
+        3000
+      ]
+    },
+    {
+      "id": "room_21",
+      "floor": 1,
+      "box_min": [
+        6600,
+        20400,
+        0
+      ],
+      "type": "bedroom",
+      "box_max": [
+        10500,
+        24600,
+        3000
+      ]
+    },
+    {
+      "id": "room_22",
+      "floor": 1,
+      "box_min": [
+        10500,
+        20400,
+        0
+      ],
+      "type": "bedroom",
+      "box_max": [
+        14400,
+        24600,
+        3000
+      ]
+    },
+    {
+      "id": "room_23",
+      "floor": 1,
+      "box_min": [
+        0,
+        20400,
+        0
+      ],
+      "type": "bathroom",
+      "box_max": [
+        2400,
+        22500,
+        3000
+      ]
+    },
+    {
+      "id": "room_24",
+      "floor": 1,
+      "box_min": [
+        0,
+        16200,
+        0
+      ],
+      "type": "bedroom",
+      "box_max": [
+        3900,
+        20400,
+        3000
+      ]
+    },
+    {
+      "id": "room_25",
+      "floor": 1,
+      "box_min": [
+        2400,
+        20400,
+        0
+      ],
+      "type": "corridor",
+      "box_max": [
+        3900,
+        22500,
+        3000
+      ]
+    },
+    {
+      "id": "room_26",
+      "floor": 1,
+      "box_min": [
+        0,
+        10200,
+        0
+      ],
+      "type": "kitchen",
+      "box_max": [
+        3900,
+        13200,
+        3000
+      ]
+    },
+    {
+      "id": "room_27",
+      "floor": 1,
+      "box_min": [
+        0,
+        6000,
+        0
+      ],
+      "type": "dining_room",
+      "box_max": [
+        3900,
+        10200,
+        3000
+      ]
+    },
+    {
+      "id": "room_28",
+      "floor": 1,
+      "box_min": [
+        11400,
+        11400,
+        0
+      ],
+      "type": "bathroom",
+      "box_max": [
+        14400,
+        13200,
+        3000
+      ]
+    },
+    {
+      "id": "room_29",
+      "floor": 1,
+      "box_min": [
+        11400,
+        9000,
+        0
+      ],
+      "type": "bathroom",
+      "box_max": [
+        14400,
+        11400,
+        3000
+      ]
+    },
+    {
+      "id": "room_30",
+      "floor": 1,
+      "box_min": [
+        9600,
+        4200,
+        0
+      ],
+      "type": "bedroom",
+      "box_max": [
+        14400,
+        9000,
+        3000
+      ]
+    },
+    {
+      "id": "room_31",
+      "floor": 1,
+      "box_min": [
+        9600,
+        9000,
+        0
+      ],
+      "type": "corridor",
+      "box_max": [
+        11400,
+        11400,
+        3000
+      ]
+    },
+    {
+      "id": "room_32",
+      "floor": 1,
+      "box_min": [
+        9600,
+        11400,
+        0
+      ],
+      "type": "corridor",
+      "box_max": [
+        11400,
+        13200,
+        3000
+      ]
+    },
+    {
+      "id": "room_33",
+      "floor": 1,
+      "box_min": [
+        0,
+        0,
+        0
+      ],
+      "type": "entryway",
+      "box_max": [
+        14400,
+        4200,
+        3000
+      ]
+    },
+    {
+      "id": "room_34",
+      "floor": 1,
+      "box_min": [
+        0,
+        4200,
+        0
+      ],
+      "type": "corridor",
+      "box_max": [
+        9600,
+        6000,
+        3000
+      ]
+    },
+    {
+      "id": "room_35",
+      "floor": 1,
+      "box_min": [
+        3900,
+        20400,
+        0
+      ],
+      "type": "corridor",
+      "box_max": [
+        6600,
+        21600,
+        3000
+      ]
+    }
+  ],
+  "house_id": "demo_sample_01",
+  "metadata": {
+    "constraints": {
+      "pure_box_enforced": true,
+      "origin_aligned_auto": true,
+      "modulus": 300
+    },
+    "building_size": {
+      "z": 6000,
+      "y": 26400,
+      "x": 14400
+    },
+    "total_rooms": 36,
+    "stats": {
+      "balcony": 1,
+      "corridor": 13,
+      "kitchen": 1,
+      "entryway": 1,
+      "living_room": 1,
+      "stairs": 1,
+      "bathroom": 9,
+      "dining_room": 1,
+      "bedroom": 8
+    },
+    "note": "Public demo sample for portfolio. Not part of the training release.",
+    "demo": true
+  }
+}

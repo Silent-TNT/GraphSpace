@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>作品集 — SpaceModal 空间模态</title>
+  <meta name="description" content="SpaceModal 实习作品集：住宅空间拓扑、GNN/CVAE 布局生成、Rhino 数据管线与量化评估。不含公开数据集。">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/shell.js"></script>
+</head>
+<body>
+  <div data-site-shell></div>
+
+  <main class="container">
+    <div class="migrate-notice">
+      本页路径已保留兼容外链。主入口请使用 <a href="/portal/">/portal/ 个人数字门户</a>。
+    </div>
+    <header class="page-header">
+      <h1>实习作品集</h1>
+      <p class="meta">
+        <span class="status-badge status-live">可公开 · 无数据集下载</span>
+        &nbsp;·&nbsp; <span data-author-name>请填写你的姓名</span> · <span data-author-role>建筑 / 计算设计 / AI</span>
+      </p>
+    </header>
+
+    <article class="prose">
+      <div class="privacy-notice">
+        <strong>隐私与学术规范：</strong>
+        本页仅展示方法、工程能力与聚合指标。原始户型 JSON、Rhino 源文件、训练权重与可识别项目信息均不在线公开。
+        如需现场演示，可提供本地环境运行说明。
+      </div>
+
+      <h2>一句话介绍</h2>
+      <blockquote>
+        独立完成从 Rhino 拓扑导出、数据 QC、异构图 + CVAE 建模到条件生成评估的完整流水线，
+        探索「用地 + 功能清单 → 采光/模数约束下的 3D 住宅体块」这一计算设计问题。
+      </blockquote>
+
+      <h2>我的贡献</h2>
+      <ul>
+        <li><strong>Rhino 数据管线</strong> — 设计并实现 V14 导出脚本，提取房间邻接、采光面与拓扑 QC 规则</li>
+        <li><strong>离线校验</strong> — 编写 JSON 数据集校验脚本，验证连通性、模数与神经网络张量转换</li>
+        <li><strong>模型训练</strong> — 实现 SpatialModalCVAE（异构图编码 + 条件潜空间 + 体素解码）</li>
+        <li><strong>评估体系</strong> — 建立 mIoU、功能匹配、模数合规率等 MVP 量化指标</li>
+        <li><strong>工程化</strong> — 搭建可复现仓库结构与项目主页（本网站）</li>
+      </ul>
+
+      <h2>技术栈</h2>
+      <div class="tag-row">
+        <span class="tag">Python</span>
+        <span class="tag">PyTorch</span>
+        <span class="tag">PyTorch Geometric</span>
+        <span class="tag">CVAE / GNN</span>
+        <span class="tag">Rhino 3D</span>
+        <span class="tag">Grasshopper</span>
+        <span class="tag">NumPy</span>
+        <span class="tag">Jupyter</span>
+        <span class="tag">空间拓扑</span>
+        <span class="tag">建筑采光</span>
+      </div>
+
+      <h2>量化结果（MVP 验证集 · 聚合指标）</h2>
+      <p>以下为本地实验聚合结果，用于说明方法可行性；非可下载数据，亦不包含可识别样本。</p>
+      <div class="metric-grid">
+        <div class="metric-card">
+          <div class="value">—</div>
+          <div class="label">mIoU</div>
+        </div>
+        <div class="metric-card">
+          <div class="value">—</div>
+          <div class="label">program_acc</div>
+        </div>
+        <div class="metric-card">
+          <div class="value">—</div>
+          <div class="label">模数合规率</div>
+        </div>
+        <div class="metric-card">
+          <div class="value">74</div>
+          <div class="label">数据集规模（户）</div>
+        </div>
+      </div>
+      <p style="font-size: 0.85rem;">
+        请在本地填入你的真实指标数值（编辑 <code>website/portfolio/index.html</code> 中 metric-card），勿上传原始 per-sample 结果文件。
+      </p>
+
+      <h2>公开 / 不公开内容</h2>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>内容</th>
+            <th>状态</th>
+            <th>说明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>项目主页与方法说明</td>
+            <td>✓ 公开</td>
+            <td>本网站静态页</td>
+          </tr>
+          <tr>
+            <td>导出 / QC 脚本结构</td>
+            <td>✓ 可公开</td>
+            <td>GitHub 代码（无数据路径内容）</td>
+          </tr>
+          <tr>
+            <td>训练 notebook 结构</td>
+            <td>✓ 可公开</td>
+            <td>不含数据挂载与权重文件</td>
+          </tr>
+          <tr>
+            <td>原始 / processed JSON</td>
+            <td>✗ 不公开</td>
+            <td>本地 <code>data/</code>，gitignore</td>
+          </tr>
+          <tr>
+            <td>模型权重 .pth</td>
+            <td>✗ 不公开</td>
+            <td>本地 <code>models/</code>，论文后评估</td>
+          </tr>
+          <tr>
+            <td>数据可视化 UI</td>
+            <td>✓ 公网样例</td>
+            <td><code>/viewer/</code> — 10 套 Demo（来自 demo/datasets/）</td>
+          </tr>
+          <tr>
+            <td>完整 QC（96 套）</td>
+            <td>✗ 仅本地</td>
+            <td><code>website/qc-viewer/</code> + <code>npm run dev</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>相关链接</h2>
+      <div class="hero-actions" style="margin-top: 1rem;">
+        <a class="btn btn-primary" href="/viewer/">数据可视化（10 套 Demo）</a>
+        <a class="btn btn-secondary" href="/paper/">论文摘要</a>
+        <a class="btn btn-secondary" href="/demo/">本地演示说明</a>
+        <a class="btn btn-secondary" href="#" data-github-url target="_blank" rel="noopener">GitHub 仓库</a>
+        <a class="btn btn-secondary" href="#" data-contact-email data-subject="实习联系">邮件联系</a>
+      </div>
+
+      <h2>数据可视化工具</h2>
+      <p>
+        公网 <a href="/viewer/">/viewer/</a> 展示 <strong>10 套 Demo 样例</strong>（2D/3D 浏览）。
+        完整训练集请在本地运行 <code>cd website/qc-viewer && npm run dev</code>。
+      </p>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>© 2026 SpaceModal · spacemodal.com</span>
+      <div class="footer-links">
+        <a href="/">折叠空间</a>
+        <a href="/portal/">门户</a>
+        <a href="#" data-contact-email>联系</a>
+      </div>
+    </div>
+  </footer>
+  <script src="/js/site-config.js"></script>
+  <script src="/js/site-apply.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>
