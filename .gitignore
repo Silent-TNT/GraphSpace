@@ -4,6 +4,11 @@ data/*
 !data/README.md
 models/*
 !models/README.md
+weights/*
+!weights/README.md
+
+# AI 助手本地上下文（可选公开：删除下一行即可）
+CLAUDE.md
 
 # ── 数据集可视化（本地生成，勿提交）────────────────────
 website/qc-viewer/node_modules/
@@ -19,13 +24,19 @@ logs/
 notebooks/experiments/
 notebooks/sandbox/
 
+# 推理/演示运行时产物
+scripts/spatial_modal_infer/.gradio/
+scripts/spatial_modal_infer/outputs/
+scripts/_patch_plot3d_fix.py
+
 # 预处理缓存与训练权重（防止误提交到任意目录）
 *.pt
 *.pth
 
-# QC / 评估脚本生成的报告
+# QC / 评估 / 分析脚本生成的报告
 qc_report_*.csv
 qc_summary_*.json
+scripts/offline_check/grid_size_report.json
 
 # ── 表格数据（限定在 data/ 与实验目录；上方目录规则已覆盖）──
 data/**/*.csv
@@ -43,3 +54,4 @@ __pycache__/
 # ── 允许提交目录说明文件 ──────────────────────────────────
 !data/README.md
 !models/README.md
+!weights/README.md

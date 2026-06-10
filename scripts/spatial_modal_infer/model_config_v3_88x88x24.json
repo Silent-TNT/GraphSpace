@@ -1,0 +1,11 @@
+{
+  "model_version": "v3_88x88x24",
+  "res_x": 88,
+  "res_y": 88,
+  "res_z": 24,
+  "voxel_size_mm": 300,
+  "decoder_init": [256, 6, 6, 2],
+  "weight_file": "spatial_modal_cvae_v3_88x88x24.pth",
+  "weight_probe_file": "spatial_modal_cvae_v3_88x88x24_probe_best.pth",
+  "note": "V3 训练 notebook 默认栅格；推理前确保 config.py 与此一致"
+}

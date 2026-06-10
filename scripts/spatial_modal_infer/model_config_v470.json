@@ -1,0 +1,10 @@
+{
+  "model_version": "v470_train_opt_v2",
+  "res_x": 64,
+  "res_y": 128,
+  "res_z": 32,
+  "voxel_size_mm": 300,
+  "decoder_init": [256, 4, 8, 2],
+  "weight_file": "spatial_modal_cvae_470_v2.pth",
+  "note": "v470 v2 旧栅格；使用此配置时需将 config.py 改回 64×128×32 且 decoder 无裁切"
+}

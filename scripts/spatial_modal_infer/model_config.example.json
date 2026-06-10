@@ -1,0 +1,9 @@
+{
+  "version": "v470_train_opt_v2",
+  "weight_file": "spatial_modal_cvae_470_v2.pth",
+  "grid": { "x": 64, "y": 128, "z": 32 },
+  "voxel_size_mm": 300,
+  "latent_dim": 256,
+  "hidden_dim": 128,
+  "note": "换栅格或改模型结构后必须同步更新 config.py 并重新训练"
+}

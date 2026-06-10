@@ -1,0 +1,23 @@
+{
+  "model_version": "v4_88x88x24",
+  "res_x": 88,
+  "res_y": 88,
+  "res_z": 24,
+  "voxel_size_mm": 300,
+  "decoder_init": [256, 6, 6, 2],
+  "node_in_dim": 8,
+  "latent_dim": 256,
+  "hidden_dim": 128,
+  "cond_dim": 17,
+  "cond_semantics": "absolute_counts_scaled",
+  "cond_count_scale": 4.0,
+  "cond_embed_dim": 64,
+  "decoder_norm": "groupnorm_affine_false_plus_film",
+  "count_aware_pooling": true,
+  "count_head": true,
+  "aux_count_weight": 0.1,
+  "weight_file": "spatial_modal_cvae_v4_88x88x24.pth",
+  "weight_probe_file": "spatial_modal_cvae_v4_88x88x24_probe_best.pth",
+  "checkpoint_file": "spatial_modal_cvae_v4_88x88x24_checkpoint.pt",
+  "note": "V4 inference package config. model.py and graph_utils.py must match this architecture and condition semantics."
+}

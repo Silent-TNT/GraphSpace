@@ -3,10 +3,10 @@
 Rhino EditPythonScript — 批量导出 JSON (V14 QC)
 
 用法（Rhino 7/8）：
-  1. 将 .3dm 源文件放在 E:\\Documents\\GraphSpace\\data\\raw（含子目录亦可）
+  1. 修改下方「路径配置」中的 BATCH_FOLDER（或 RAW_DIR / OUT_DIR）
   2. Rhino → EditPythonScript → 打开本文件 → Run
-  3. JSON 输出至 data/processed/house_*.json
-  4. 日志：data/processed/batch_export_log.txt
+  3. JSON 输出至 OUT_DIR（house_*.json），与其它批次目录隔离
+  4. 日志：OUT_DIR/batch_export_log.txt
 
 依赖同目录下的 260524rhino-json-v14.py（已支持 interactive=False）。
 """
@@ -24,10 +24,20 @@ import rhinoscriptsyntax as rs
 import Rhino
 import scriptcontext as sc
 
-# ========== 路径配置（按需修改） ==========
+# ========== 路径配置（只改这里） ==========
 ROOT = r"E:\Documents\GraphSpace"
-RAW_DIR = os.path.join(ROOT, "data", "raw")
-OUT_DIR = os.path.join(ROOT, "data", "processed")
+
+# 批次文件夹名：.3dm 在 data/raw/<名>，JSON 输出到 data/processed/<名>
+# 示例：first_ | second_94 | third_299
+BATCH_FOLDER = "third_299"
+
+RAW_DIR = os.path.join(ROOT, "data", "raw", BATCH_FOLDER)
+OUT_DIR = os.path.join(ROOT, "data", "processed", BATCH_FOLDER)
+
+# 若目录结构不同，可直接覆盖上面两行，例如：
+# RAW_DIR = r"E:\Documents\GraphSpace\data\raw\third_299"
+# OUT_DIR = r"E:\Documents\GraphSpace\data\processed\third_299"
+
 V14_SCRIPT = os.path.join(ROOT, "scripts", "rhino_export", "260524rhino-json-v14.py")
 LOG_PATH = os.path.join(OUT_DIR, "batch_export_log.txt")
 
@@ -233,6 +243,7 @@ def batch_export():
         "",
         "=" * 72,
         "批量导出开始 {}".format(started.strftime("%Y-%m-%d %H:%M:%S")),
+        "BATCH_FOLDER: {}".format(BATCH_FOLDER),
         "RAW: {}".format(RAW_DIR),
         "OUT: {}".format(OUT_DIR),
         "共 {} 个 .3dm".format(len(three_dm_files)),
