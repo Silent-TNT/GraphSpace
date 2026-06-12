@@ -1,0 +1,46 @@
+{
+  "generated_at": "2026-06-11 22:20:49",
+  "generated_stamp": "20260611_222049",
+  "weights": "E:\\Documents\\GraphSpace\\weights\\spatial_modal_cvae_v4_88x88x24.pth",
+  "weights_file": "spatial_modal_cvae_v4_88x88x24.pth",
+  "weights_stem": "spatial_modal_cvae_v4_88x88x24",
+  "seed": 123,
+  "decode_mode": "latent_sample_2",
+  "n_occ": 30944,
+  "quality_score": -218.98062937062937,
+  "quality_metrics": {
+    "score": -218.981,
+    "present_targets": 8,
+    "total_targets": 13,
+    "non_empty": 30944,
+    "missing": 2.0,
+    "extra_area": 48.51,
+    "area": 4.724,
+    "fragment": 2.0,
+    "shape": 0.0
+  },
+  "display_source": "model_regions",
+  "display_style": "regions",
+  "room_counts": {
+    "entryway": 1,
+    "living_room": 1,
+    "dining_room": 1,
+    "kitchen": 1,
+    "bedroom": 3,
+    "bathroom": 2,
+    "corridor": 2,
+    "stairs": 1,
+    "balcony": 1
+  },
+  "site": [
+    18000.0,
+    15000.0
+  ],
+  "outputs": {
+    "3d_html": "outputs\\route_baseline\\2026-06-11\\medium\\seed_123\\v4\\figures\\layout_20260611_222049_spatial_modal_cvae_v4_88x88x24_3d_seed123.html",
+    "3d": "outputs\\route_baseline\\2026-06-11\\medium\\seed_123\\v4\\figures\\layout_20260611_222049_spatial_modal_cvae_v4_88x88x24_3d_seed123.png",
+    "floor1": "outputs\\route_baseline\\2026-06-11\\medium\\seed_123\\v4\\figures\\layout_20260611_222049_spatial_modal_cvae_v4_88x88x24_floor1_seed123.png",
+    "floor2": "outputs\\route_baseline\\2026-06-11\\medium\\seed_123\\v4\\figures\\layout_20260611_222049_spatial_modal_cvae_v4_88x88x24_floor2_seed123.png",
+    "topology": "outputs\\route_baseline\\2026-06-11\\medium\\seed_123\\v4\\figures\\layout_20260611_222049_spatial_modal_cvae_v4_88x88x24_topology_seed123.png"
+  }
+}

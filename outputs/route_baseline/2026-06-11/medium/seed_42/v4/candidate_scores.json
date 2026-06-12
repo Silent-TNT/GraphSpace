@@ -1,0 +1,66 @@
+[
+  {
+    "decode_mode": "latent_sample_0",
+    "non_empty_voxels": 31074,
+    "score": -257.3751398601399,
+    "metrics": {
+      "score": -257.375,
+      "present_targets": 9,
+      "total_targets": 13,
+      "non_empty": 31074,
+      "missing": 4.0,
+      "extra_area": 41.94,
+      "area": 3.566,
+      "fragment": 0.0,
+      "shape": 0.0
+    }
+  },
+  {
+    "decode_mode": "latent_sample_1",
+    "non_empty_voxels": 33621,
+    "score": -314.7756293706294,
+    "metrics": {
+      "score": -314.776,
+      "present_targets": 8,
+      "total_targets": 13,
+      "non_empty": 33621,
+      "missing": 5.0,
+      "extra_area": 51.75,
+      "area": 3.419,
+      "fragment": 0.0,
+      "shape": 0.124
+    }
+  },
+  {
+    "decode_mode": "latent_sample_2",
+    "non_empty_voxels": 31375,
+    "score": -270.92738826390996,
+    "metrics": {
+      "score": -270.927,
+      "present_targets": 8,
+      "total_targets": 13,
+      "non_empty": 31375,
+      "missing": 4.0,
+      "extra_area": 47.34,
+      "area": 3.737,
+      "fragment": 0.0,
+      "shape": 0.002
+    }
+  },
+  {
+    "decode_mode": "latent_sample_3",
+    "non_empty_voxels": 31952,
+    "score": -308.66591093117404,
+    "metrics": {
+      "score": -308.666,
+      "present_targets": 8,
+      "total_targets": 13,
+      "non_empty": 31952,
+      "missing": 4.0,
+      "extra_area": 46.8,
+      "area": 4.275,
+      "fragment": 7.0,
+      "shape": 0.0
+    }
+  }
+]

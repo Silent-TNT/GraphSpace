@@ -1,0 +1,274 @@
+{
+  "route": "zoned",
+  "case": "medium",
+  "site": {
+    "x_mm": 18000,
+    "y_mm": 15000,
+    "z_mm": 6000
+  },
+  "room_counts": {
+    "entryway": 1,
+    "living_room": 1,
+    "dining_room": 1,
+    "kitchen": 1,
+    "bedroom": 3,
+    "bathroom": 2,
+    "corridor": 2,
+    "stairs": 1,
+    "balcony": 1
+  },
+  "seed": 123,
+  "status": "completed",
+  "elapsed_seconds": 10.189,
+  "route_metadata": {
+    "generator_score": 128.9037736198214,
+    "score_detail": {
+      "area_penalty": 2.1896,
+      "overlap_penalty": 0.0,
+      "adjacency_bonus": 34.5933,
+      "adjacency_penalty": 3.5,
+      "occupancy_penalty": 0.0,
+      "prior_bonus": 0.0,
+      "missing_penalty": 0.0
+    },
+    "placement_record": {
+      "generator": "zoned_prior_pack_v1",
+      "seed": 21549,
+      "core": {
+        "enabled": true,
+        "source": "corner_rule",
+        "rect": {
+          "x0_m": 0.0,
+          "y0_m": 0.0,
+          "x1_m": 3.0,
+          "y1_m": 3.0
+        },
+        "prior_score": 0.0096
+      },
+      "corridors": [
+        {
+          "room_id": "corridor_1",
+          "floor": 1,
+          "rect": {
+            "x0_m": 3.0,
+            "y0_m": 0.6,
+            "x1_m": 9.0,
+            "y1_m": 2.1
+          },
+          "auto_added": false
+        },
+        {
+          "room_id": "corridor_2",
+          "floor": 2,
+          "rect": {
+            "x0_m": 3.0,
+            "y0_m": 0.6,
+            "x1_m": 15.0,
+            "y1_m": 2.1
+          },
+          "auto_added": false
+        }
+      ],
+      "placements": [
+        {
+          "room_id": "entryway_1",
+          "type": "entryway",
+          "placed": true,
+          "rect": {
+            "x0_m": 9.0,
+            "y0_m": 0.0,
+            "x1_m": 11.4,
+            "y1_m": 2.4
+          },
+          "score": 17.2477,
+          "scale": 1.0,
+          "source": "zone_pack_rule"
+        },
+        {
+          "room_id": "living_room_1",
+          "type": "living_room",
+          "placed": true,
+          "rect": {
+            "x0_m": 11.4,
+            "y0_m": 0.0,
+            "x1_m": 16.8,
+            "y1_m": 6.0
+          },
+          "score": 12.1875,
+          "scale": 1.0,
+          "source": "zone_pack_rule"
+        },
+        {
+          "room_id": "dining_room_1",
+          "type": "dining_room",
+          "placed": true,
+          "rect": {
+            "x0_m": 10.8,
+            "y0_m": 6.0,
+            "x1_m": 14.4,
+            "y1_m": 10.2
+          },
+          "score": 6.2932,
+          "scale": 1.0,
+          "source": "zone_pack_rule"
+        },
+        {
+          "room_id": "kitchen_1",
+          "type": "kitchen",
+          "placed": true,
+          "rect": {
+            "x0_m": 14.4,
+            "y0_m": 6.0,
+            "x1_m": 18.0,
+            "y1_m": 9.3
+          },
+          "score": 14.0242,
+          "scale": 1.0,
+          "source": "zone_pack_rule"
+        },
+        {
+          "room_id": "bathroom_1",
+          "type": "bathroom",
+          "placed": true,
+          "rect": {
+            "x0_m": 0.0,
+            "y0_m": 3.0,
+            "x1_m": 2.7,
+            "y1_m": 5.1
+          },
+          "score": 3.4834,
+          "scale": 1.0,
+          "source": "zone_pack_rule"
+        },
+        {
+          "room_id": "bathroom_2",
+          "type": "bathroom",
+          "placed": true,
+          "rect": {
+            "x0_m": 15.0,
+            "y0_m": 0.0,
+            "x1_m": 17.1,
+            "y1_m": 2.7
+          },
+          "score": 16.9563,
+          "scale": 1.0,
+          "source": "zone_pack_rule"
+        },
+        {
+          "room_id": "bedroom_1",
+          "type": "bedroom",
+          "placed": true,
+          "rect": {
+            "x0_m": 13.8,
+            "y0_m": 3.0,
+            "x1_m": 18.0,
+            "y1_m": 6.6
+          },
+          "score": 9.8643,
+          "scale": 1.0,
+          "source": "zone_pack_rule"
+        },
+        {
+          "room_id": "bedroom_2",
+          "type": "bedroom",
+          "placed": true,
+          "rect": {
+            "x0_m": 0.0,
+            "y0_m": 3.0,
+            "x1_m": 4.2,
+            "y1_m": 6.6
+          },
+          "score": 9.1123,
+          "scale": 1.0,
+          "source": "zone_pack_rule"
+        },
+        {
+          "room_id": "bedroom_3",
+          "type": "bedroom",
+          "placed": true,
+          "rect": {
+            "x0_m": 10.2,
+            "y0_m": 2.4,
+            "x1_m": 13.8,
+            "y1_m": 6.6
+          },
+          "score": -4.7415,
+          "scale": 1.0,
+          "source": "zone_pack_rule"
+        },
+        {
+          "room_id": "balcony_1",
+          "type": "balcony",
+          "placed": true,
+          "rect": {
+            "x0_m": 0.0,
+            "y0_m": 6.6,
+            "x1_m": 3.9,
+            "y1_m": 8.4
+          },
+          "score": 37.1929,
+          "scale": 1.0,
+          "source": "zone_pack_rule"
+        }
+      ],
+      "fill_strategy": "target_area_with_unassigned_void",
+      "prior_mode": "rule_only"
+    },
+    "candidates": 64,
+    "non_empty_voxels": 19320
+  },
+  "evaluation": {
+    "requested_counts": {
+      "entryway": 1,
+      "living_room": 1,
+      "dining_room": 1,
+      "kitchen": 1,
+      "bedroom": 3,
+      "bathroom": 2,
+      "corridor": 2,
+      "stairs": 1,
+      "balcony": 1
+    },
+    "generated_counts": {
+      "balcony": 1,
+      "bathroom": 2,
+      "bedroom": 3,
+      "corridor": 2,
+      "dining_room": 1,
+      "entryway": 1,
+      "kitchen": 1,
+      "living_room": 1,
+      "stairs": 1
+    },
+    "count_delta": {
+      "entryway": 0,
+      "living_room": 0,
+      "dining_room": 0,
+      "kitchen": 0,
+      "bedroom": 0,
+      "bathroom": 0,
+      "corridor": 0,
+      "stairs": 0,
+      "balcony": 0
+    },
+    "missing_counts": {},
+    "extra_counts": {},
+    "room_count_match": true,
+    "p0_pass": true,
+    "failure_labels": [
+      "exterior_contact_missing"
+    ],
+    "details": {
+      "invalid_room_ids": [],
+      "out_of_bounds_room_ids": [],
+      "modulus_room_ids": [],
+      "overlap_pairs": [],
+      "area_fail_room_ids": [],
+      "width_fail_room_ids": [],
+      "aspect_fail_room_ids": [],
+      "exterior_fail_room_ids": [
+        "bedroom_3"
+      ]
+    }
+  }
+}

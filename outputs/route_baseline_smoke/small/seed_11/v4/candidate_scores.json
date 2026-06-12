@@ -1,0 +1,18 @@
+[
+  {
+    "decode_mode": "latent_sample_0",
+    "non_empty_voxels": 22910,
+    "score": -156.86694805194804,
+    "metrics": {
+      "score": -156.867,
+      "present_targets": 5,
+      "total_targets": 8,
+      "non_empty": 22910,
+      "missing": 3.0,
+      "extra_area": 67.59,
+      "area": 0.64,
+      "fragment": 0.0,
+      "shape": 0.038
+    }
+  }
+]

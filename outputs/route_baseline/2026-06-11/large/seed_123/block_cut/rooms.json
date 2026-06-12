@@ -1,0 +1,306 @@
+[
+  {
+    "id": "stairs_1",
+    "type": "stairs",
+    "floor": null,
+    "box_min": [
+      0.0,
+      14100.0,
+      0.0
+    ],
+    "box_max": [
+      2400.0,
+      18000.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "entryway_1",
+    "type": "entryway",
+    "floor": 1,
+    "box_min": [
+      2400.0,
+      14100.0,
+      0.0
+    ],
+    "box_max": [
+      5400.0,
+      18000.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "corridor_1",
+    "type": "corridor",
+    "floor": 1,
+    "box_min": [
+      5400.0,
+      14100.0,
+      0.0
+    ],
+    "box_max": [
+      11400.0,
+      18000.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bathroom_3",
+    "type": "bathroom",
+    "floor": 1,
+    "box_min": [
+      11400.0,
+      14100.0,
+      0.0
+    ],
+    "box_max": [
+      15000.0,
+      18000.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bathroom_1",
+    "type": "bathroom",
+    "floor": 1,
+    "box_min": [
+      15000.0,
+      14100.0,
+      0.0
+    ],
+    "box_max": [
+      18600.0,
+      18000.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "utility_1",
+    "type": "utility",
+    "floor": 1,
+    "box_min": [
+      18600.0,
+      14100.0,
+      0.0
+    ],
+    "box_max": [
+      22000.0,
+      18000.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "kitchen_1",
+    "type": "kitchen",
+    "floor": 1,
+    "box_min": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "box_max": [
+      11100.0,
+      3600.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "living_room_1",
+    "type": "living_room",
+    "floor": 1,
+    "box_min": [
+      0.0,
+      3600.0,
+      0.0
+    ],
+    "box_max": [
+      11100.0,
+      14100.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "dining_room_1",
+    "type": "dining_room",
+    "floor": 1,
+    "box_min": [
+      11100.0,
+      0.0,
+      0.0
+    ],
+    "box_max": [
+      22000.0,
+      6300.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "multi_purpose_1",
+    "type": "multi_purpose",
+    "floor": 1,
+    "box_min": [
+      11100.0,
+      6300.0,
+      0.0
+    ],
+    "box_max": [
+      22000.0,
+      14100.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "corridor_2",
+    "type": "corridor",
+    "floor": 2,
+    "box_min": [
+      2400.0,
+      14100.0,
+      3000.0
+    ],
+    "box_max": [
+      13200.0,
+      18000.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bathroom_2",
+    "type": "bathroom",
+    "floor": 2,
+    "box_min": [
+      13200.0,
+      14100.0,
+      3000.0
+    ],
+    "box_max": [
+      22000.0,
+      18000.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_4",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      0.0,
+      0.0,
+      3000.0
+    ],
+    "box_max": [
+      5400.0,
+      8700.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_1",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      5400.0,
+      0.0,
+      3000.0
+    ],
+    "box_max": [
+      11400.0,
+      8700.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_3",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      0.0,
+      8700.0,
+      3000.0
+    ],
+    "box_max": [
+      11400.0,
+      14100.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_2",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      11400.0,
+      0.0,
+      3000.0
+    ],
+    "box_max": [
+      22000.0,
+      5700.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_5",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      11400.0,
+      5700.0,
+      3000.0
+    ],
+    "box_max": [
+      17400.0,
+      14100.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_1",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      17400.0,
+      5700.0,
+      3000.0
+    ],
+    "box_max": [
+      22000.0,
+      9600.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_2",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      17400.0,
+      9600.0,
+      3000.0
+    ],
+    "box_max": [
+      22000.0,
+      14100.0,
+      6000.0
+    ],
+    "auto_added": false
+  }
+]

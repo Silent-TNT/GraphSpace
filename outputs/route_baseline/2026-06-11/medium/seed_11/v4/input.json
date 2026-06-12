@@ -1,0 +1,21 @@
+{
+  "route": "v4",
+  "case": "medium",
+  "site": {
+    "x_mm": 18000,
+    "y_mm": 15000,
+    "z_mm": 6000
+  },
+  "room_counts": {
+    "entryway": 1,
+    "living_room": 1,
+    "dining_room": 1,
+    "kitchen": 1,
+    "bedroom": 3,
+    "bathroom": 2,
+    "corridor": 2,
+    "stairs": 1,
+    "balcony": 1
+  },
+  "seed": 11
+}

@@ -1,0 +1,210 @@
+[
+  {
+    "id": "stairs_1",
+    "type": "stairs",
+    "floor": null,
+    "box_min": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "box_max": [
+      3000.0,
+      3000.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "corridor_1",
+    "type": "corridor",
+    "floor": 1,
+    "box_min": [
+      3000.0,
+      600.0,
+      0.0
+    ],
+    "box_max": [
+      9000.0,
+      2100.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "entryway_1",
+    "type": "entryway",
+    "floor": 1,
+    "box_min": [
+      9000.0,
+      0.0,
+      0.0
+    ],
+    "box_max": [
+      11400.0,
+      2400.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "living_room_1",
+    "type": "living_room",
+    "floor": 1,
+    "box_min": [
+      11400.0,
+      0.0,
+      0.0
+    ],
+    "box_max": [
+      16800.0,
+      6000.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "dining_room_1",
+    "type": "dining_room",
+    "floor": 1,
+    "box_min": [
+      10800.0,
+      6000.0,
+      0.0
+    ],
+    "box_max": [
+      14400.0,
+      10200.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "kitchen_1",
+    "type": "kitchen",
+    "floor": 1,
+    "box_min": [
+      14400.0,
+      6000.0,
+      0.0
+    ],
+    "box_max": [
+      18000.0,
+      9300.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bathroom_1",
+    "type": "bathroom",
+    "floor": 1,
+    "box_min": [
+      0.0,
+      3000.0,
+      0.0
+    ],
+    "box_max": [
+      2700.0,
+      5100.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "corridor_2",
+    "type": "corridor",
+    "floor": 2,
+    "box_min": [
+      3000.0,
+      600.0,
+      3000.0
+    ],
+    "box_max": [
+      15000.0,
+      2100.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bathroom_2",
+    "type": "bathroom",
+    "floor": 2,
+    "box_min": [
+      15000.0,
+      0.0,
+      3000.0
+    ],
+    "box_max": [
+      17100.0,
+      2700.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_1",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      13800.0,
+      3000.0,
+      3000.0
+    ],
+    "box_max": [
+      18000.0,
+      6600.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_2",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      0.0,
+      3000.0,
+      3000.0
+    ],
+    "box_max": [
+      4200.0,
+      6600.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_3",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      10200.0,
+      2400.0,
+      3000.0
+    ],
+    "box_max": [
+      13800.0,
+      6600.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_1",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      0.0,
+      6600.0,
+      3000.0
+    ],
+    "box_max": [
+      3900.0,
+      8400.0,
+      6000.0
+    ],
+    "auto_added": false
+  }
+]

@@ -1,0 +1,4 @@
+﻿case,seed,route,status,elapsed_seconds,p0_pass,room_count_match,failure_labels,error_type,error
+small,11,v4,completed,0.329,False,False,room_count_missing|room_count_extra|required_dining_room_missing|invalid_room_geometry|site_boundary_violation|room_area_below_threshold|room_width_below_threshold|room_aspect_above_threshold|exterior_contact_missing,,
+small,11,block_cut,completed,0.006,False,True,modulus_violation,,
+small,11,zoned,completed,0.446,True,True,exterior_contact_missing,,

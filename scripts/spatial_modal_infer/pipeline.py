@@ -75,7 +75,7 @@ def infer_voxels(user_req, rooms, model, device, seed: int = 42, sample_k: int =
         logits_z = model.decoder(z, cond_dev)
         pred = torch.argmax(logits_z[0], dim=0).cpu().numpy()
         n_occ = int((pred > 0).sum())
-        score, metrics = _score_candidate(pred, rooms, user_req)
+        score, metrics = _score_candidate(pred, rooms, user_req, seed=seed)
         candidates.append((f"latent_sample_{i}", pred, n_occ, score, metrics))
         if score > best_score or (score == best_score and n_occ > best_n):
             best_pred, best_n, best_mode = pred, n_occ, f"latent_sample_{i}"
@@ -85,7 +85,7 @@ def infer_voxels(user_req, rooms, model, device, seed: int = 42, sample_k: int =
         _set_seed(seed, device)
         pred_mu = torch.argmax(model.decoder(mu, cond_dev)[0], dim=0).cpu().numpy()
         n_mu = int((pred_mu > 0).sum())
-        score, metrics = _score_candidate(pred_mu, rooms, user_req)
+        score, metrics = _score_candidate(pred_mu, rooms, user_req, seed=seed)
         candidates.append(("encoder_mu", pred_mu, n_mu, score, metrics))
         if score > best_score or (score == best_score and n_mu > best_n):
             best_pred, best_n, best_mode = pred_mu, n_mu, "encoder_mu"
@@ -96,7 +96,7 @@ def infer_voxels(user_req, rooms, model, device, seed: int = 42, sample_k: int =
         z_rand = torch.randn(1, LATENT_DIM, device=device)
         pred_rand = torch.argmax(model.decoder(z_rand, cond_dev)[0], dim=0).cpu().numpy()
         n_rand = int((pred_rand > 0).sum())
-        score, metrics = _score_candidate(pred_rand, rooms, user_req)
+        score, metrics = _score_candidate(pred_rand, rooms, user_req, seed=seed)
         candidates.append(("random_z_cond", pred_rand, n_rand, score, metrics))
         if score > best_score or (score == best_score and n_rand > best_n):
             best_pred, best_n, best_mode = pred_rand, n_rand, "random_z_cond"
@@ -107,7 +107,7 @@ def infer_voxels(user_req, rooms, model, device, seed: int = 42, sample_k: int =
         best_pred = pred_graph
         best_n = int((pred_graph > 0).sum())
         best_mode = "graph_forward"
-        best_score, best_metrics = _score_candidate(pred_graph, rooms, user_req)
+        best_score, best_metrics = _score_candidate(pred_graph, rooms, user_req, seed=seed)
         candidates.append((best_mode, pred_graph, best_n, best_score, best_metrics))
 
     return best_pred, best_n, best_mode, candidates, best_score, best_metrics
@@ -145,13 +145,14 @@ ROOM_AREA_LIMITS = {
 }
 
 
-def _score_candidate(pred_cls: np.ndarray, rooms, user_req) -> tuple[float, dict]:
+def _score_candidate(pred_cls: np.ndarray, rooms, user_req, seed: int = 42) -> tuple[float, dict]:
     """Score generated voxels by architectural plausibility, not just fill volume."""
     if pred_cls is None:
         return -1e9, {"reason": "empty"}
 
     voxel_area_m2 = (VOXEL_SIZE / 1000.0) ** 2
-    targets = program_floor_room_targets((user_req or {}).get("room_counts", {}))
+    room_counts = (user_req or {}).get("room_counts", {})
+    targets = program_floor_room_targets(room_counts, seed=seed)
     layers = voxels_to_floor_layers(pred_cls, rooms)
     requested = set((user_req or {}).get("room_counts", {}).keys())
     type_names = {v: k for k, v in CHANNEL_MAP.items() if v > 0}
@@ -424,13 +425,13 @@ def _cells_to_rectangles(cells: list[tuple[int, int]]) -> list[tuple[int, int, i
     return [(x0, y0, x1, y1) for x0, x1, y0, y1 in rectangles]
 
 
-def voxels_to_region_rooms(pred_cls, rooms=None, user_req=None, min_cells: int = 2, preserve_footprint: bool = True):
+def voxels_to_region_rooms(pred_cls, rooms=None, user_req=None, min_cells: int = 2, preserve_footprint: bool = True, seed: int = 42):
     """
     每层 2D 连通域 → 按用户需求合并碎片 → 每域一个紧贴外框并拉满层高。
     比旧版 3D 外接盒更少重叠、房间数更接近清单。
     """
     type_names = {v: k for k, v in CHANNEL_MAP.items() if v > 0}
-    floor_targets = program_floor_room_targets((user_req or {}).get("room_counts", {}))
+    floor_targets = program_floor_room_targets((user_req or {}).get("room_counts", {}), seed=seed)
     layers = voxels_to_floor_layers(pred_cls, rooms)
     out = []
     for floor, layer in layers.items():
@@ -552,7 +553,7 @@ def generate_user_layout(
     if n_occ > 0:
         floor_layers = voxels_to_floor_layers(pred, rooms)
         if display_style == "regions":
-            display_rooms = voxels_to_region_rooms(pred, rooms, user_req)
+            display_rooms = voxels_to_region_rooms(pred, rooms, user_req, seed=seed)
             display_source = "model_regions"
         elif display_style == "boxes":
             display_rooms = voxels_to_boxes(pred, rooms)

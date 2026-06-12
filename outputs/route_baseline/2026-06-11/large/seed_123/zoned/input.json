@@ -1,0 +1,23 @@
+{
+  "route": "zoned",
+  "case": "large",
+  "site": {
+    "x_mm": 22000,
+    "y_mm": 18000,
+    "z_mm": 6000
+  },
+  "room_counts": {
+    "entryway": 1,
+    "living_room": 1,
+    "dining_room": 1,
+    "kitchen": 1,
+    "bedroom": 5,
+    "bathroom": 3,
+    "corridor": 2,
+    "stairs": 1,
+    "utility": 1,
+    "balcony": 2,
+    "multi_purpose": 1
+  },
+  "seed": 123
+}

@@ -1,0 +1,3010 @@
+[
+  {
+    "id": "entryway_0",
+    "type": "entryway",
+    "floor": 1,
+    "box_min": [
+      9000.0,
+      3900.0,
+      0.0
+    ],
+    "box_max": [
+      9600.0,
+      4500.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "entryway_1",
+    "type": "entryway",
+    "floor": 1,
+    "box_min": [
+      9600.0,
+      3600.0,
+      0.0
+    ],
+    "box_max": [
+      10200.0,
+      4500.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "entryway_2",
+    "type": "entryway",
+    "floor": 1,
+    "box_min": [
+      11100.0,
+      4200.0,
+      0.0
+    ],
+    "box_max": [
+      12000.0,
+      4500.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "entryway_3",
+    "type": "entryway",
+    "floor": 1,
+    "box_min": [
+      12000.0,
+      3900.0,
+      0.0
+    ],
+    "box_max": [
+      12300.0,
+      4500.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "entryway_4",
+    "type": "entryway",
+    "floor": 1,
+    "box_min": [
+      12300.0,
+      4200.0,
+      0.0
+    ],
+    "box_max": [
+      13200.0,
+      4500.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "living_room_5",
+    "type": "living_room",
+    "floor": 1,
+    "box_min": [
+      7200.0,
+      5700.0,
+      0.0
+    ],
+    "box_max": [
+      7800.0,
+      6900.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "living_room_6",
+    "type": "living_room",
+    "floor": 1,
+    "box_min": [
+      7800.0,
+      4800.0,
+      0.0
+    ],
+    "box_max": [
+      8100.0,
+      9600.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "living_room_7",
+    "type": "living_room",
+    "floor": 1,
+    "box_min": [
+      8100.0,
+      4500.0,
+      0.0
+    ],
+    "box_max": [
+      8400.0,
+      9600.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "living_room_8",
+    "type": "living_room",
+    "floor": 1,
+    "box_min": [
+      8400.0,
+      4200.0,
+      0.0
+    ],
+    "box_max": [
+      8700.0,
+      10500.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "living_room_9",
+    "type": "living_room",
+    "floor": 1,
+    "box_min": [
+      8700.0,
+      4500.0,
+      0.0
+    ],
+    "box_max": [
+      9000.0,
+      10800.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "living_room_10",
+    "type": "living_room",
+    "floor": 1,
+    "box_min": [
+      8400.0,
+      11400.0,
+      0.0
+    ],
+    "box_max": [
+      9000.0,
+      11700.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "living_room_11",
+    "type": "living_room",
+    "floor": 1,
+    "box_min": [
+      9000.0,
+      4500.0,
+      0.0
+    ],
+    "box_max": [
+      9600.0,
+      11700.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "living_room_12",
+    "type": "living_room",
+    "floor": 1,
+    "box_min": [
+      9600.0,
+      4500.0,
+      0.0
+    ],
+    "box_max": [
+      10200.0,
+      12000.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "living_room_13",
+    "type": "living_room",
+    "floor": 1,
+    "box_min": [
+      10200.0,
+      4200.0,
+      0.0
+    ],
+    "box_max": [
+      10500.0,
+      12000.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "living_room_14",
+    "type": "living_room",
+    "floor": 1,
+    "box_min": [
+      10500.0,
+      3900.0,
+      0.0
+    ],
+    "box_max": [
+      10800.0,
+      4200.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "living_room_15",
+    "type": "living_room",
+    "floor": 1,
+    "box_min": [
+      10500.0,
+      4500.0,
+      0.0
+    ],
+    "box_max": [
+      10800.0,
+      12300.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "living_room_16",
+    "type": "living_room",
+    "floor": 1,
+    "box_min": [
+      10800.0,
+      3900.0,
+      0.0
+    ],
+    "box_max": [
+      11100.0,
+      12300.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "living_room_17",
+    "type": "living_room",
+    "floor": 1,
+    "box_min": [
+      11100.0,
+      4500.0,
+      0.0
+    ],
+    "box_max": [
+      12600.0,
+      12300.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "living_room_18",
+    "type": "living_room",
+    "floor": 1,
+    "box_min": [
+      12600.0,
+      4500.0,
+      0.0
+    ],
+    "box_max": [
+      12900.0,
+      12000.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "living_room_19",
+    "type": "living_room",
+    "floor": 1,
+    "box_min": [
+      12900.0,
+      4800.0,
+      0.0
+    ],
+    "box_max": [
+      13800.0,
+      12300.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "living_room_20",
+    "type": "living_room",
+    "floor": 1,
+    "box_min": [
+      13800.0,
+      5100.0,
+      0.0
+    ],
+    "box_max": [
+      14400.0,
+      12000.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "living_room_21",
+    "type": "living_room",
+    "floor": 1,
+    "box_min": [
+      14400.0,
+      5400.0,
+      0.0
+    ],
+    "box_max": [
+      14700.0,
+      10500.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "living_room_22",
+    "type": "living_room",
+    "floor": 1,
+    "box_min": [
+      14400.0,
+      11400.0,
+      0.0
+    ],
+    "box_max": [
+      14700.0,
+      12000.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "living_room_23",
+    "type": "living_room",
+    "floor": 1,
+    "box_min": [
+      14700.0,
+      6000.0,
+      0.0
+    ],
+    "box_max": [
+      15000.0,
+      10500.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "living_room_24",
+    "type": "living_room",
+    "floor": 1,
+    "box_min": [
+      14700.0,
+      11400.0,
+      0.0
+    ],
+    "box_max": [
+      15000.0,
+      11700.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bathroom_25",
+    "type": "bathroom",
+    "floor": 1,
+    "box_min": [
+      3900.0,
+      9900.0,
+      0.0
+    ],
+    "box_max": [
+      4200.0,
+      10800.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bathroom_26",
+    "type": "bathroom",
+    "floor": 1,
+    "box_min": [
+      4200.0,
+      9600.0,
+      0.0
+    ],
+    "box_max": [
+      4500.0,
+      10800.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bathroom_27",
+    "type": "bathroom",
+    "floor": 1,
+    "box_min": [
+      4500.0,
+      9900.0,
+      0.0
+    ],
+    "box_max": [
+      4800.0,
+      10800.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bathroom_28",
+    "type": "bathroom",
+    "floor": 1,
+    "box_min": [
+      4800.0,
+      9900.0,
+      0.0
+    ],
+    "box_max": [
+      5100.0,
+      10500.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bathroom_29",
+    "type": "bathroom",
+    "floor": 1,
+    "box_min": [
+      5100.0,
+      9900.0,
+      0.0
+    ],
+    "box_max": [
+      5400.0,
+      10800.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "corridor_30",
+    "type": "corridor",
+    "floor": 1,
+    "box_min": [
+      7500.0,
+      9900.0,
+      0.0
+    ],
+    "box_max": [
+      7800.0,
+      11100.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "corridor_31",
+    "type": "corridor",
+    "floor": 1,
+    "box_min": [
+      7800.0,
+      9600.0,
+      0.0
+    ],
+    "box_max": [
+      8400.0,
+      11400.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "corridor_32",
+    "type": "corridor",
+    "floor": 1,
+    "box_min": [
+      8400.0,
+      10500.0,
+      0.0
+    ],
+    "box_max": [
+      8700.0,
+      11400.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "corridor_33",
+    "type": "corridor",
+    "floor": 1,
+    "box_min": [
+      8700.0,
+      10800.0,
+      0.0
+    ],
+    "box_max": [
+      9000.0,
+      11400.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "corridor_34",
+    "type": "corridor",
+    "floor": 1,
+    "box_min": [
+      14400.0,
+      10500.0,
+      0.0
+    ],
+    "box_max": [
+      15000.0,
+      11400.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "corridor_35",
+    "type": "corridor",
+    "floor": 1,
+    "box_min": [
+      15000.0,
+      9000.0,
+      0.0
+    ],
+    "box_max": [
+      15300.0,
+      11700.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "corridor_36",
+    "type": "corridor",
+    "floor": 1,
+    "box_min": [
+      15300.0,
+      8700.0,
+      0.0
+    ],
+    "box_max": [
+      15600.0,
+      11400.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "corridor_37",
+    "type": "corridor",
+    "floor": 1,
+    "box_min": [
+      15600.0,
+      9300.0,
+      0.0
+    ],
+    "box_max": [
+      16200.0,
+      11100.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "corridor_38",
+    "type": "corridor",
+    "floor": 1,
+    "box_min": [
+      16200.0,
+      9900.0,
+      0.0
+    ],
+    "box_max": [
+      16500.0,
+      10800.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "corridor_39",
+    "type": "corridor",
+    "floor": 1,
+    "box_min": [
+      16500.0,
+      10200.0,
+      0.0
+    ],
+    "box_max": [
+      16800.0,
+      10800.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "stairs_40",
+    "type": "stairs",
+    "floor": 1,
+    "box_min": [
+      6000.0,
+      10200.0,
+      0.0
+    ],
+    "box_max": [
+      6300.0,
+      10500.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "stairs_41",
+    "type": "stairs",
+    "floor": 1,
+    "box_min": [
+      6300.0,
+      9900.0,
+      0.0
+    ],
+    "box_max": [
+      6600.0,
+      10500.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "stairs_42",
+    "type": "stairs",
+    "floor": 1,
+    "box_min": [
+      6600.0,
+      9600.0,
+      0.0
+    ],
+    "box_max": [
+      6900.0,
+      10800.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "stairs_43",
+    "type": "stairs",
+    "floor": 1,
+    "box_min": [
+      6900.0,
+      9600.0,
+      0.0
+    ],
+    "box_max": [
+      7200.0,
+      10500.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "stairs_44",
+    "type": "stairs",
+    "floor": 1,
+    "box_min": [
+      7200.0,
+      14100.0,
+      0.0
+    ],
+    "box_max": [
+      7500.0,
+      14400.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "stairs_45",
+    "type": "stairs",
+    "floor": 1,
+    "box_min": [
+      7500.0,
+      13800.0,
+      0.0
+    ],
+    "box_max": [
+      7800.0,
+      14700.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "stairs_46",
+    "type": "stairs",
+    "floor": 1,
+    "box_min": [
+      7800.0,
+      13500.0,
+      0.0
+    ],
+    "box_max": [
+      8100.0,
+      14700.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "stairs_47",
+    "type": "stairs",
+    "floor": 1,
+    "box_min": [
+      8100.0,
+      11400.0,
+      0.0
+    ],
+    "box_max": [
+      8400.0,
+      12600.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "stairs_48",
+    "type": "stairs",
+    "floor": 1,
+    "box_min": [
+      8100.0,
+      12900.0,
+      0.0
+    ],
+    "box_max": [
+      8400.0,
+      14700.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "stairs_49",
+    "type": "stairs",
+    "floor": 1,
+    "box_min": [
+      8400.0,
+      11700.0,
+      0.0
+    ],
+    "box_max": [
+      8700.0,
+      14700.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "stairs_50",
+    "type": "stairs",
+    "floor": 1,
+    "box_min": [
+      8700.0,
+      11700.0,
+      0.0
+    ],
+    "box_max": [
+      9600.0,
+      15000.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "stairs_51",
+    "type": "stairs",
+    "floor": 1,
+    "box_min": [
+      9600.0,
+      12000.0,
+      0.0
+    ],
+    "box_max": [
+      9900.0,
+      15300.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "stairs_52",
+    "type": "stairs",
+    "floor": 1,
+    "box_min": [
+      9900.0,
+      12300.0,
+      0.0
+    ],
+    "box_max": [
+      10200.0,
+      15600.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "stairs_53",
+    "type": "stairs",
+    "floor": 1,
+    "box_min": [
+      10200.0,
+      12000.0,
+      0.0
+    ],
+    "box_max": [
+      10500.0,
+      15600.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "stairs_54",
+    "type": "stairs",
+    "floor": 1,
+    "box_min": [
+      10500.0,
+      12300.0,
+      0.0
+    ],
+    "box_max": [
+      11400.0,
+      15600.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "stairs_55",
+    "type": "stairs",
+    "floor": 1,
+    "box_min": [
+      11400.0,
+      12300.0,
+      0.0
+    ],
+    "box_max": [
+      12000.0,
+      15900.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "stairs_56",
+    "type": "stairs",
+    "floor": 1,
+    "box_min": [
+      12000.0,
+      12300.0,
+      0.0
+    ],
+    "box_max": [
+      12300.0,
+      15600.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "stairs_57",
+    "type": "stairs",
+    "floor": 1,
+    "box_min": [
+      12300.0,
+      12300.0,
+      0.0
+    ],
+    "box_max": [
+      12600.0,
+      15900.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "stairs_58",
+    "type": "stairs",
+    "floor": 1,
+    "box_min": [
+      12600.0,
+      12000.0,
+      0.0
+    ],
+    "box_max": [
+      12900.0,
+      15900.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "stairs_59",
+    "type": "stairs",
+    "floor": 1,
+    "box_min": [
+      12900.0,
+      12300.0,
+      0.0
+    ],
+    "box_max": [
+      13200.0,
+      15900.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "stairs_60",
+    "type": "stairs",
+    "floor": 1,
+    "box_min": [
+      13200.0,
+      12300.0,
+      0.0
+    ],
+    "box_max": [
+      13800.0,
+      15600.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "stairs_61",
+    "type": "stairs",
+    "floor": 1,
+    "box_min": [
+      13800.0,
+      12000.0,
+      0.0
+    ],
+    "box_max": [
+      14400.0,
+      15300.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "stairs_62",
+    "type": "stairs",
+    "floor": 1,
+    "box_min": [
+      14400.0,
+      12300.0,
+      0.0
+    ],
+    "box_max": [
+      15000.0,
+      15300.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "stairs_63",
+    "type": "stairs",
+    "floor": 1,
+    "box_min": [
+      15000.0,
+      12300.0,
+      0.0
+    ],
+    "box_max": [
+      15300.0,
+      13500.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "stairs_64",
+    "type": "stairs",
+    "floor": 1,
+    "box_min": [
+      15000.0,
+      14100.0,
+      0.0
+    ],
+    "box_max": [
+      15300.0,
+      14700.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "stairs_65",
+    "type": "stairs",
+    "floor": 1,
+    "box_min": [
+      15300.0,
+      12300.0,
+      0.0
+    ],
+    "box_max": [
+      15600.0,
+      12900.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "stairs_66",
+    "type": "stairs",
+    "floor": 1,
+    "box_min": [
+      15300.0,
+      13200.0,
+      0.0
+    ],
+    "box_max": [
+      15600.0,
+      13500.0,
+      3000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_67",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      3300.0,
+      13500.0,
+      3000.0
+    ],
+    "box_max": [
+      3600.0,
+      13800.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_68",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      3600.0,
+      13200.0,
+      3000.0
+    ],
+    "box_max": [
+      3900.0,
+      14100.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_69",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      3900.0,
+      7500.0,
+      3000.0
+    ],
+    "box_max": [
+      4200.0,
+      9600.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_70",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      3900.0,
+      10800.0,
+      3000.0
+    ],
+    "box_max": [
+      4200.0,
+      14700.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_71",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      4200.0,
+      7500.0,
+      3000.0
+    ],
+    "box_max": [
+      4500.0,
+      14700.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_72",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      4500.0,
+      7500.0,
+      3000.0
+    ],
+    "box_max": [
+      4800.0,
+      14400.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_73",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      4800.0,
+      7500.0,
+      3000.0
+    ],
+    "box_max": [
+      6000.0,
+      14700.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_74",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      6000.0,
+      8100.0,
+      3000.0
+    ],
+    "box_max": [
+      6300.0,
+      14700.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_75",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      6300.0,
+      8400.0,
+      3000.0
+    ],
+    "box_max": [
+      6600.0,
+      14700.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_76",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      6600.0,
+      8100.0,
+      3000.0
+    ],
+    "box_max": [
+      7200.0,
+      14700.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_77",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      7200.0,
+      7500.0,
+      3000.0
+    ],
+    "box_max": [
+      7500.0,
+      7800.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_78",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      7200.0,
+      8100.0,
+      3000.0
+    ],
+    "box_max": [
+      7500.0,
+      14100.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_79",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      7500.0,
+      7500.0,
+      3000.0
+    ],
+    "box_max": [
+      7800.0,
+      14100.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_80",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      7200.0,
+      14400.0,
+      3000.0
+    ],
+    "box_max": [
+      7800.0,
+      14700.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_81",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      7800.0,
+      7500.0,
+      3000.0
+    ],
+    "box_max": [
+      8100.0,
+      9300.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_82",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      7800.0,
+      11100.0,
+      3000.0
+    ],
+    "box_max": [
+      8100.0,
+      14100.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_83",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      8100.0,
+      8400.0,
+      3000.0
+    ],
+    "box_max": [
+      8400.0,
+      9300.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_84",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      8100.0,
+      11400.0,
+      3000.0
+    ],
+    "box_max": [
+      8400.0,
+      13500.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_85",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      8400.0,
+      11400.0,
+      3000.0
+    ],
+    "box_max": [
+      8700.0,
+      11700.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_86",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      14700.0,
+      12300.0,
+      3000.0
+    ],
+    "box_max": [
+      15000.0,
+      12600.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_87",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      15000.0,
+      12300.0,
+      3000.0
+    ],
+    "box_max": [
+      15300.0,
+      14700.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_88",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      15300.0,
+      11700.0,
+      3000.0
+    ],
+    "box_max": [
+      15600.0,
+      14700.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_89",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      15600.0,
+      11700.0,
+      3000.0
+    ],
+    "box_max": [
+      15900.0,
+      15000.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_90",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      15900.0,
+      11700.0,
+      3000.0
+    ],
+    "box_max": [
+      16200.0,
+      14700.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_91",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      16200.0,
+      11100.0,
+      3000.0
+    ],
+    "box_max": [
+      17400.0,
+      14700.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_92",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      17400.0,
+      10800.0,
+      3000.0
+    ],
+    "box_max": [
+      17700.0,
+      11400.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_93",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      17400.0,
+      11700.0,
+      3000.0
+    ],
+    "box_max": [
+      17700.0,
+      14700.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_94",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      17700.0,
+      11400.0,
+      3000.0
+    ],
+    "box_max": [
+      18000.0,
+      14700.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_95",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      18000.0,
+      12300.0,
+      3000.0
+    ],
+    "box_max": [
+      19200.0,
+      14700.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_96",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      19200.0,
+      12000.0,
+      3000.0
+    ],
+    "box_max": [
+      19800.0,
+      14400.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_97",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      19800.0,
+      13500.0,
+      3000.0
+    ],
+    "box_max": [
+      20100.0,
+      13800.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_98",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      15900.0,
+      8400.0,
+      3000.0
+    ],
+    "box_max": [
+      16200.0,
+      8700.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_99",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      16200.0,
+      8400.0,
+      3000.0
+    ],
+    "box_max": [
+      16800.0,
+      9300.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_100",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      16800.0,
+      8700.0,
+      3000.0
+    ],
+    "box_max": [
+      17100.0,
+      9900.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_101",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      17100.0,
+      8400.0,
+      3000.0
+    ],
+    "box_max": [
+      17400.0,
+      10500.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_102",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      17400.0,
+      8700.0,
+      3000.0
+    ],
+    "box_max": [
+      18000.0,
+      10500.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "bedroom_103",
+    "type": "bedroom",
+    "floor": 2,
+    "box_min": [
+      18000.0,
+      9600.0,
+      3000.0
+    ],
+    "box_max": [
+      18300.0,
+      10200.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "corridor_104",
+    "type": "corridor",
+    "floor": 2,
+    "box_min": [
+      7800.0,
+      10500.0,
+      3000.0
+    ],
+    "box_max": [
+      8100.0,
+      11100.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "corridor_105",
+    "type": "corridor",
+    "floor": 2,
+    "box_min": [
+      8100.0,
+      10500.0,
+      3000.0
+    ],
+    "box_max": [
+      9000.0,
+      11400.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_106",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      11100.0,
+      3600.0,
+      3000.0
+    ],
+    "box_max": [
+      12300.0,
+      3900.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_107",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      12300.0,
+      3300.0,
+      3000.0
+    ],
+    "box_max": [
+      12900.0,
+      3900.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_108",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      13500.0,
+      5400.0,
+      3000.0
+    ],
+    "box_max": [
+      13800.0,
+      6000.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_109",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      13500.0,
+      4800.0,
+      3000.0
+    ],
+    "box_max": [
+      14100.0,
+      5100.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_110",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      13800.0,
+      5400.0,
+      3000.0
+    ],
+    "box_max": [
+      14100.0,
+      6300.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_111",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      14100.0,
+      4800.0,
+      3000.0
+    ],
+    "box_max": [
+      14400.0,
+      6300.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_112",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      14400.0,
+      4800.0,
+      3000.0
+    ],
+    "box_max": [
+      14700.0,
+      6900.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_113",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      14400.0,
+      7200.0,
+      3000.0
+    ],
+    "box_max": [
+      14700.0,
+      7500.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_114",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      12900.0,
+      3600.0,
+      3000.0
+    ],
+    "box_max": [
+      15000.0,
+      3900.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_115",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      14700.0,
+      4800.0,
+      3000.0
+    ],
+    "box_max": [
+      15000.0,
+      7500.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_116",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      15000.0,
+      5100.0,
+      3000.0
+    ],
+    "box_max": [
+      15300.0,
+      8400.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_117",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      15300.0,
+      5400.0,
+      3000.0
+    ],
+    "box_max": [
+      15600.0,
+      8400.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_118",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      15600.0,
+      5100.0,
+      3000.0
+    ],
+    "box_max": [
+      15900.0,
+      8700.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_119",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      15900.0,
+      4800.0,
+      3000.0
+    ],
+    "box_max": [
+      16800.0,
+      8400.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_120",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      16800.0,
+      4800.0,
+      3000.0
+    ],
+    "box_max": [
+      17100.0,
+      8700.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_121",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      17100.0,
+      4800.0,
+      3000.0
+    ],
+    "box_max": [
+      17400.0,
+      8400.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_122",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      17400.0,
+      4500.0,
+      3000.0
+    ],
+    "box_max": [
+      17700.0,
+      8700.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_123",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      17700.0,
+      4800.0,
+      3000.0
+    ],
+    "box_max": [
+      18000.0,
+      8700.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_124",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      18000.0,
+      4800.0,
+      3000.0
+    ],
+    "box_max": [
+      18300.0,
+      9600.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_125",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      18300.0,
+      4800.0,
+      3000.0
+    ],
+    "box_max": [
+      18600.0,
+      9900.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_126",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      18600.0,
+      4800.0,
+      3000.0
+    ],
+    "box_max": [
+      19200.0,
+      10500.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_127",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      19200.0,
+      4800.0,
+      3000.0
+    ],
+    "box_max": [
+      19800.0,
+      11100.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_128",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      19800.0,
+      6900.0,
+      3000.0
+    ],
+    "box_max": [
+      20100.0,
+      11700.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_129",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      20100.0,
+      7800.0,
+      3000.0
+    ],
+    "box_max": [
+      20400.0,
+      10500.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_130",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      20100.0,
+      10800.0,
+      3000.0
+    ],
+    "box_max": [
+      20400.0,
+      11100.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_131",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      3000.0,
+      5400.0,
+      3000.0
+    ],
+    "box_max": [
+      3600.0,
+      6300.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_132",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      3600.0,
+      5100.0,
+      3000.0
+    ],
+    "box_max": [
+      3900.0,
+      6900.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_133",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      3900.0,
+      3600.0,
+      3000.0
+    ],
+    "box_max": [
+      4200.0,
+      3900.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_134",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      3900.0,
+      4200.0,
+      3000.0
+    ],
+    "box_max": [
+      4200.0,
+      7500.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_135",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      4200.0,
+      3300.0,
+      3000.0
+    ],
+    "box_max": [
+      4800.0,
+      7500.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_136",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      4800.0,
+      3000.0,
+      3000.0
+    ],
+    "box_max": [
+      6000.0,
+      7500.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_137",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      6000.0,
+      3300.0,
+      3000.0
+    ],
+    "box_max": [
+      6300.0,
+      8100.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_138",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      6300.0,
+      3300.0,
+      3000.0
+    ],
+    "box_max": [
+      6600.0,
+      8400.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_139",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      6600.0,
+      3300.0,
+      3000.0
+    ],
+    "box_max": [
+      6900.0,
+      8100.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_140",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      6900.0,
+      3000.0,
+      3000.0
+    ],
+    "box_max": [
+      7200.0,
+      8100.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_141",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      7200.0,
+      3000.0,
+      3000.0
+    ],
+    "box_max": [
+      7500.0,
+      7500.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_142",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      7200.0,
+      7800.0,
+      3000.0
+    ],
+    "box_max": [
+      7500.0,
+      8100.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_143",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      7500.0,
+      2700.0,
+      3000.0
+    ],
+    "box_max": [
+      8100.0,
+      7500.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_144",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      8100.0,
+      3000.0,
+      3000.0
+    ],
+    "box_max": [
+      8400.0,
+      7200.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_145",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      8100.0,
+      7500.0,
+      3000.0
+    ],
+    "box_max": [
+      8400.0,
+      8400.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_146",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      8400.0,
+      3300.0,
+      3000.0
+    ],
+    "box_max": [
+      8700.0,
+      6300.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_147",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      8400.0,
+      7500.0,
+      3000.0
+    ],
+    "box_max": [
+      8700.0,
+      7800.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_148",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      8700.0,
+      3000.0,
+      3000.0
+    ],
+    "box_max": [
+      9000.0,
+      6000.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_149",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      8400.0,
+      8100.0,
+      3000.0
+    ],
+    "box_max": [
+      9000.0,
+      8400.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_150",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      9000.0,
+      3000.0,
+      3000.0
+    ],
+    "box_max": [
+      9300.0,
+      5700.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_151",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      9300.0,
+      3000.0,
+      3000.0
+    ],
+    "box_max": [
+      9600.0,
+      5100.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_152",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      9300.0,
+      5400.0,
+      3000.0
+    ],
+    "box_max": [
+      9600.0,
+      5700.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_153",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      9600.0,
+      3300.0,
+      3000.0
+    ],
+    "box_max": [
+      9900.0,
+      5100.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_154",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      9900.0,
+      3000.0,
+      3000.0
+    ],
+    "box_max": [
+      10200.0,
+      5100.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_155",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      10200.0,
+      3600.0,
+      3000.0
+    ],
+    "box_max": [
+      10800.0,
+      3900.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "balcony_156",
+    "type": "balcony",
+    "floor": 2,
+    "box_min": [
+      10200.0,
+      4200.0,
+      3000.0
+    ],
+    "box_max": [
+      10800.0,
+      4500.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "multi_purpose_157",
+    "type": "multi_purpose",
+    "floor": 2,
+    "box_min": [
+      7800.0,
+      9300.0,
+      3000.0
+    ],
+    "box_max": [
+      8400.0,
+      10500.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "multi_purpose_158",
+    "type": "multi_purpose",
+    "floor": 2,
+    "box_min": [
+      8400.0,
+      8400.0,
+      3000.0
+    ],
+    "box_max": [
+      9000.0,
+      10500.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "multi_purpose_159",
+    "type": "multi_purpose",
+    "floor": 2,
+    "box_min": [
+      8700.0,
+      11400.0,
+      3000.0
+    ],
+    "box_max": [
+      9000.0,
+      11700.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "multi_purpose_160",
+    "type": "multi_purpose",
+    "floor": 2,
+    "box_min": [
+      9000.0,
+      7500.0,
+      3000.0
+    ],
+    "box_max": [
+      9900.0,
+      12300.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "multi_purpose_161",
+    "type": "multi_purpose",
+    "floor": 2,
+    "box_min": [
+      9900.0,
+      7200.0,
+      3000.0
+    ],
+    "box_max": [
+      10200.0,
+      12300.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "multi_purpose_162",
+    "type": "multi_purpose",
+    "floor": 2,
+    "box_min": [
+      10200.0,
+      7500.0,
+      3000.0
+    ],
+    "box_max": [
+      10500.0,
+      12300.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "multi_purpose_163",
+    "type": "multi_purpose",
+    "floor": 2,
+    "box_min": [
+      10200.0,
+      12600.0,
+      3000.0
+    ],
+    "box_max": [
+      10500.0,
+      12900.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "multi_purpose_164",
+    "type": "multi_purpose",
+    "floor": 2,
+    "box_min": [
+      10500.0,
+      7500.0,
+      3000.0
+    ],
+    "box_max": [
+      10800.0,
+      12900.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "multi_purpose_165",
+    "type": "multi_purpose",
+    "floor": 2,
+    "box_min": [
+      10800.0,
+      6900.0,
+      3000.0
+    ],
+    "box_max": [
+      12000.0,
+      12900.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "multi_purpose_166",
+    "type": "multi_purpose",
+    "floor": 2,
+    "box_min": [
+      12000.0,
+      6900.0,
+      3000.0
+    ],
+    "box_max": [
+      12600.0,
+      12300.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "multi_purpose_167",
+    "type": "multi_purpose",
+    "floor": 2,
+    "box_min": [
+      12600.0,
+      6300.0,
+      3000.0
+    ],
+    "box_max": [
+      13200.0,
+      12300.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "multi_purpose_168",
+    "type": "multi_purpose",
+    "floor": 2,
+    "box_min": [
+      13200.0,
+      5700.0,
+      3000.0
+    ],
+    "box_max": [
+      13500.0,
+      12300.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "multi_purpose_169",
+    "type": "multi_purpose",
+    "floor": 2,
+    "box_min": [
+      13500.0,
+      6000.0,
+      3000.0
+    ],
+    "box_max": [
+      13800.0,
+      12300.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "multi_purpose_170",
+    "type": "multi_purpose",
+    "floor": 2,
+    "box_min": [
+      13800.0,
+      6300.0,
+      3000.0
+    ],
+    "box_max": [
+      14400.0,
+      12300.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "multi_purpose_171",
+    "type": "multi_purpose",
+    "floor": 2,
+    "box_min": [
+      14400.0,
+      6900.0,
+      3000.0
+    ],
+    "box_max": [
+      14700.0,
+      7200.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "multi_purpose_172",
+    "type": "multi_purpose",
+    "floor": 2,
+    "box_min": [
+      14400.0,
+      7500.0,
+      3000.0
+    ],
+    "box_max": [
+      14700.0,
+      12900.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "multi_purpose_173",
+    "type": "multi_purpose",
+    "floor": 2,
+    "box_min": [
+      14700.0,
+      7500.0,
+      3000.0
+    ],
+    "box_max": [
+      15000.0,
+      12300.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "multi_purpose_174",
+    "type": "multi_purpose",
+    "floor": 2,
+    "box_min": [
+      14700.0,
+      12600.0,
+      3000.0
+    ],
+    "box_max": [
+      15000.0,
+      12900.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "multi_purpose_175",
+    "type": "multi_purpose",
+    "floor": 2,
+    "box_min": [
+      15000.0,
+      8400.0,
+      3000.0
+    ],
+    "box_max": [
+      15300.0,
+      12300.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "multi_purpose_176",
+    "type": "multi_purpose",
+    "floor": 2,
+    "box_min": [
+      15300.0,
+      8400.0,
+      3000.0
+    ],
+    "box_max": [
+      15600.0,
+      11700.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "multi_purpose_177",
+    "type": "multi_purpose",
+    "floor": 2,
+    "box_min": [
+      15600.0,
+      8700.0,
+      3000.0
+    ],
+    "box_max": [
+      16200.0,
+      11700.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "multi_purpose_178",
+    "type": "multi_purpose",
+    "floor": 2,
+    "box_min": [
+      16200.0,
+      9300.0,
+      3000.0
+    ],
+    "box_max": [
+      16800.0,
+      11100.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "multi_purpose_179",
+    "type": "multi_purpose",
+    "floor": 2,
+    "box_min": [
+      16800.0,
+      9900.0,
+      3000.0
+    ],
+    "box_max": [
+      17100.0,
+      11100.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "multi_purpose_180",
+    "type": "multi_purpose",
+    "floor": 2,
+    "box_min": [
+      17100.0,
+      10500.0,
+      3000.0
+    ],
+    "box_max": [
+      17400.0,
+      11100.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "multi_purpose_181",
+    "type": "multi_purpose",
+    "floor": 2,
+    "box_min": [
+      17400.0,
+      10500.0,
+      3000.0
+    ],
+    "box_max": [
+      17700.0,
+      10800.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "multi_purpose_182",
+    "type": "multi_purpose",
+    "floor": 2,
+    "box_min": [
+      17700.0,
+      10500.0,
+      3000.0
+    ],
+    "box_max": [
+      18000.0,
+      11400.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "multi_purpose_183",
+    "type": "multi_purpose",
+    "floor": 2,
+    "box_min": [
+      18000.0,
+      10200.0,
+      3000.0
+    ],
+    "box_max": [
+      18300.0,
+      12300.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "multi_purpose_184",
+    "type": "multi_purpose",
+    "floor": 2,
+    "box_min": [
+      18300.0,
+      9900.0,
+      3000.0
+    ],
+    "box_max": [
+      18600.0,
+      12300.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "multi_purpose_185",
+    "type": "multi_purpose",
+    "floor": 2,
+    "box_min": [
+      18600.0,
+      10500.0,
+      3000.0
+    ],
+    "box_max": [
+      18900.0,
+      12300.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "multi_purpose_186",
+    "type": "multi_purpose",
+    "floor": 2,
+    "box_min": [
+      18900.0,
+      10800.0,
+      3000.0
+    ],
+    "box_max": [
+      19200.0,
+      12300.0,
+      6000.0
+    ],
+    "auto_added": false
+  },
+  {
+    "id": "multi_purpose_187",
+    "type": "multi_purpose",
+    "floor": 2,
+    "box_min": [
+      19200.0,
+      11100.0,
+      3000.0
+    ],
+    "box_max": [
+      19500.0,
+      12000.0,
+      6000.0
+    ],
+    "auto_added": false
+  }
+]

@@ -1,0 +1,35 @@
+{
+  "cases": {
+    "small": {
+      "site": [
+        12000,
+        12000
+      ],
+      "rooms": {
+        "entryway": 1,
+        "living_room": 1,
+        "dining_room": 1,
+        "bedroom": 2,
+        "bathroom": 1,
+        "corridor": 1,
+        "stairs": 1
+      }
+    }
+  },
+  "seeds": [
+    11
+  ],
+  "routes": [
+    "v4",
+    "block_cut",
+    "zoned"
+  ],
+  "weights": "E:\\Documents\\GraphSpace\\weights\\spatial_modal_cvae_v4_88x88x24.pth",
+  "device": "cpu",
+  "parameters": {
+    "sample_k": 1,
+    "block_candidates": 16,
+    "zoned_candidates": 16,
+    "save_images": false
+  }
+}

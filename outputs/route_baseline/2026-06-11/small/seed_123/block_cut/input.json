@@ -1,0 +1,19 @@
+{
+  "route": "block_cut",
+  "case": "small",
+  "site": {
+    "x_mm": 12000,
+    "y_mm": 12000,
+    "z_mm": 6000
+  },
+  "room_counts": {
+    "entryway": 1,
+    "living_room": 1,
+    "dining_room": 1,
+    "bedroom": 2,
+    "bathroom": 1,
+    "corridor": 1,
+    "stairs": 1
+  },
+  "seed": 123
+}

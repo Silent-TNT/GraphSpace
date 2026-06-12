@@ -1,0 +1,151 @@
+{
+  "nodes": [
+    {
+      "id": "living_room_0",
+      "type": "living_room",
+      "floor": 1
+    },
+    {
+      "id": "kitchen_0",
+      "type": "kitchen",
+      "floor": 1
+    },
+    {
+      "id": "entryway_0",
+      "type": "entryway",
+      "floor": 1
+    },
+    {
+      "id": "dining_room_0",
+      "type": "dining_room",
+      "floor": 1
+    },
+    {
+      "id": "bedroom_0",
+      "type": "bedroom",
+      "floor": 2
+    },
+    {
+      "id": "bedroom_1",
+      "type": "bedroom",
+      "floor": 2
+    },
+    {
+      "id": "bedroom_2",
+      "type": "bedroom",
+      "floor": 2
+    },
+    {
+      "id": "balcony_0",
+      "type": "balcony",
+      "floor": 2
+    },
+    {
+      "id": "bathroom_0",
+      "type": "bathroom",
+      "floor": 1
+    },
+    {
+      "id": "bathroom_1",
+      "type": "bathroom",
+      "floor": 1
+    },
+    {
+      "id": "corridor_1",
+      "type": "corridor",
+      "floor": 2
+    },
+    {
+      "id": "corridor_0",
+      "type": "corridor",
+      "floor": 2
+    },
+    {
+      "id": "stairs_0",
+      "type": "stairs",
+      "floor": "1&2"
+    }
+  ],
+  "edges": [
+    {
+      "source": "living_room_0",
+      "target": "kitchen_0",
+      "relation": "horizontal"
+    },
+    {
+      "source": "living_room_0",
+      "target": "entryway_0",
+      "relation": "horizontal"
+    },
+    {
+      "source": "living_room_0",
+      "target": "dining_room_0",
+      "relation": "horizontal"
+    },
+    {
+      "source": "living_room_0",
+      "target": "bathroom_0",
+      "relation": "horizontal"
+    },
+    {
+      "source": "living_room_0",
+      "target": "bathroom_1",
+      "relation": "horizontal"
+    },
+    {
+      "source": "living_room_0",
+      "target": "stairs_0",
+      "relation": "vertical"
+    },
+    {
+      "source": "kitchen_0",
+      "target": "dining_room_0",
+      "relation": "horizontal"
+    },
+    {
+      "source": "bedroom_0",
+      "target": "bedroom_2",
+      "relation": "horizontal"
+    },
+    {
+      "source": "bedroom_0",
+      "target": "corridor_1",
+      "relation": "horizontal"
+    },
+    {
+      "source": "bedroom_1",
+      "target": "bedroom_2",
+      "relation": "horizontal"
+    },
+    {
+      "source": "bedroom_1",
+      "target": "balcony_0",
+      "relation": "horizontal"
+    },
+    {
+      "source": "bedroom_1",
+      "target": "corridor_0",
+      "relation": "horizontal"
+    },
+    {
+      "source": "bedroom_2",
+      "target": "balcony_0",
+      "relation": "horizontal"
+    },
+    {
+      "source": "bedroom_2",
+      "target": "corridor_1",
+      "relation": "horizontal"
+    },
+    {
+      "source": "bedroom_2",
+      "target": "corridor_0",
+      "relation": "horizontal"
+    },
+    {
+      "source": "bedroom_2",
+      "target": "stairs_0",
+      "relation": "vertical"
+    }
+  ]
+}

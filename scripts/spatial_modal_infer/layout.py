@@ -11,6 +11,60 @@ except ImportError:
     from config import DEFAULT_ROOM_SIZE, ROOM_TYPES, VOXEL_SIZE
 
 
+# 固定楼层的房间类型
+FIXED_FLOOR_1 = {"entryway", "living_room", "dining_room", "kitchen"}
+FIXED_FLOOR_2 = {"bedroom", "balcony"}
+FLEXIBLE_TYPES = {"bathroom", "corridor", "utility", "multi_purpose"}
+
+# 互补房间对——这些房间类型之间更倾向有直接边
+COMPLEMENTARY_PAIRS = {
+    ("bedroom", "bathroom"), ("kitchen", "dining_room"),
+    ("living_room", "dining_room"), ("living_room", "entryway"),
+    ("bedroom", "balcony"), ("kitchen", "utility"),
+    ("corridor", "living_room"), ("corridor", "bedroom"),
+}
+
+
+def _are_complementary(t1: str, t2: str) -> bool:
+    return (t1, t2) in COMPLEMENTARY_PAIRS or (t2, t1) in COMPLEMENTARY_PAIRS
+
+
+def _assign_floors(room_counts: dict, seed: int) -> list[tuple[str, int, str]]:
+    """
+    基于种子的楼层分配，返回 [(nid, room_type, floor), ...]。
+    种子不同 → 灵活房间的楼层分布不同 → 图结构不同。
+    """
+    rng = random.Random(seed)
+    entries: list[tuple[str, int, str]] = []
+
+    # 固定楼层房间
+    for r_type in FIXED_FLOOR_1:
+        for i in range(room_counts.get(r_type, 0)):
+            entries.append((f"{r_type}_{i}", r_type, 1))
+
+    for r_type in FIXED_FLOOR_2:
+        for i in range(room_counts.get(r_type, 0)):
+            entries.append((f"{r_type}_{i}", r_type, 2))
+
+    # 灵活楼层房间：用种子 shuffle 分配
+    flexible: list[tuple[str, int]] = []
+    for r_type in FLEXIBLE_TYPES:
+        for i in range(room_counts.get(r_type, 0)):
+            flexible.append((r_type, i))
+    rng.shuffle(flexible)
+
+    mid = len(flexible) // 2
+    for j, (r_type, i) in enumerate(flexible):
+        floor = 1 if j < mid else 2
+        entries.append((f"{r_type}_{i}", r_type, floor))
+
+    # 楼梯
+    for i in range(room_counts.get("stairs", 0)):
+        entries.append((f"stairs_{i}", "stairs", "1&2"))
+
+    return entries
+
+
 def snap_modulus(v: float) -> float:
     return round(float(v) / VOXEL_SIZE) * VOXEL_SIZE
 
@@ -25,74 +79,123 @@ def build_user_request(site_x, site_y, room_counts, site_z=6000):
     }
 
 
-def program_floor_room_targets(room_counts: dict) -> dict[int, dict[str, int]]:
-    """按程序拓扑规则，统计每层各房间类型的目标数量。"""
+def program_floor_room_targets(room_counts: dict, seed: int = 42) -> dict[int, dict[str, int]]:
+    """
+    按种子分配楼层，统计每层各房间类型的目标数量。
+    与 build_program_topology 使用相同的 _assign_floors 逻辑，
+    保证生成和评分对同一楼层分布的认知一致。
+    """
     targets: dict[int, dict[str, int]] = {1: {}, 2: {}}
-    bath_i = corr_i = 0
-    for r_type, count in room_counts.items():
-        n = int(count)
-        if n <= 0:
-            continue
+    for _nid, r_type, floor in _assign_floors(room_counts, seed):
         if r_type == "stairs":
-            targets[1][r_type] = targets[1].get(r_type, 0) + n
-            continue
-        for _ in range(n):
-            if r_type in ["entryway", "living_room", "dining_room", "kitchen"]:
-                floor = 1
-            elif r_type in ["bedroom", "balcony"]:
-                floor = 2
-            elif r_type == "bathroom":
-                floor = 1 if bath_i % 2 == 0 else 2
-                bath_i += 1
-            elif r_type == "corridor":
-                floor = 1 if corr_i % 2 == 0 else 2
-                corr_i += 1
-            else:
-                floor = 1
+            targets[1][r_type] = targets[1].get(r_type, 0) + 1
+        elif isinstance(floor, int):
             targets[floor][r_type] = targets[floor].get(r_type, 0) + 1
     return targets
 
 
 def build_program_topology(room_counts, seed=42):
+    """
+    基于种子构建异构图拓扑。
+    种子决定：楼层分配、hub 选择、额外连边 → 不同种子产生真正的不同图结构。
+    """
+    rng = random.Random(seed)
     G = nx.Graph()
-    nodes = []
-    bath_i = corr_i = 0
-    for r_type, count in room_counts.items():
-        for i in range(count):
-            nid = f"{r_type}_{i}"
-            if r_type in ["entryway", "living_room", "dining_room", "kitchen"]:
-                floor = 1
-            elif r_type in ["bedroom", "balcony"]:
-                floor = 2
-            elif r_type == "bathroom":
-                floor = 1 if bath_i % 2 == 0 else 2
-                bath_i += 1
-            elif r_type == "corridor":
-                floor = 1 if corr_i % 2 == 0 else 2
-                corr_i += 1
-            elif r_type == "stairs":
-                floor = "1&2"
-            else:
-                floor = 1
-            nodes.append((nid, r_type, floor))
-            G.add_node(nid, type=r_type, floor=floor)
 
-    f1_corr = [n for n, t, f in nodes if t == "corridor" and f == 1]
-    f2_corr = [n for n, t, f in nodes if t == "corridor" and f == 2]
-    f1_hub = f1_corr[0] if f1_corr else next((n for n, t, f in nodes if t == "living_room"), nodes[0][0])
-    f2_hub = f2_corr[0] if f2_corr else next((n for n, t, f in nodes if t == "bedroom"), nodes[-1][0])
+    # Step 1: 种子控制的楼层分配
+    entries = _assign_floors(room_counts, seed)
+    nodes = [(nid, r_type, floor) for nid, r_type, floor in entries]
+    for nid, r_type, floor in entries:
+        G.add_node(nid, type=r_type, floor=floor)
 
+    # Step 2: 种子控制的 hub 选择（不同种子可能选不同房间做 hub）
+    f1_hub_candidates = [
+        n for n, t, f in entries
+        if f == 1 and t in ("corridor", "living_room", "entryway")
+    ]
+    f2_hub_candidates = [
+        n for n, t, f in entries
+        if f == 2 and t in ("corridor", "bedroom")
+    ]
+
+    if f1_hub_candidates:
+        f1_hub = rng.choice(f1_hub_candidates)
+    else:
+        f1_hub = next((n for n, t, f in entries if f == 1), entries[0][0])
+
+    if f2_hub_candidates:
+        f2_hub = rng.choice(f2_hub_candidates)
+    else:
+        f2_hub = next((n for n, t, f in entries if f == 2), entries[-1][0])
+
+    # Step 3: 种子控制图拓扑形态
+    # 不同种子使用不同拓扑模式：star / tree / small-world
     edge_types = {}
-    for nid, r_type, floor in nodes:
-        if r_type == "stairs":
-            continue
-        hub = f1_hub if floor == 1 else f2_hub
-        if nid != hub:
-            G.add_edge(nid, hub)
-            edge_types[(nid, hub)] = "horizontal"
-            edge_types[(hub, nid)] = "horizontal"
+    topology_mode = seed % 3  # 0=star, 1=tree, 2=small-world
 
-    stairs = [n for n, t, f in nodes if t == "stairs"]
+    f1_rooms = [(n, t) for n, t, f in entries if f == 1 and t != "stairs"]
+    f2_rooms = [(n, t) for n, t, f in entries if f == 2 and t != "stairs"]
+
+    for floor_label, floor_rooms, hub in [("F1", f1_rooms, f1_hub), ("F2", f2_rooms, f2_hub)]:
+        nids = [n for n, t in floor_rooms]
+        if len(nids) <= 1:
+            continue
+
+        if topology_mode == 0:
+            # Star: 所有房间连到 hub（原始行为）
+            for nid in nids:
+                if nid != hub:
+                    G.add_edge(nid, hub)
+                    edge_types[(nid, hub)] = "horizontal"
+                    edge_types[(hub, nid)] = "horizontal"
+
+        elif topology_mode == 1:
+            # Tree: hub 作为根，种子控制 BFS 顺序生成树
+            rng.shuffle(nids)
+            connected = {hub}
+            remaining = [n for n in nids if n != hub]
+            rng.shuffle(remaining)
+            for nid in remaining:
+                parent = rng.choice(list(connected))
+                G.add_edge(nid, parent)
+                edge_types[(nid, parent)] = "horizontal"
+                edge_types[(parent, nid)] = "horizontal"
+                connected.add(nid)
+
+        else:  # topology_mode == 2
+            # Small-world: 环 + 种子控制随机捷径
+            shuffled = list(nids)
+            rng.shuffle(shuffled)
+            for i in range(len(shuffled)):
+                n1 = shuffled[i]
+                n2 = shuffled[(i + 1) % len(shuffled)]
+                if n1 != n2:
+                    G.add_edge(n1, n2)
+                    edge_types[(n1, n2)] = "horizontal"
+                    edge_types[(n2, n1)] = "horizontal"
+            # 随机捷径
+            for i in range(len(shuffled)):
+                for j in range(i + 2, len(shuffled)):
+                    if rng.random() < 0.25:
+                        n1, n2 = shuffled[i], shuffled[j]
+                        if not G.has_edge(n1, n2):
+                            G.add_edge(n1, n2)
+                            edge_types[(n1, n2)] = "horizontal"
+                            edge_types[(n2, n1)] = "horizontal"
+
+        # 无论哪种拓扑，互补房间获得额外边
+        for i in range(len(floor_rooms)):
+            for j in range(i + 1, len(floor_rooms)):
+                n1, t1 = floor_rooms[i]
+                n2, t2 = floor_rooms[j]
+                if _are_complementary(t1, t2) and rng.random() < 0.5:
+                    if not G.has_edge(n1, n2):
+                        G.add_edge(n1, n2)
+                        edge_types[(n1, n2)] = "horizontal"
+                        edge_types[(n2, n1)] = "horizontal"
+
+    # 楼梯跨层连接
+    stairs = [n for n, t, f in entries if t == "stairs"]
     if stairs:
         st = stairs[0]
         if f1_hub != st:
@@ -107,22 +210,38 @@ def build_program_topology(room_counts, seed=42):
 
 
 def layout_rooms_from_program(user_req, seed=42):
+    """
+    基于种子生成房间布局。
+    种子控制：图拓扑(楼层/hub/边)、spring_layout 位置、抖动幅度、房间尺寸微调。
+    """
     rng = random.Random(seed)
     np.random.seed(seed % (2**32 - 1))
+
     G, pos, nodes, edge_types = build_program_topology(user_req["room_counts"], seed=seed)
     sx, sy = user_req["site_x"], user_req["site_y"]
     rooms = []
+
     for nid, r_type, floor in nodes:
-        w, d, h = DEFAULT_ROOM_SIZE.get(r_type, (3600, 3600, 3000))
+        base_w, base_d, base_h = DEFAULT_ROOM_SIZE.get(r_type, (3600, 3600, 3000))
+
+        # 种子控制的房间尺寸微调 (+-25%, 比原来的 0% 变化更大)
+        w_scale = 1.0 + rng.uniform(-0.25, 0.25)
+        d_scale = 1.0 + rng.uniform(-0.25, 0.25)
+        w = base_w * w_scale
+        d = base_d * d_scale
+        h = base_h
+
         px, py = pos[nid]
-        jx = rng.uniform(-0.12, 0.12)
-        jy = rng.uniform(-0.12, 0.12)
-        cx = (px + 1) / 2 * (sx * 0.7) + sx * 0.15 + jx * sx * 0.08
-        cy = (py + 1) / 2 * (sy * 0.7) + sy * 0.15 + jy * sy * 0.08
+        # 种子控制的抖动（+-0.30 比原来 +-0.12 更显著）
+        jx = rng.uniform(-0.30, 0.30)
+        jy = rng.uniform(-0.30, 0.30)
+        cx = (px + 1) / 2 * (sx * 0.7) + sx * 0.15 + jx * sx * 0.12
+        cy = (py + 1) / 2 * (sy * 0.7) + sy * 0.15 + jy * sy * 0.12
         cx, cy = snap_modulus(cx), snap_modulus(cy)
         w, d = snap_modulus(w), snap_modulus(d)
         z0 = 0 if floor == 1 or floor == "1&2" else 3000
         z1 = z0 + h
+
         rooms.append(
             {
                 "id": nid,

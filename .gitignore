@@ -7,8 +7,11 @@ models/*
 weights/*
 !weights/README.md
 
-# AI 助手本地上下文（可选公开：删除下一行即可）
+# AI 助手本地上下文（可选公开：删除对应规则即可）
 CLAUDE.md
+AGENTS.md
+PROJECT_STATUS.md
+EXPERIMENT_LOG.md
 
 # ── 数据集可视化（本地生成，勿提交）────────────────────
 website/qc-viewer/node_modules/

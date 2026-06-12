@@ -1,0 +1,175 @@
+{
+  "route": "block_cut",
+  "case": "small",
+  "site": {
+    "x_mm": 12000,
+    "y_mm": 12000,
+    "z_mm": 6000
+  },
+  "room_counts": {
+    "entryway": 1,
+    "living_room": 1,
+    "dining_room": 1,
+    "bedroom": 2,
+    "bathroom": 1,
+    "corridor": 1,
+    "stairs": 1
+  },
+  "seed": 11,
+  "status": "completed",
+  "elapsed_seconds": 1.3,
+  "route_metadata": {
+    "generator_score": 106.56027813983677,
+    "score_detail": {
+      "area_penalty": 14.1897,
+      "aspect_penalty": 0.0,
+      "min_width_penalty": 0.0,
+      "exterior_penalty": 0.0,
+      "adjacency_bonus": 24.0,
+      "adjacency_penalty": 3.25,
+      "overlap_penalty": 0.0,
+      "external_scorer": 0.0
+    },
+    "cut_record": {
+      "seed": 720640,
+      "core": {
+        "enabled": true,
+        "side": "bottom",
+        "band": {
+          "x0_m": 0.0,
+          "y0_m": 0.0,
+          "x1_m": 12.0,
+          "y1_m": 3.9
+        },
+        "stair": {
+          "x0_m": 0.0,
+          "y0_m": 0.0,
+          "x1_m": 2.4,
+          "y1_m": 3.9
+        },
+        "service": {
+          "x0_m": 2.4,
+          "y0_m": 0.0,
+          "x1_m": 12.0,
+          "y1_m": 3.9
+        },
+        "main": {
+          "x0_m": 0.0,
+          "y0_m": 3.9,
+          "x1_m": 12.0,
+          "y1_m": 12.0
+        },
+        "band_width_m": 3.9,
+        "source": "random_core_rule",
+        "prior_score": null
+      },
+      "guillotine_cuts": [
+        {
+          "depth": 1,
+          "axis": "x",
+          "at_m": 5.4,
+          "rect": {
+            "x0_m": 2.4,
+            "y0_m": 0.0,
+            "x1_m": 12.0,
+            "y1_m": 3.9
+          },
+          "source": "area_rule",
+          "prior_score": null,
+          "group_a": [
+            "entryway_1"
+          ],
+          "group_b": [
+            "corridor_1",
+            "bathroom_1"
+          ]
+        },
+        {
+          "depth": 2,
+          "axis": "x",
+          "at_m": 9.3,
+          "rect": {
+            "x0_m": 5.4,
+            "y0_m": 0.0,
+            "x1_m": 12.0,
+            "y1_m": 3.9
+          },
+          "source": "area_rule",
+          "prior_score": null,
+          "group_a": [
+            "corridor_1"
+          ],
+          "group_b": [
+            "bathroom_1"
+          ]
+        },
+        {
+          "depth": 1,
+          "axis": "x",
+          "at_m": 8.1,
+          "rect": {
+            "x0_m": 0.0,
+            "y0_m": 3.9,
+            "x1_m": 12.0,
+            "y1_m": 12.0
+          },
+          "source": "area_rule",
+          "prior_score": null,
+          "group_a": [
+            "living_room_1"
+          ],
+          "group_b": [
+            "dining_room_1"
+          ]
+        }
+      ],
+      "cut_sampler": "area_rule_v1"
+    },
+    "candidates": 128,
+    "non_empty_voxels": 32000
+  },
+  "evaluation": {
+    "requested_counts": {
+      "entryway": 1,
+      "living_room": 1,
+      "dining_room": 1,
+      "bedroom": 2,
+      "bathroom": 1,
+      "corridor": 1,
+      "stairs": 1
+    },
+    "generated_counts": {
+      "bathroom": 1,
+      "bedroom": 2,
+      "corridor": 1,
+      "dining_room": 1,
+      "entryway": 1,
+      "living_room": 1,
+      "stairs": 1
+    },
+    "count_delta": {
+      "entryway": 0,
+      "living_room": 0,
+      "dining_room": 0,
+      "bedroom": 0,
+      "bathroom": 0,
+      "corridor": 0,
+      "stairs": 0
+    },
+    "missing_counts": {},
+    "extra_counts": {},
+    "room_count_match": true,
+    "p0_pass": true,
+    "failure_labels": [],
+    "details": {
+      "invalid_room_ids": [],
+      "out_of_bounds_room_ids": [],
+      "modulus_room_ids": [],
+      "overlap_pairs": [],
+      "area_fail_room_ids": [],
+      "width_fail_room_ids": [],
+      "aspect_fail_room_ids": [],
+      "exterior_fail_room_ids": []
+    }
+  }
+}
