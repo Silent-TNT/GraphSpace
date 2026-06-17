@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from collections import Counter
+
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
@@ -8,9 +10,21 @@ from matplotlib.patches import Rectangle
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
 try:
-    from .config import CHANNEL_MAP, CN_NAMES, TYPE_COLOR_DICT, VOXEL_SIZE
+    from .config import (
+        CHANNEL_MAP,
+        CN_NAMES,
+        ROOM_TYPES,
+        TYPE_COLOR_DICT,
+        VOXEL_SIZE,
+    )
 except ImportError:
-    from config import CHANNEL_MAP, CN_NAMES, TYPE_COLOR_DICT, VOXEL_SIZE
+    from config import (
+        CHANNEL_MAP,
+        CN_NAMES,
+        ROOM_TYPES,
+        TYPE_COLOR_DICT,
+        VOXEL_SIZE,
+    )
 
 FLOOR_SLABS = {
     1: (0.0, 3000.0),
@@ -146,6 +160,11 @@ def plot_3d_layout(
 
     cmap = color_map or TYPE_COLOR_DICT
     fig = go.Figure()
+    max_extent = max(
+        float(site_x or 1.0),
+        float(site_y or 1.0),
+        float(site_z or 1.0),
+    )
 
     # ---- 房间体块 ----
     grouped = {}
@@ -262,11 +281,34 @@ def plot_3d_layout(
             zaxis=dict(title="Z (mm)", range=[0, site_z], gridcolor="#e8e8e8"),
             aspectmode="manual" if site_x and site_y else "data",
             aspectratio=dict(
-                x=float(site_x) if site_x else 1,
-                y=float(site_y) if site_y else 1,
-                z=float(site_z) * 1.2,
+                x=float(site_x) / max_extent if site_x else 1,
+                y=float(site_y) / max_extent if site_y else 1,
+                z=float(site_z) / max_extent if site_z else 1,
             ) if site_x and site_y else None,
-            camera=dict(eye=dict(x=1.5, y=1.5, z=1.1)),
+            camera=dict(
+                center=dict(x=0.0, y=0.0, z=-0.04),
+                eye=dict(x=1.65, y=1.65, z=1.25),
+                up=dict(x=0.0, y=0.0, z=1.0),
+            ),
+            dragmode="orbit",
+        ),
+        annotations=(
+            [
+                dict(
+                    text=(
+                        f"用户输入用地：{float(site_x):,.0f} × "
+                        f"{float(site_y):,.0f} mm"
+                    ),
+                    x=0.5,
+                    y=1.02,
+                    xref="paper",
+                    yref="paper",
+                    showarrow=False,
+                    font=dict(size=12, color="#444444"),
+                )
+            ]
+            if site_x and site_y
+            else []
         ),
         legend=dict(yanchor="top", y=0.98, xanchor="left", x=0.01, font=dict(size=10)),
         margin=dict(l=10, r=10, b=10, t=50),
@@ -344,6 +386,16 @@ def plot_3d_layout_static(
     ax.set_ylabel("Y (mm)")
     ax.set_zlabel("Z (mm)")
     ax.set_title(title, fontsize=13, pad=14)
+    if site_x and site_y:
+        fig.text(
+            0.5,
+            0.94,
+            f"用户输入用地：{float(site_x):,.0f} × {float(site_y):,.0f} mm",
+            ha="center",
+            va="center",
+            fontsize=10,
+            color="#444444",
+        )
     ax.grid(True, linestyle=":", alpha=0.25)
     if legend_handles:
         ax.legend(handles=list(legend_handles.values()), loc="upper left", fontsize=8, framealpha=0.92)
@@ -463,6 +515,24 @@ def plot_floor_plan(
     ax.set_xlabel("X (mm)")
     ax.set_ylabel("Y (mm)")
     ax.set_title(title, fontsize=12)
+    if site_x and site_y:
+        ax.text(
+            0.01,
+            0.99,
+            f"用户输入用地：{float(site_x):,.0f} × {float(site_y):,.0f} mm",
+            transform=ax.transAxes,
+            ha="left",
+            va="top",
+            fontsize=9,
+            color="#444444",
+            bbox=dict(
+                boxstyle="round,pad=0.3",
+                facecolor="white",
+                edgecolor="#BBBBBB",
+                alpha=0.9,
+            ),
+            zorder=5,
+        )
     ax.grid(True, linestyle=":", alpha=0.4)
     if legend_handles:
         ax.legend(handles=list(legend_handles.values()), loc="upper right", fontsize=8, framealpha=0.92)
@@ -476,6 +546,7 @@ def plot_topology_graph(
     edge_types=None,
     title="功能拓扑连接图",
     color_map=None,
+    show_node_ids=True,
 ):
     """纯拓扑图：节点 + 连边，无体块。"""
     _setup_matplotlib_cjk()
@@ -514,8 +585,9 @@ def plot_topology_graph(
         ax.scatter(x, y, s=520, c=[color], edgecolors="white", linewidths=1.2, zorder=3)
         floor = graph.nodes[nid].get("floor", "")
         name = CN_NAMES.get(ntype, ntype)
+        label = f"{name}\n({nid})" if show_node_ids else name
         ax.annotate(
-            f"{name}\n({nid})",
+            label,
             (x, y), textcoords="offset points", xytext=(0, 12),
             ha="center", fontsize=7, color="#333", zorder=4,
         )
@@ -526,8 +598,42 @@ def plot_topology_graph(
             )
 
     ax.set_title(title, fontsize=12, pad=10)
+    type_counts = Counter(
+        graph.nodes[nid].get("type", "unknown") for nid in graph.nodes
+    )
+    type_handles = [
+        Line2D(
+            [0],
+            [0],
+            marker="o",
+            color="none",
+            markerfacecolor=cmap.get(room_type, "#888888"),
+            markeredgecolor="white",
+            markersize=9,
+            label=f"{CN_NAMES.get(room_type, room_type)} × {type_counts[room_type]}",
+        )
+        for room_type in ROOM_TYPES
+        if type_counts.get(room_type, 0) > 0
+    ]
+    if type_handles:
+        type_legend = ax.legend(
+            handles=type_handles,
+            title=f"功能数量（共 {sum(type_counts.values())} 个）",
+            loc="upper left",
+            fontsize=8,
+            title_fontsize=9,
+            framealpha=0.94,
+        )
+        ax.add_artist(type_legend)
     if edge_handles:
-        ax.legend(handles=edge_handles, loc="lower right", fontsize=8, framealpha=0.92)
+        ax.legend(
+            handles=edge_handles,
+            title="关系类型",
+            loc="lower right",
+            fontsize=8,
+            title_fontsize=9,
+            framealpha=0.92,
+        )
     fig.tight_layout()
     return fig
 

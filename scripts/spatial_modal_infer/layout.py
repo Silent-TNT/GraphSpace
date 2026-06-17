@@ -38,17 +38,17 @@ def _assign_floors(room_counts: dict, seed: int) -> list[tuple[str, int, str]]:
     entries: list[tuple[str, int, str]] = []
 
     # 固定楼层房间
-    for r_type in FIXED_FLOOR_1:
+    for r_type in sorted(FIXED_FLOOR_1):
         for i in range(room_counts.get(r_type, 0)):
             entries.append((f"{r_type}_{i}", r_type, 1))
 
-    for r_type in FIXED_FLOOR_2:
+    for r_type in sorted(FIXED_FLOOR_2):
         for i in range(room_counts.get(r_type, 0)):
             entries.append((f"{r_type}_{i}", r_type, 2))
 
     # 灵活楼层房间：用种子 shuffle 分配
     flexible: list[tuple[str, int]] = []
-    for r_type in FLEXIBLE_TYPES:
+    for r_type in sorted(FLEXIBLE_TYPES):
         for i in range(room_counts.get(r_type, 0)):
             flexible.append((r_type, i))
     rng.shuffle(flexible)

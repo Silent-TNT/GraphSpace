@@ -23,6 +23,7 @@ web/
 
 # ── 实验产物与日志 ────────────────────────────────────────
 experimental_results/
+outputs/
 logs/
 notebooks/experiments/
 notebooks/sandbox/
@@ -50,6 +51,7 @@ data/**/*.xls
 # ── Python 与 IDE ─────────────────────────────────────────
 __pycache__/
 *.py[cod]
+.venv*/
 .ipynb_checkpoints/
 .vscode/
 .DS_Store
