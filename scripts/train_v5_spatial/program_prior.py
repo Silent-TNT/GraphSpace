@@ -152,6 +152,91 @@ class ProgramPrior:
             "distributions": distributions,
         }
 
+    def infer_part_counts(
+        self,
+        group_counts: dict[str, int],
+        neighbors: list[dict],
+        seed: int,
+    ) -> tuple[dict[str, int], dict]:
+        """Infer rectangular part counts from functional-group counts.
+
+        `group_counts` describes how many functional nodes are requested. The
+        returned counts describe how many rectangular parts the decoder should
+        be prepared to produce for each type.
+        """
+        rng = random.Random(seed)
+        counts = {str(key): int(value) for key, value in group_counts.items() if int(value) > 0}
+        if not counts:
+            return {}, {"source": "empty_group_counts", "distributions": {}}
+
+        donor_candidates = neighbors or [
+            {"house": house, "weight": 1.0, "distance": 0.0} for house in self.houses
+        ]
+        donor_weights = [float(item.get("weight", 1.0)) for item in donor_candidates]
+        donor = self._weighted_choice(rng, donor_candidates, donor_weights)
+        donor_house = donor["house"]
+        donor_group_counts = donor_house.get(
+            "functional_group_counts",
+            donor_house.get("room_counts", {}),
+        )
+        donor_part_counts = donor_house.get("part_counts", donor_group_counts)
+
+        part_counts = {}
+        distributions = {}
+        for room_type, group_count in sorted(counts.items()):
+            ratios = []
+            weighted_mean_parts = 0.0
+            weighted_mean_groups = 0.0
+            for item in donor_candidates:
+                house = item["house"]
+                weight = float(item.get("weight", 1.0))
+                house_group_count = int(
+                    house.get("functional_group_counts", house.get("room_counts", {})).get(
+                        room_type,
+                        0,
+                    )
+                )
+                house_part_count = int(
+                    house.get("part_counts", house.get("room_counts", {})).get(
+                        room_type,
+                        house_group_count,
+                    )
+                )
+                if house_group_count > 0:
+                    ratios.append((house_part_count / house_group_count, weight))
+                weighted_mean_groups += house_group_count * weight
+                weighted_mean_parts += house_part_count * weight
+
+            donor_groups = int(donor_group_counts.get(room_type, 0))
+            donor_parts = int(donor_part_counts.get(room_type, donor_groups))
+            if donor_groups > 0:
+                ratio = donor_parts / donor_groups
+                source = "sampled_neighbor_ratio"
+            elif ratios:
+                total_weight = sum(weight for _ratio, weight in ratios)
+                ratio = sum(value * weight for value, weight in ratios) / max(total_weight, 1e-9)
+                source = "weighted_neighbor_ratio"
+            else:
+                ratio = 1.0
+                source = "fallback_one_part_per_group"
+            predicted = max(group_count, int(round(group_count * ratio)))
+            part_counts[room_type] = predicted
+            distributions[room_type] = {
+                "requested_functional_groups": group_count,
+                "predicted_parts": predicted,
+                "ratio": ratio,
+                "source": source,
+                "neighbor_weighted_mean_groups": weighted_mean_groups,
+                "neighbor_weighted_mean_parts": weighted_mean_parts,
+            }
+
+        return part_counts, {
+            "source": "phase10_group_to_part_prior",
+            "part_count_donor_house": donor_house.get("house_id"),
+            "part_count_donor_distance": donor.get("distance"),
+            "distributions": distributions,
+        }
+
     def _assign_floors(
         self,
         counts: dict[str, int],

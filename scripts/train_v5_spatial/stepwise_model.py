@@ -64,6 +64,7 @@ class StepwiseActionPolicy(nn.Module):
         )
         self.action_head = nn.Linear(hidden, len(ACTION_TO_ID))
         self.accept_head = nn.Linear(hidden, 1)
+        self.progress_head = nn.Linear(hidden, 1)
         self.axis_head = nn.Linear(hidden, 3)
         self.cut_head = nn.Sequential(nn.Linear(hidden, 1), nn.Sigmoid())
         self.box_head = nn.Sequential(nn.Linear(hidden, 6), nn.Sigmoid())
@@ -91,6 +92,7 @@ class StepwiseActionPolicy(nn.Module):
         return {
             "action_logits": self.action_head(fused),
             "accept_logit": self.accept_head(fused).squeeze(-1),
+            "progress_logit": self.progress_head(fused).squeeze(-1),
             "axis_logits": self.axis_head(fused),
             "cut": self.cut_head(fused).squeeze(-1),
             "box": self.box_head(fused),

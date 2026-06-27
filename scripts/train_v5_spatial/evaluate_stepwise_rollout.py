@@ -31,6 +31,7 @@ from stepwise_dataset import (  # noqa: E402
     GRID_Y,
     GRID_Z,
     ID_TO_ACTION,
+    protocol_action_mask,
     read_json,
     record_to_action,
     state_volume,
@@ -40,6 +41,7 @@ from stepwise_decision import (  # noqa: E402
     DecisionRegion,
     StepAction,
     StepwiseDecisionEnvironment,
+    intersects,
     volume,
 )
 from stepwise_model import StepwiseActionPolicy  # noqa: E402
@@ -161,30 +163,144 @@ def graph_tensors(payload: dict, device: torch.device) -> tuple[torch.Tensor, to
     return node_tensor, mask, adjacency
 
 
-def decode_bounds(raw: torch.Tensor) -> tuple[int, int, int, int, int, int]:
+def legalize_bounds(
+    values: list[int],
+    container: tuple[int, int, int, int, int, int],
+) -> tuple[int, int, int, int, int, int]:
+    output = []
+    for axis in range(3):
+        low = max(container[axis], min(values[axis], values[axis + 3]))
+        high = min(container[axis + 3], max(values[axis], values[axis + 3]))
+        if high <= low:
+            midpoint = int(round((values[axis] + values[axis + 3]) / 2))
+            low = min(max(midpoint, container[axis]), container[axis + 3] - 1)
+            high = low + 1
+        output.append(int(low))
+    for axis in range(3):
+        output.append(
+            int(min(max(output[axis] + 1, max(values[axis], values[axis + 3])), container[axis + 3]))
+        )
+    return tuple(output)
+
+
+def decode_bounds(
+    raw: torch.Tensor,
+    container: tuple[int, int, int, int, int, int],
+) -> tuple[int, int, int, int, int, int]:
     scale = torch.tensor([GRID_X, GRID_Y, GRID_Z, GRID_X, GRID_Y, GRID_Z], device=raw.device)
     values = torch.round(raw * scale).to(torch.int64).detach().cpu().tolist()
-    return tuple(int(value) for value in values)
+    return legalize_bounds([int(value) for value in values], container)
+
+
+def taken_bounds(env: StepwiseDecisionEnvironment) -> list[tuple[int, int, int, int, int, int]]:
+    assigned = [
+        bounds
+        for boxes in env.state.assignments.values()
+        for bounds in boxes
+    ]
+    return assigned + list(env.state.empty_regions)
+
+
+def overlaps_taken(
+    env: StepwiseDecisionEnvironment,
+    bounds: tuple[int, int, int, int, int, int],
+) -> bool:
+    return any(intersects(bounds, existing) for existing in taken_bounds(env))
+
+
+def largest_free_xy_bounds(
+    env: StepwiseDecisionEnvironment,
+    region: DecisionRegion,
+) -> tuple[int, int, int, int, int, int] | None:
+    x0, y0, z0, x1, y1, z1 = region.bounds
+    width = max(x1 - x0, 0)
+    height = max(y1 - y0, 0)
+    if width == 0 or height == 0:
+        return None
+    occupied = [[False for _ in range(height)] for _ in range(width)]
+    for bounds in taken_bounds(env):
+        if not intersects(region.bounds, bounds):
+            continue
+        ix0 = max(x0, bounds[0]) - x0
+        iy0 = max(y0, bounds[1]) - y0
+        ix1 = min(x1, bounds[3]) - x0
+        iy1 = min(y1, bounds[4]) - y0
+        for ix in range(ix0, ix1):
+            for iy in range(iy0, iy1):
+                occupied[ix][iy] = True
+
+    heights = [0] * height
+    best: tuple[int, int, int, int] | None = None
+    best_area = 0
+    for ix in range(width):
+        for iy in range(height):
+            heights[iy] = 0 if occupied[ix][iy] else heights[iy] + 1
+        stack: list[int] = []
+        for iy in range(height + 1):
+            current = heights[iy] if iy < height else 0
+            while stack and heights[stack[-1]] > current:
+                top = stack.pop()
+                rect_width = heights[top]
+                y_start = stack[-1] + 1 if stack else 0
+                rect_height = iy - y_start
+                area = rect_width * rect_height
+                if area > best_area:
+                    best_area = area
+                    best = (
+                        ix - rect_width + 1,
+                        y_start,
+                        ix + 1,
+                        iy,
+                    )
+            stack.append(iy)
+    if best is None or best_area <= 0:
+        return None
+    bx0, by0, bx1, by1 = best
+    return (x0 + bx0, y0 + by0, z0, x0 + bx1, y0 + by1, z1)
+
+
+def repair_overlapping_bounds(
+    env: StepwiseDecisionEnvironment,
+    region: DecisionRegion,
+    bounds: tuple[int, int, int, int, int, int],
+) -> tuple[int, int, int, int, int, int]:
+    if not overlaps_taken(env, bounds):
+        return bounds
+    repaired = largest_free_xy_bounds(env, region)
+    return repaired or bounds
 
 
 def decode_node_set(
     logits: torch.Tensor,
     active_nodes: tuple[int, ...],
     threshold: float = 0.5,
+    require_one: bool = False,
+    allow_all: bool = True,
 ) -> tuple[int, ...]:
     probs = logits.sigmoid().detach().cpu()
-    return tuple(
+    selected = tuple(
         node_id
         for node_id in active_nodes
         if float(probs[node_id]) >= threshold
     )
+    if require_one and not selected and active_nodes:
+        selected = (max(active_nodes, key=lambda node_id: float(probs[node_id])),)
+    if not allow_all and len(selected) == len(active_nodes) and len(active_nodes) > 1:
+        lowest = min(active_nodes, key=lambda node_id: float(probs[node_id]))
+        selected = tuple(node_id for node_id in selected if node_id != lowest)
+    return selected
 
 
 def predicted_action(
     output: dict,
     region: DecisionRegion,
+    env: StepwiseDecisionEnvironment,
 ) -> StepAction | None:
-    action_id = int(output["action_logits"].argmax(dim=-1)[0])
+    mask = torch.from_numpy(protocol_action_mask(env, region.id)).to(
+        output["action_logits"].device
+    )
+    logits = output["action_logits"][0].masked_fill(mask <= 0, -1.0e4)
+    action_id = int(logits.argmax(dim=-1))
     action_name = ID_TO_ACTION[action_id]
     if action_name == "reject":
         return None
@@ -193,8 +309,17 @@ def predicted_action(
     if action_name == "cut":
         axis = int(output["axis_logits"].argmax(dim=-1)[0])
         scale = [GRID_X, GRID_Y, GRID_Z][axis]
-        cut = int(round(float(output["cut"][0]) * scale))
-        left = decode_node_set(output["node_logits"][0], region.node_ids)
+        raw_cut = int(round(float(output["cut"][0]) * scale))
+        cut = min(
+            max(raw_cut, region.bounds[axis] + 1),
+            region.bounds[axis + 3] - 1,
+        )
+        left = decode_node_set(
+            output["node_logits"][0],
+            region.node_ids,
+            require_one=True,
+            allow_all=False,
+        )
         right = tuple(node for node in region.node_ids if node not in set(left))
         return StepAction(
             kind=ActionKind.CUT,
@@ -206,19 +331,33 @@ def predicted_action(
             reason="model rollout prediction",
         )
     if action_name == "place":
-        node_ids = decode_node_set(output["node_logits"][0], region.node_ids)
+        node_ids = decode_node_set(
+            output["node_logits"][0],
+            region.node_ids,
+            require_one=True,
+        )
+        bounds = repair_overlapping_bounds(
+            env,
+            region,
+            decode_bounds(output["box"][0], region.bounds),
+        )
         return StepAction(
             kind=ActionKind.PLACE,
             region_id=region.id,
             node_ids=node_ids,
-            bounds=decode_bounds(output["box"][0]),
+            bounds=bounds,
             reason="model rollout prediction",
         )
     if action_name == "reserve_empty":
+        bounds = repair_overlapping_bounds(
+            env,
+            region,
+            decode_bounds(output["box"][0], region.bounds),
+        )
         return StepAction(
             kind=ActionKind.RESERVE_EMPTY,
             region_id=region.id,
-            bounds=decode_bounds(output["box"][0]),
+            bounds=bounds,
             reason="model rollout prediction",
         )
     raise ValueError(f"unsupported predicted action: {action_name}")
@@ -249,7 +388,7 @@ def rollout_model(
         )[None].to(device)
         with torch.no_grad():
             output = model(volume_tensor, nodes, node_mask, adjacency)
-        action = predicted_action(output, region)
+        action = predicted_action(output, region, env)
         if action is None:
             counters["predicted_reject"] += 1
             consecutive_no_progress += 1

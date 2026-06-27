@@ -4,6 +4,8 @@ import sys
 import unittest
 from pathlib import Path
 
+import torch
+
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
@@ -11,9 +13,13 @@ if str(SCRIPT_DIR) not in sys.path:
 
 from evaluate_stepwise_rollout import (  # noqa: E402
     assignment_report,
+    decode_node_set,
     evaluate_payload,
+    legalize_bounds,
+    repair_overlapping_bounds,
     replay_oracle,
 )
+from stepwise_decision import ActionKind, StepAction, StepwiseDecisionEnvironment  # noqa: E402
 from stepwise_dataset import (  # noqa: E402
     ACTION_TO_ID,
     DEFAULT_DATA_DIR,
@@ -56,6 +62,38 @@ class StepwiseRolloutTest(unittest.TestCase):
         }
         self.assertEqual(marked, set(record["left_node_ids"]))
         self.assertNotEqual(marked, set(record["left_node_ids"]) | set(record["right_node_ids"]))
+
+    def test_action_decoder_legalizes_empty_node_and_invalid_box(self) -> None:
+        bounds = legalize_bounds([8, 8, 8, 2, 2, 2], (0, 0, 0, 10, 10, 10))
+        self.assertLess(bounds[0], bounds[3])
+        self.assertLess(bounds[1], bounds[4])
+        self.assertLess(bounds[2], bounds[5])
+        logits = torch.tensor([-10.0, -9.0, -8.0])
+        self.assertEqual(
+            decode_node_set(logits, (0, 1, 2), require_one=True),
+            (2,),
+        )
+
+    def test_repair_overlapping_bounds_finds_free_region(self) -> None:
+        env = StepwiseDecisionEnvironment(
+            site_bounds=(0, 0, 0, 10, 10, 10),
+            node_ids=(0, 1),
+        )
+        result = env.apply(
+            StepAction(
+                kind=ActionKind.PLACE,
+                region_id="root",
+                node_ids=(0,),
+                bounds=(0, 0, 0, 5, 10, 10),
+            )
+        )
+        self.assertTrue(result.accepted)
+        repaired = repair_overlapping_bounds(
+            env,
+            env.state.regions["root"],
+            (0, 0, 0, 5, 10, 10),
+        )
+        self.assertEqual(repaired, (5, 0, 0, 10, 10, 10))
 
 
 if __name__ == "__main__":

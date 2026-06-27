@@ -28,6 +28,12 @@ STEPWISE_VOLUME_CHANNELS = [
     "x_coord",
     "y_coord",
     "z_coord",
+    "last_rejected_bounds",
+    "last_rejected_place",
+    "last_rejected_empty",
+    "last_rejected_cut",
+    "last_rejected_overlap",
+    "last_rejected_bounds_invalid",
 ]
 ACTION_TO_ID = {
     "reject": 0,
@@ -68,6 +74,41 @@ def fill_box(volume: np.ndarray, bounds: tuple[int, int, int, int, int, int], va
     volume[x0:x1, y0:y1, z0:z1] = value
 
 
+def last_rejected_attempt(env: StepwiseDecisionEnvironment):
+    for attempt in reversed(env.attempt_log):
+        if not attempt.accepted:
+            return attempt
+    return None
+
+
+def mark_last_rejection(
+    volume: np.ndarray,
+    env: StepwiseDecisionEnvironment,
+    current: dict,
+) -> None:
+    attempt = last_rejected_attempt(env)
+    if attempt is None:
+        return
+    action = attempt.action
+    region = env.state.regions.get(current.get("region_id"))
+    marker_bounds = action.bounds or (region.bounds if region else None)
+    if marker_bounds:
+        fill_box(volume[9], marker_bounds, 1.0)
+    kind_to_channel = {
+        ActionKind.PLACE: 10,
+        ActionKind.RESERVE_EMPTY: 11,
+        ActionKind.CUT: 12,
+    }
+    channel = kind_to_channel.get(action.kind)
+    if channel is not None and marker_bounds:
+        fill_box(volume[channel], marker_bounds, 1.0)
+    issue_text = " ".join(attempt.issues)
+    if "overlap" in issue_text and marker_bounds:
+        fill_box(volume[13], marker_bounds, 1.0)
+    if "bounds" in issue_text and marker_bounds:
+        fill_box(volume[14], marker_bounds, 1.0)
+
+
 def state_volume(
     env: StepwiseDecisionEnvironment,
     site_cells: list[int],
@@ -97,6 +138,7 @@ def state_volume(
     volume[6] = x[:, None, None]
     volume[7] = y[None, :, None]
     volume[8] = z[None, None, :]
+    mark_last_rejection(volume, env, current)
     return volume
 
 
@@ -118,19 +160,53 @@ def normalized_cut(record: dict) -> float:
     return (float(record["cut"]) - float(bounds[axis])) / float(extent)
 
 
+def has_assignments(env: StepwiseDecisionEnvironment) -> bool:
+    return any(bool(boxes) for boxes in env.state.assignments.values())
+
+
+def protocol_action_mask(
+    env: StepwiseDecisionEnvironment,
+    region_id: str | None,
+) -> np.ndarray:
+    """Mask actions that cannot make useful generation progress in this state."""
+    mask = np.ones(len(ACTION_TO_ID), dtype=np.float32)
+    region = env.state.regions.get(region_id) if region_id else None
+    active_nodes = bool(region and region.node_ids)
+    if active_nodes:
+        mask[ACTION_TO_ID["reject"]] = 0.0
+    if len(env.state.history) == 0:
+        mask[ACTION_TO_ID["rollback"]] = 0.0
+    if not has_assignments(env):
+        mask[ACTION_TO_ID["reserve_empty"]] = 0.0
+    return mask
+
+
+def action_mask_for_state(
+    env: StepwiseDecisionEnvironment,
+    record: dict,
+) -> np.ndarray:
+    mask = protocol_action_mask(env, record.get("region_id"))
+    target = ACTION_TO_ID[action_name_for_record(record)]
+    mask[target] = 1.0
+    return mask
+
+
 def replay_until(payload: dict, action_index: int) -> StepwiseDecisionEnvironment:
     env = StepwiseDecisionEnvironment(
         site_bounds=(0, 0, 0, *payload["site_cells"]),
         node_ids=tuple(range(len(payload["rooms"]))),
     )
     for record in payload["actions"][:action_index]:
-        if not record["accepted"]:
-            continue
         result = env.apply(record_to_action(record))
-        if not result.accepted:
+        if record["accepted"] and not result.accepted:
             raise ValueError(
                 f"{payload['house_id']}: replay failed before action "
                 f"{action_index}: {result.issues}"
+            )
+        if not record["accepted"] and result.accepted:
+            raise ValueError(
+                f"{payload['house_id']}: negative action unexpectedly "
+                f"accepted before action {action_index}"
             )
     return env
 
@@ -183,7 +259,12 @@ class StepwiseActionDataset(Dataset):
             "edge_index": torch.from_numpy(edge_index),
             "edge_type": torch.from_numpy(edge_type),
             "action_target": torch.tensor(ACTION_TO_ID[action_name], dtype=torch.long),
+            "action_mask": torch.from_numpy(action_mask_for_state(env, record)),
             "accepted_target": torch.tensor(float(record["accepted"]), dtype=torch.float32),
+            "progress_target": torch.tensor(
+                float(record["accepted"] and record["kind"] in {"cut", "place"}),
+                dtype=torch.float32,
+            ),
             "axis_target": torch.tensor(int(record.get("axis", -1)), dtype=torch.long),
             "cut_target": torch.tensor(normalized_cut(record), dtype=torch.float32),
             "box_target": torch.from_numpy(normalized_bounds(record.get("bounds"))),
@@ -216,7 +297,9 @@ def collate_stepwise(items: list[dict]) -> dict:
         "node_mask": node_mask,
         "adjacency": adjacency,
         "action_target": torch.stack([item["action_target"] for item in items]),
+        "action_mask": torch.stack([item["action_mask"] for item in items]),
         "accepted_target": torch.stack([item["accepted_target"] for item in items]),
+        "progress_target": torch.stack([item["progress_target"] for item in items]),
         "axis_target": torch.stack([item["axis_target"] for item in items]),
         "cut_target": torch.stack([item["cut_target"] for item in items]),
         "box_target": torch.stack([item["box_target"] for item in items]),

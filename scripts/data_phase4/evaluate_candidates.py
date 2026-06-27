@@ -19,6 +19,7 @@ for import_dir in (
     ROOT,
     ROOT / "scripts" / "data_phase2",
     ROOT / "scripts" / "data_phase3",
+    ROOT / "scripts" / "train_v5_spatial",
 ):
     if str(import_dir) not in sys.path:
         sys.path.insert(0, str(import_dir))
@@ -29,6 +30,7 @@ from scripts.data_phase1.run_phase1 import (
 )
 from build_v5_representation import decode_instances, encode_house, evaluate_round_trip
 from evaluate_structural_diversity import compare_layouts, layout_signature
+from analyze_topology_dual import build_report as build_topology_dual_report
 
 
 MODULUS_MM = 300.0
@@ -88,10 +90,20 @@ def normalize_rooms(rooms: list[Any]) -> list[dict]:
     for index, room in enumerate(rooms):
         data = room.to_json() if hasattr(room, "to_json") else dict(room)
         room_type = str(data.get("type", data.get("room_type", "unknown")))
+        room_id = str(data.get("id", data.get("room_id", "{}_{}".format(room_type, index))))
+        functional_id = next(
+            (
+                str(data[key])
+                for key in ("functional_id", "group_id", "parent_id")
+                if data.get(key)
+            ),
+            room_id.split("_part_", 1)[0] if "_part_" in room_id else room_id,
+        )
         box_min = [float(value) for value in data["box_min"]]
         box_max = [float(value) for value in data["box_max"]]
         normalized = {
-            "id": str(data.get("id", data.get("room_id", "{}_{}".format(room_type, index)))),
+            "id": room_id,
+            "functional_id": functional_id,
             "type": room_type,
             "box_min": box_min,
             "box_max": box_max,
@@ -134,7 +146,19 @@ def evaluate_p0(
     rooms: list[dict], requested: dict[str, int], site: tuple[float, float]
 ) -> dict:
     site_x, site_y = map(float, site)
-    counts = Counter(room["type"] for room in rooms)
+    raw_part_counts = Counter(room["type"] for room in rooms)
+    group_types: dict[str, str] = {}
+    group_part_counts: Counter[str] = Counter()
+    mixed_type_groups: dict[str, set[str]] = {}
+    for room in rooms:
+        group_id = str(room.get("functional_id", room["id"]))
+        group_part_counts[group_id] += 1
+        if group_id in group_types and group_types[group_id] != room["type"]:
+            mixed_type_groups.setdefault(group_id, {group_types[group_id]}).add(
+                room["type"]
+            )
+        group_types.setdefault(group_id, room["type"])
+    counts = Counter(group_types.values())
     all_types = sorted(set(requested) | set(counts))
     count_delta = {
         room_type: counts.get(room_type, 0) - int(requested.get(room_type, 0))
@@ -183,6 +207,7 @@ def evaluate_p0(
         "requested_counts_match": not missing and not extra,
         "dining_room_present": counts.get("dining_room", 0) >= 1,
         "known_room_types": not unknown,
+        "functional_groups_have_single_type": not mixed_type_groups,
         "positive_geometry": not invalid,
         "inside_site": not outside,
         "modulus_300mm": not modulus,
@@ -198,6 +223,15 @@ def evaluate_p0(
         "details": {
             "missing_counts": missing,
             "extra_counts": extra,
+            "raw_part_counts": dict(sorted(raw_part_counts.items())),
+            "multipart_functional_groups": {
+                key: value
+                for key, value in sorted(group_part_counts.items())
+                if value > 1
+            },
+            "mixed_type_functional_groups": {
+                key: sorted(value) for key, value in mixed_type_groups.items()
+            },
             "unknown_type_room_ids": unknown,
             "invalid_room_ids": invalid,
             "out_of_bounds_room_ids": outside,
@@ -297,21 +331,75 @@ def candidate_payload(
     }
 
 
+def p1_topology_realization_report(topology: dict, layout: dict) -> dict:
+    """Evaluate P1 as target heterogeneous topology realization in final geometry."""
+    topology_report = build_topology_dual_report(topology, layout)
+    target_report = topology_report["target_vs_realized"]
+    target_count = int(target_report["target_edge_count"])
+    realized_count = int(target_report["realized_edge_count"])
+    required_count = int(target_report["required_edge_count"])
+    required_realized = int(target_report["required_realized_edge_count"])
+    all_target_realized = target_count > 0 and realized_count == target_count
+    all_required_realized = required_realized == required_count
+    checks = {
+        "target_topology_provided": target_count > 0,
+        "all_target_edges_realized": all_target_realized,
+        "all_required_edges_realized": all_required_realized,
+    }
+    return {
+        "mode": "target_topology_realization",
+        "checks": checks,
+        "hard_geometry_pass": all_required_realized,
+        "spatial_organization_pass": all(checks.values()),
+        "target_topology": target_report,
+        "realized_planar_dual": topology_report["realized_planar_dual"],
+        "voxel_assignment": topology_report["voxel_assignment"],
+        "scope": [
+            "P1 compares the generated heterogeneous topology against the final planar dual graph.",
+            "It does not use fixed residential adjacency rules when target topology is provided.",
+            "Door positions and pedestrian paths remain outside the current output scope.",
+        ],
+    }
+
+
+def disabled_p2_report() -> dict:
+    return {
+        "enabled": False,
+        "quality_gate_pass": False,
+        "all_rooms_pass": None,
+        "checks": {},
+        "pass_rates": {},
+        "quality_gate_thresholds": {},
+        "quality_gate_checks": {},
+        "details": {
+            "disabled_reason": (
+                "P2 geometry/function quality is temporarily disabled because the "
+                "current thresholds are not a reliable training or generation gate."
+            )
+        },
+    }
+
+
 def evaluate_candidate(
     candidate_id: str,
     rooms: list[Any],
     requested: dict[str, int],
     site: tuple[float, float],
+    topology: dict | None = None,
 ) -> tuple[dict, dict[str, np.ndarray] | None]:
     normalized = normalize_rooms(rooms)
     p0 = evaluate_p0(normalized, requested, site)
-    relations = extract_relations(normalized, float(site[0]), float(site[1]))
-    p1 = p1_spatial_organization_report(normalized, relations)
-    p2 = evaluate_p2(normalized, site)
+    payload = candidate_payload(candidate_id, normalized, site, requested)
+    if topology is None:
+        relations = extract_relations(normalized, float(site[0]), float(site[1]))
+        p1 = p1_spatial_organization_report(normalized, relations)
+        p1["mode"] = "legacy_fixed_rule_proxy"
+    else:
+        p1 = p1_topology_realization_report(topology, payload)
+    p2 = disabled_p2_report()
     instance_report: dict[str, Any]
     arrays = None
     try:
-        payload = candidate_payload(candidate_id, normalized, site, requested)
         arrays, metadata = encode_house(payload)
         round_trip = evaluate_round_trip(payload, arrays, metadata)
         decoded = decode_instances(arrays, metadata)
@@ -341,11 +429,12 @@ def evaluate_candidate(
         "eligible_for_diversity": eligible,
         "overall": {
             "hard_valid": bool(p0["pass"] and p1["hard_geometry_pass"]),
-            "quality_gate_pass": bool(p2["quality_gate_pass"]),
+            "quality_gate_pass": None,
             "spatial_organization_pass": bool(
                 p1["spatial_organization_pass"]
             ),
             "instance_recovery_pass": bool(instance_report["pass"]),
+            "p2_enabled": False,
         },
     }
     return report, arrays

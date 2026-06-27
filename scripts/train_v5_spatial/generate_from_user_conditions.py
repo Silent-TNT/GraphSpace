@@ -31,6 +31,7 @@ from staged_dataset import (
     reduce_2d,
 )
 from staged_model import StagedSpatialPolicy
+from analyze_topology_dual import build_report as build_topology_dual_report
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -51,6 +52,33 @@ from program_prior import ProgramPrior
 VOXEL_MM = 300.0
 TYPE_TO_ID = {value: index for index, value in enumerate(ROOM_TYPES)}
 DIRECT_LIGHT_TYPES = {"living_room", "bedroom", "balcony"}
+TRUNK_TYPES = {
+    "stairs",
+    "entryway",
+    "corridor",
+    "living_room",
+    "dining_room",
+    "kitchen",
+}
+CORE_REPAIR_TYPES = TRUNK_TYPES | {"bathroom"}
+RULE_EXPANDABLE_TYPES = {"corridor"}
+FIRST_FLOOR_TRUNK_EDGE_TYPES = {
+    frozenset(("entryway", "stairs")),
+    frozenset(("entryway", "living_room")),
+    frozenset(("stairs", "corridor")),
+    frozenset(("stairs", "living_room")),
+    frozenset(("corridor", "living_room")),
+    frozenset(("corridor", "dining_room")),
+    frozenset(("living_room", "dining_room")),
+    frozenset(("dining_room", "kitchen")),
+}
+SECOND_FLOOR_TRUNK_EDGE_TYPES = {
+    frozenset(("stairs", "corridor")),
+    frozenset(("corridor", "bedroom")),
+    frozenset(("corridor", "bathroom")),
+    frozenset(("corridor", "balcony")),
+    frozenset(("corridor", "multi_purpose")),
+}
 TEST_CASES = {
     "small": {
         "site": (12000.0, 12000.0),
@@ -446,11 +474,11 @@ def placement_order(nodes: list[dict]) -> list[int]:
         "stairs": 0,
         "entryway": 1,
         "corridor": 2,
-        "bedroom": 3,
-        "living_room": 4,
-        "dining_room": 5,
-        "kitchen": 6,
-        "bathroom": 7,
+        "living_room": 3,
+        "dining_room": 4,
+        "kitchen": 5,
+        "bathroom": 6,
+        "bedroom": 7,
         "multi_purpose": 8,
         "utility": 9,
         "balcony": 10,
@@ -464,6 +492,446 @@ def placement_order(nodes: list[dict]) -> list[int]:
             index,
         ),
     )
+
+
+def fallback_prediction_for_node(node: dict) -> np.ndarray:
+    width_mm, depth_mm, _ = DEFAULT_ROOM_SIZE[node["type"]]
+    area_scale = max(float(node.get("target_area_ratio", 0.0)), 1.0e-4) ** 0.5
+    width = max(width_mm / VOXEL_MM, 2.0) * max(area_scale, 0.8)
+    depth = max(depth_mm / VOXEL_MM, 2.0) * max(area_scale, 0.8)
+    return np.asarray([0.5, 0.5, width / 88.0, depth / 88.0], dtype=np.float32)
+
+
+def repair_missing_rooms(
+    model_graph: dict,
+    site_cells: list[int],
+    building: np.ndarray,
+    occupied: np.ndarray,
+    predictions: dict[int, tuple[int, int, int, int]],
+    predicted_floors: dict[int, list[int]],
+    topology_neighbors: dict[int, list[tuple[int, int, bool]]],
+    raw_predictions: dict[int, np.ndarray],
+    failures: list[str],
+) -> tuple[list[str], list[dict]]:
+    repaired = []
+    remaining_failures = []
+    failed_indices = {
+        index
+        for index, node in enumerate(model_graph["nodes"])
+        if node["instance_token"] in set(failures)
+    }
+    ordered = placement_order(model_graph["nodes"])
+    for room_index in sorted(
+        failed_indices,
+        key=lambda index: (
+            model_graph["nodes"][index]["type"] not in CORE_REPAIR_TYPES,
+            ordered.index(index),
+        ),
+    ):
+        node = model_graph["nodes"][room_index]
+        floors = node_floors(node)
+        required_neighbors = [
+            (neighbor, relation, required)
+            for neighbor, relation, required in topology_neighbors[room_index]
+            if neighbor in predictions
+        ]
+        prediction = raw_predictions.get(room_index, fallback_prediction_for_node(node))
+        box, details = place_topology_box(
+            prediction,
+            site_cells,
+            floors,
+            building,
+            occupied,
+            predictions,
+            predicted_floors,
+            required_neighbors,
+            needs_exterior=bool(ROOM_RULES.get(node["type"], {}).get("needs_exterior")),
+        )
+        if box is None:
+            box = place_nearest_box(
+                fallback_prediction_for_node(node),
+                site_cells,
+                floors,
+                building,
+                occupied,
+            )
+            details = {"final_repair": True, "fallback_nearest_box": box is not None}
+        if box is None:
+            remaining_failures.append(node["instance_token"])
+            continue
+        predictions[room_index] = box
+        predicted_floors[room_index] = floors
+        mark_occupied(occupied, box, floors)
+        repaired.append(
+            {
+                "node": node["instance_token"],
+                "type": node["type"],
+                "box": list(box),
+                "details": {
+                    **details,
+                    "final_repair": True,
+                    "repair_priority": (
+                        "core_trunk" if node["type"] in CORE_REPAIR_TYPES else "branch"
+                    ),
+                },
+            }
+        )
+    return remaining_failures, repaired
+
+
+def edge_quality(
+    source: int,
+    target: int,
+    relation: int,
+    predictions: dict[int, tuple[int, int, int, int]],
+    predicted_floors: dict[int, list[int]],
+) -> float:
+    if source not in predictions or target not in predictions:
+        return 0.0
+    if relation == 1:
+        return box_projection_overlap(predictions[source], predictions[target])
+    if set(predicted_floors[source]) & set(predicted_floors[target]):
+        return box_face_contact(predictions[source], predictions[target])
+    return 0.0
+
+
+def trunk_edge_scope(nodes: list[dict], source: int, target: int) -> str | None:
+    type_pair = frozenset((nodes[source]["type"], nodes[target]["type"]))
+    shared = set(node_floors(nodes[source])) & set(node_floors(nodes[target]))
+    if 1 in shared and type_pair in FIRST_FLOOR_TRUNK_EDGE_TYPES:
+        return "floor_1"
+    if 2 in shared and type_pair in SECOND_FLOOR_TRUNK_EDGE_TYPES:
+        return "floor_2"
+    return None
+
+
+def is_trunk_edge(nodes: list[dict], source: int, target: int) -> bool:
+    return trunk_edge_scope(nodes, source, target) is not None
+
+
+def split_room_box(room: dict, part_count: int) -> list[dict]:
+    if part_count <= 1:
+        output = dict(room)
+        output.setdefault("functional_id", room["id"])
+        return [output]
+    x0, y0, z0 = [float(value) for value in room["box_min"]]
+    x1, y1, z1 = [float(value) for value in room["box_max"]]
+    x_cells = int(round((x1 - x0) / VOXEL_MM))
+    y_cells = int(round((y1 - y0) / VOXEL_MM))
+    axis = 0 if x_cells >= y_cells else 1
+    cells = x_cells if axis == 0 else y_cells
+    if cells < part_count:
+        output = dict(room)
+        output.setdefault("functional_id", room["id"])
+        return [output]
+    boundaries = [
+        int(round(index * cells / part_count))
+        for index in range(part_count + 1)
+    ]
+    if any(left >= right for left, right in zip(boundaries, boundaries[1:])):
+        output = dict(room)
+        output.setdefault("functional_id", room["id"])
+        return [output]
+    parts = []
+    for index, (left, right) in enumerate(zip(boundaries, boundaries[1:])):
+        part = dict(room)
+        part["id"] = f"{room['id']}_part_{index}"
+        part["functional_id"] = room["id"]
+        if axis == 0:
+            part["box_min"] = [x0 + left * VOXEL_MM, y0, z0]
+            part["box_max"] = [x0 + right * VOXEL_MM, y1, z1]
+        else:
+            part["box_min"] = [x0, y0 + left * VOXEL_MM, z0]
+            part["box_max"] = [x1, y0 + right * VOXEL_MM, z1]
+        parts.append(part)
+    return parts
+
+
+def expand_functional_parts(
+    rooms: list[dict],
+    functional_group_counts: dict[str, int],
+    part_counts: dict[str, int],
+    expandable_types: set[str] | None = None,
+) -> tuple[list[dict], dict]:
+    expandable_types = expandable_types or RULE_EXPANDABLE_TYPES
+    by_type: dict[str, list[dict]] = {}
+    for room in rooms:
+        by_type.setdefault(str(room["type"]), []).append(room)
+    target_parts_by_room: dict[str, int] = {}
+    report = {
+        "enabled": True,
+        "method": "rule_based_axis_split",
+        "expandable_types": sorted(expandable_types),
+        "expanded_groups": [],
+        "skipped_groups": [],
+        "input_room_count": len(rooms),
+    }
+    for room_type in sorted(expandable_types):
+        type_rooms = sorted(by_type.get(room_type, []), key=lambda item: item["id"])
+        group_count = int(functional_group_counts.get(room_type, len(type_rooms)))
+        requested_parts = int(part_counts.get(room_type, len(type_rooms)))
+        if not type_rooms or group_count <= 0:
+            continue
+        requested_parts = max(requested_parts, len(type_rooms))
+        base = requested_parts // len(type_rooms)
+        remainder = requested_parts % len(type_rooms)
+        for index, room in enumerate(type_rooms):
+            target_parts_by_room[room["id"]] = max(
+                1,
+                base + (1 if index < remainder else 0),
+            )
+
+    expanded = []
+    for room in rooms:
+        target_part_count = target_parts_by_room.get(room["id"], 1)
+        parts = split_room_box(room, target_part_count)
+        if len(parts) != target_part_count:
+            report["skipped_groups"].append(
+                {
+                    "functional_id": room["id"],
+                    "type": room["type"],
+                    "target_part_count": target_part_count,
+                    "actual_part_count": len(parts),
+                    "reason": "box_too_small_for_safe_axis_split",
+                }
+            )
+        elif target_part_count > 1:
+            report["expanded_groups"].append(
+                {
+                    "functional_id": room["id"],
+                    "type": room["type"],
+                    "part_count": target_part_count,
+                    "part_ids": [part["id"] for part in parts],
+                }
+            )
+        expanded.extend(parts)
+    report["output_part_count"] = len(expanded)
+    report["expanded_group_count"] = len(report["expanded_groups"])
+    report["skipped_group_count"] = len(report["skipped_groups"])
+    return expanded, report
+
+
+def try_move_node_for_edge(
+    node_index: int,
+    anchor_index: int,
+    relation: int,
+    model_graph: dict,
+    site_cells: list[int],
+    building: np.ndarray,
+    occupied: np.ndarray,
+    predictions: dict[int, tuple[int, int, int, int]],
+    predicted_floors: dict[int, list[int]],
+    topology_neighbors: dict[int, list[tuple[int, int, bool]]],
+    raw_predictions: dict[int, np.ndarray],
+) -> tuple[bool, dict]:
+    old_box = predictions.get(node_index)
+    if old_box is None or anchor_index not in predictions:
+        return False, {}
+    floors = predicted_floors[node_index]
+    x0, y0, x1, y1 = old_box
+    for floor in floors:
+        occupied[floor - 1, x0:x1, y0:y1] = 0
+    all_priority_neighbors = [
+        (neighbor, neighbor_relation, True)
+        for neighbor, neighbor_relation, neighbor_required in topology_neighbors[
+            node_index
+        ]
+        if neighbor in predictions
+        and (
+            neighbor == anchor_index
+            or neighbor_required
+            or is_trunk_edge(model_graph["nodes"], node_index, neighbor)
+        )
+    ]
+    direct_neighbor = [(anchor_index, relation, True)]
+    tried_neighbor_sets = [all_priority_neighbors, direct_neighbor]
+    for neighbor_set in tried_neighbor_sets:
+        replacement, details = place_topology_box(
+            raw_predictions.get(
+                node_index,
+                fallback_prediction_for_node(model_graph["nodes"][node_index]),
+            ),
+            site_cells,
+            floors,
+            building,
+            occupied,
+            predictions,
+            predicted_floors,
+            neighbor_set,
+            needs_exterior=bool(
+                ROOM_RULES.get(
+                    model_graph["nodes"][node_index]["type"],
+                    {},
+                ).get("needs_exterior")
+            ),
+        )
+        if replacement is None:
+            continue
+        predictions[node_index] = replacement
+        if (
+            edge_quality(
+                node_index,
+                anchor_index,
+                relation,
+                predictions,
+                predicted_floors,
+            )
+            > 0
+        ):
+            mark_occupied(occupied, replacement, floors)
+            return replacement != old_box, {
+                **details,
+                "priority_edge_repair": True,
+                "target_only_fallback": neighbor_set == direct_neighbor,
+            }
+    predictions[node_index] = old_box
+    mark_occupied(occupied, old_box, floors)
+    return False, {"priority_edge_repair_failed": True}
+
+
+def repair_priority_edges(
+    model_graph: dict,
+    site_cells: list[int],
+    building: np.ndarray,
+    occupied: np.ndarray,
+    predictions: dict[int, tuple[int, int, int, int]],
+    predicted_floors: dict[int, list[int]],
+    topology_neighbors: dict[int, list[tuple[int, int, bool]]],
+    raw_predictions: dict[int, np.ndarray],
+    order: list[int],
+    required_edges: set[tuple[int, int]],
+) -> list[dict]:
+    all_relations = []
+    priority_relations = []
+    seen = set()
+    for source, target, relation in model_graph["edges"]:
+        edge = tuple(sorted((source, target)))
+        if edge in seen:
+            continue
+        seen.add(edge)
+        required = edge in required_edges
+        trunk = is_trunk_edge(model_graph["nodes"], source, target)
+        all_relations.append((source, target, relation, required, trunk))
+        if required or trunk:
+            priority_relations.append((source, target, relation, required, trunk))
+
+    def realized_score(relations: list[tuple[int, int, int, bool, bool]]) -> int:
+        score = 0
+        for source, target, relation, required, trunk in relations:
+            if (
+                edge_quality(
+                    source,
+                    target,
+                    relation,
+                    predictions,
+                    predicted_floors,
+                )
+                <= 0
+            ):
+                continue
+            score += 100 if required else 0
+            score += 20 if trunk else 0
+            score += 1
+        return score
+
+    order_offsets = {room_index: offset for offset, room_index in enumerate(order)}
+    repairs = []
+    for _pass in range(4):
+        missing_priority = [
+            edge
+            for edge in priority_relations
+            if edge_quality(
+                edge[0],
+                edge[1],
+                edge[2],
+                predictions,
+                predicted_floors,
+            )
+            <= 0
+        ]
+        if not missing_priority:
+            break
+        changed = False
+        for source, target, relation, required, trunk in sorted(
+            missing_priority,
+            key=lambda edge: (not edge[3], not edge[4]),
+        ):
+            candidates = sorted(
+                (source, target),
+                key=lambda index: (
+                    model_graph["nodes"][index]["type"] in {"stairs", "entryway"},
+                    model_graph["nodes"][index]["type"] not in TRUNK_TYPES,
+                    -order_offsets.get(index, -1),
+                ),
+            )
+            moved = candidates[0]
+            repaired = False
+            details = {"priority_edge_repair_failed": True}
+            for movable in candidates:
+                anchor = target if movable == source else source
+                old_box = predictions.get(movable)
+                if old_box is None:
+                    continue
+                before_score = realized_score(all_relations)
+                repaired, details = try_move_node_for_edge(
+                    movable,
+                    anchor,
+                    relation,
+                    model_graph,
+                    site_cells,
+                    building,
+                    occupied,
+                    predictions,
+                    predicted_floors,
+                    topology_neighbors,
+                    raw_predictions,
+                )
+                moved = movable
+                after_score = realized_score(all_relations)
+                if repaired and after_score < before_score:
+                    new_box = predictions[movable]
+                    floors = predicted_floors[movable]
+                    nx0, ny0, nx1, ny1 = new_box
+                    for floor in floors:
+                        occupied[floor - 1, nx0:nx1, ny0:ny1] = 0
+                    predictions[movable] = old_box
+                    mark_occupied(occupied, old_box, floors)
+                    repaired = False
+                    details = {
+                        **details,
+                        "priority_edge_repair_rejected_regression": True,
+                    }
+                    continue
+                if (
+                    edge_quality(
+                        source,
+                        target,
+                        relation,
+                        predictions,
+                        predicted_floors,
+                    )
+                    > 0
+                ):
+                    break
+            repairs.append(
+                {
+                    "source": model_graph["nodes"][source]["instance_token"],
+                    "target": model_graph["nodes"][target]["instance_token"],
+                    "relation": "vertical" if relation == 1 else "horizontal",
+                    "required": required,
+                    "trunk": trunk,
+                    "moved": model_graph["nodes"][moved]["instance_token"],
+                    "repaired": repaired,
+                    "details": {
+                        **details,
+                        "priority_edge_repair": True,
+                    },
+                }
+            )
+            changed |= repaired
+        if not changed:
+            break
+    return repairs
 
 
 def place_rooms(
@@ -543,81 +1011,37 @@ def place_rooms(
         placement_details[node["instance_token"]] = details
         mark_occupied(occupied, box, floors)
 
-    order_offsets = {room_index: offset for offset, room_index in enumerate(order)}
+    failures, final_repairs = repair_missing_rooms(
+        model_graph,
+        site_cells,
+        building,
+        occupied,
+        predictions,
+        predicted_floors,
+        topology_neighbors,
+        raw_predictions,
+        failures,
+    )
+    for repair in final_repairs:
+        placement_details[repair["node"]] = repair["details"]
 
-    def edge_quality(source: int, target: int, relation: int) -> float:
-        if source not in predictions or target not in predictions:
-            return 0.0
-        if relation == 1:
-            return box_projection_overlap(predictions[source], predictions[target])
-        if set(predicted_floors[source]) & set(predicted_floors[target]):
-            return box_face_contact(predictions[source], predictions[target])
-        return 0.0
-
-    required_relations = []
-    relation_lookup = {
-        tuple(sorted((source, target))): relation
-        for source, target, relation in model_graph["edges"]
-    }
-    for source, target in required_edges:
-        required_relations.append(
-            (source, target, relation_lookup[(source, target)])
-        )
-    for _pass in range(3):
-        missing_required = [
-            edge for edge in required_relations if edge_quality(*edge) <= 0
-        ]
-        if not missing_required:
-            break
-        changed = False
-        for source, target, _relation in missing_required:
-            movable = max(
-                (source, target),
-                key=lambda index: (
-                    model_graph["nodes"][index]["type"] == "stairs",
-                    order_offsets.get(index, -1),
-                ),
-            )
-            if model_graph["nodes"][movable]["type"] == "stairs":
-                movable = target if movable == source else source
-            old_box = predictions.get(movable)
-            if old_box is None:
-                continue
-            floors = predicted_floors[movable]
-            x0, y0, x1, y1 = old_box
-            for floor in floors:
-                occupied[floor - 1, x0:x1, y0:y1] = 0
-            required_neighbors = [
-                (neighbor, relation, True)
-                for neighbor, relation, required in topology_neighbors[movable]
-                if required and neighbor in predictions
-            ]
-            replacement, details = place_topology_box(
-                raw_predictions[movable],
-                site_cells,
-                floors,
-                building,
-                occupied,
-                predictions,
-                predicted_floors,
-                required_neighbors,
-                needs_exterior=bool(
-                    ROOM_RULES.get(
-                        model_graph["nodes"][movable]["type"],
-                        {},
-                    ).get("needs_exterior")
-                ),
-            )
-            if replacement is None:
-                replacement = old_box
-            predictions[movable] = replacement
-            placement_details[
-                model_graph["nodes"][movable]["instance_token"]
-            ] = {**details, "local_repair": replacement != old_box}
-            mark_occupied(occupied, replacement, floors)
-            changed |= replacement != old_box
-        if not changed:
-            break
+    priority_edge_repairs = repair_priority_edges(
+        model_graph,
+        site_cells,
+        building,
+        occupied,
+        predictions,
+        predicted_floors,
+        topology_neighbors,
+        raw_predictions,
+        order,
+        required_edges,
+    )
+    for repair in priority_edge_repairs:
+        placement_details[repair["moved"]] = {
+            **repair["details"],
+            "local_repair": repair["repaired"],
+        }
     rooms = [
         standard_room(index, model_graph["nodes"][index], box)
         for index, box in sorted(predictions.items())
@@ -632,13 +1056,22 @@ def place_rooms(
         target_box = predictions.get(target)
         quality = 0.0
         if source_box is not None and target_box is not None:
-            quality = edge_quality(source, target, relation)
+            quality = edge_quality(
+                source,
+                target,
+                relation,
+                predictions,
+                predicted_floors,
+            )
+        trunk_scope = trunk_edge_scope(model_graph["nodes"], source, target)
         realized_edges.append(
             {
                 "source": model_graph["nodes"][source]["instance_token"],
                 "target": model_graph["nodes"][target]["instance_token"],
                 "relation": "vertical" if relation == 1 else "horizontal",
                 "required": (source, target) in required_edges,
+                "trunk": trunk_scope is not None,
+                "trunk_scope": trunk_scope,
                 "realized": quality > 0,
                 "contact_quality": quality,
             }
@@ -660,6 +1093,27 @@ def place_rooms(
         ),
         "edges": realized_edges,
         "placement_details": placement_details,
+        "final_repairs": final_repairs,
+        "priority_edge_repairs": priority_edge_repairs,
+        "trunk_edge_count": sum(edge["trunk"] for edge in realized_edges),
+        "trunk_edge_realized_count": sum(
+            edge["trunk"] and edge["realized"] for edge in realized_edges
+        ),
+        "trunk_edge_realization_rate": (
+            sum(edge["trunk"] and edge["realized"] for edge in realized_edges)
+            / max(sum(edge["trunk"] for edge in realized_edges), 1)
+        ),
+        "trunk_edge_scope_counts": {
+            scope: sum(edge["trunk_scope"] == scope for edge in realized_edges)
+            for scope in ("floor_1", "floor_2")
+        },
+        "trunk_edge_scope_realized_counts": {
+            scope: sum(
+                edge["trunk_scope"] == scope and edge["realized"]
+                for edge in realized_edges
+            )
+            for scope in ("floor_1", "floor_2")
+        },
     }
     return rooms, failures, topology_report
 
@@ -704,6 +1158,11 @@ def main() -> None:
         explicit_counts=counts,
         infer_missing=not bool(args.case),
     )
+    part_counts, part_count_evidence = program_prior.infer_part_counts(
+        counts,
+        neighbors,
+        args.seed,
+    )
     validate_request(site_x, site_y, counts)
     torch.manual_seed(args.seed)
     np.random.seed(args.seed % (2**32 - 1))
@@ -719,6 +1178,16 @@ def main() -> None:
         )
     )
     request["program_prior"] = str(args.program_prior)
+    request["functional_group_counts"] = dict(counts)
+    request["part_counts"] = dict(part_counts)
+    request["count_semantics"] = {
+        "requested_counts": "functional_group_counts",
+        "part_counts": "predicted rectangular part counts",
+        "geometry_decoder": (
+            "model decoder emits one box per functional topology node; "
+            "rule expander may split selected room types into multiple parts"
+        ),
+    }
     model_graph, topology = request_graph(
         counts,
         site_x,
@@ -727,6 +1196,7 @@ def main() -> None:
         program_prior,
     )
     topology["count_evidence"] = count_evidence
+    topology["part_count_evidence"] = part_count_evidence
     staged_checkpoint = torch.load(args.staged_checkpoint, map_location=device)
     staged_model = StagedSpatialPolicy(
         int(staged_checkpoint["config"]["base_channels"])
@@ -779,6 +1249,12 @@ def main() -> None:
                 site_cells,
                 device,
             )
+    rooms, expansion_report = expand_functional_parts(
+        rooms,
+        counts,
+        part_counts,
+    )
+    topology_report["functional_part_expansion"] = expansion_report
     candidate_id = f"user_{int(site_x)}x{int(site_y)}_seed{args.seed}"
     candidate = {
         "house_id": candidate_id,
@@ -799,6 +1275,7 @@ def main() -> None:
         rooms,
         counts,
         (site_x, site_y),
+        topology=topology,
     )
     summary = {
         "input_source": (
@@ -810,6 +1287,9 @@ def main() -> None:
         "program_prior": str(args.program_prior),
         "nearest_training_houses": topology["evidence"]["nearest_houses"],
         "room_counts": counts,
+        "functional_group_counts": counts,
+        "part_counts": part_counts,
+        "count_semantics": request["count_semantics"],
         "staged_checkpoint": str(args.staged_checkpoint),
         "instance_checkpoint": (
             str(args.joint_checkpoint)
@@ -823,6 +1303,9 @@ def main() -> None:
         ),
         "requested_count": sum(counts.values()),
         "placed_count": len(rooms),
+        "functional_group_count": sum(counts.values()),
+        "rectangular_part_count": len(rooms),
+        "functional_part_expansion": expansion_report,
         "generation_grid_mm": [
             site_cells[0] * VOXEL_MM,
             site_cells[1] * VOXEL_MM,
@@ -846,6 +1329,7 @@ def main() -> None:
             "spatial_organization_pass"
         ],
         "p2_quality_gate_pass": report["p2"]["quality_gate_pass"],
+        "p2_enabled": report["p2"].get("enabled", True),
     }
     args.output_dir.mkdir(parents=True, exist_ok=True)
     (args.output_dir / "request.json").write_text(
@@ -866,6 +1350,11 @@ def main() -> None:
     )
     (args.output_dir / "topology_realization.json").write_text(
         json.dumps(topology_report, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+    topology_dual_report = build_topology_dual_report(topology, candidate)
+    (args.output_dir / "topology_dual_report.json").write_text(
+        json.dumps(topology_dual_report, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
     (args.output_dir / "summary.json").write_text(
