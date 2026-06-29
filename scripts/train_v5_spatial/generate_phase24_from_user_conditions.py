@@ -86,6 +86,16 @@ TYPE_PRIORITY = {
     "balcony": 10,
 }
 
+PASSAGE_TYPES = {
+    "entryway",
+    "living_room",
+    "dining_room",
+    "kitchen",
+    "corridor",
+    "multi_purpose",
+}
+VERTICAL_TYPES = {"stairs"}
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
@@ -142,6 +152,30 @@ def parse_args() -> argparse.Namespace:
         type=float,
         default=150.0,
         help="Blend strength for --candidate-scorer-checkpoint. Higher values let learned ranking affect candidates more.",
+    )
+    parser.add_argument(
+        "--access-aware-placement",
+        action="store_true",
+        help=(
+            "During graph-aware coarse placement, penalize legal candidate boxes "
+            "that create blocked direct contacts such as stairs-bedroom or "
+            "served-space to served-space contact."
+        ),
+    )
+    parser.add_argument(
+        "--blocked-contact-penalty",
+        type=float,
+        default=1800.0,
+        help="Score penalty applied per blocked direct contact when --access-aware-placement is enabled.",
+    )
+    parser.add_argument(
+        "--untargeted-access-contact-penalty",
+        type=float,
+        default=120.0,
+        help=(
+            "Small score penalty for access-capable contacts that are not target "
+            "topology neighbors when --access-aware-placement is enabled."
+        ),
     )
     parser.add_argument(
         "--topology-generator-checkpoint",
@@ -259,6 +293,13 @@ def topology_neighbors(topology: dict[str, Any]) -> dict[str, set[str]]:
     return neighbors
 
 
+def access_label_between_types(left_type: str, right_type: str) -> str:
+    if left_type in VERTICAL_TYPES or right_type in VERTICAL_TYPES:
+        other_type = right_type if left_type in VERTICAL_TYPES else left_type
+        return "access" if other_type in PASSAGE_TYPES else "blocked"
+    return "access" if left_type in PASSAGE_TYPES or right_type in PASSAGE_TYPES else "blocked"
+
+
 def share_floor(left: list[int], right: list[int]) -> bool:
     return bool(set(left) & set(right))
 
@@ -312,6 +353,9 @@ def place_box_graph_aware(
     room_type: str | None = None,
     candidate_scorer: tuple[torch.nn.Module, torch.device] | None = None,
     candidate_scorer_weight: float = 150.0,
+    access_aware_placement: bool = False,
+    blocked_contact_penalty: float = 1800.0,
+    untargeted_access_contact_penalty: float = 120.0,
 ) -> tuple[float, float, float, float]:
     sx = int(round(site_x / VOXEL_MM))
     sy = int(round(site_y / VOXEL_MM))
@@ -342,6 +386,19 @@ def place_box_graph_aware(
                     score -= 5000.0
                 else:
                     score += 35.0 * grid_gap(candidate, neighbor_box) + 250.0
+            if access_aware_placement and room_type:
+                for other_id, other in placed.items():
+                    if other_id in target_neighbors:
+                        continue
+                    if not share_floor(floors, other["floors"]):
+                        continue
+                    if not touches(candidate, other["box"]):
+                        continue
+                    relation = access_label_between_types(room_type, str(other.get("room_type", "")))
+                    if relation == "blocked":
+                        score += float(blocked_contact_penalty)
+                    else:
+                        score += float(untargeted_access_contact_penalty)
             if not scored_neighbor:
                 center_x = x + wc * 0.5
                 center_y = y + dc * 0.5
@@ -368,7 +425,7 @@ def place_box_graph_aware(
         candidate = (x, y, x + wc, y + dc)
         for floor in floors:
             occupied[floor].append(candidate)
-        placed[node_id] = {"box": candidate, "floors": list(floors)}
+        placed[node_id] = {"box": candidate, "floors": list(floors), "room_type": room_type}
         return tuple(float(value * VOXEL_MM) for value in candidate)
 
     if wc > 1 or dc > 1:
@@ -386,6 +443,9 @@ def place_box_graph_aware(
             room_type=room_type,
             candidate_scorer=candidate_scorer,
             candidate_scorer_weight=candidate_scorer_weight,
+            access_aware_placement=access_aware_placement,
+            blocked_contact_penalty=blocked_contact_penalty,
+            untargeted_access_contact_penalty=untargeted_access_contact_penalty,
         )
     raise ValueError(f"no graph-aware coarse placement found for {node_id}")
 
@@ -470,6 +530,9 @@ def build_user_group_samples(
     coarse_layout_strategy: str = "rule",
     candidate_scorer: tuple[torch.nn.Module, torch.device] | None = None,
     candidate_scorer_weight: float = 150.0,
+    access_aware_placement: bool = False,
+    blocked_contact_penalty: float = 1800.0,
+    untargeted_access_contact_penalty: float = 120.0,
 ) -> tuple[list[GroupSample], list[dict[str, Any]], dict[str, int]]:
     positions = normalized_positions(topology)
     conditions = topology.get("evidence", {}).get("node_conditions", {})
@@ -539,6 +602,9 @@ def build_user_group_samples(
                 room_type=room_type,
                 candidate_scorer=candidate_scorer,
                 candidate_scorer_weight=candidate_scorer_weight,
+                access_aware_placement=access_aware_placement,
+                blocked_contact_penalty=blocked_contact_penalty,
+                untargeted_access_contact_penalty=untargeted_access_contact_penalty,
             )
         else:
             x0, y0, x1, y1 = place_box(node_id, width, depth, floors, preferred, site_x, site_y, occupied)
@@ -550,6 +616,7 @@ def build_user_group_samples(
                     int(round(y1 / VOXEL_MM)),
                 ),
                 "floors": list(floors),
+                "room_type": room_type,
             }
         z0 = min(FLOOR_Z[floor][0] for floor in floors)
         z1 = max(FLOOR_Z[floor][1] for floor in floors)
@@ -981,6 +1048,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         coarse_layout_strategy=args.coarse_layout_strategy,
         candidate_scorer=candidate_scorer,
         candidate_scorer_weight=float(args.candidate_scorer_weight),
+        access_aware_placement=bool(args.access_aware_placement),
+        blocked_contact_penalty=float(args.blocked_contact_penalty),
+        untargeted_access_contact_penalty=float(args.untargeted_access_contact_penalty),
     )
 
     checkpoint = torch.load(args.decoder_checkpoint, map_location=device)
@@ -1049,6 +1119,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             ),
             "candidate_scorer": str(args.candidate_scorer_checkpoint) if args.candidate_scorer_checkpoint else None,
             "candidate_scorer_weight": float(args.candidate_scorer_weight),
+            "access_aware_placement": bool(args.access_aware_placement),
+            "blocked_contact_penalty": float(args.blocked_contact_penalty),
+            "untargeted_access_contact_penalty": float(args.untargeted_access_contact_penalty),
             "topology_source": topology.get("source"),
             "topology_generator": (
                 str(args.topology_generator_checkpoint) if args.topology_generator_checkpoint else None
@@ -1079,6 +1152,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             str(args.candidate_scorer_checkpoint) if args.candidate_scorer_checkpoint else None
         ),
         "candidate_scorer_weight": float(args.candidate_scorer_weight),
+        "access_aware_placement": bool(args.access_aware_placement),
+        "blocked_contact_penalty": float(args.blocked_contact_penalty),
+        "untargeted_access_contact_penalty": float(args.untargeted_access_contact_penalty),
         "topology_generator_checkpoint": (
             str(args.topology_generator_checkpoint) if args.topology_generator_checkpoint else None
         ),
@@ -1111,6 +1187,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             str(args.candidate_scorer_checkpoint) if args.candidate_scorer_checkpoint else None
         ),
         "candidate_scorer_weight": float(args.candidate_scorer_weight),
+        "access_aware_placement": bool(args.access_aware_placement),
+        "blocked_contact_penalty": float(args.blocked_contact_penalty),
+        "untargeted_access_contact_penalty": float(args.untargeted_access_contact_penalty),
         "topology_source": topology.get("source"),
         "topology_generator_checkpoint": (
             str(args.topology_generator_checkpoint) if args.topology_generator_checkpoint else None
